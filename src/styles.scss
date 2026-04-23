@@ -1,4 +1,50 @@
-/* You can add global styles to this file, and also import other style files */
+@use 'sass:color';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+// ── Variables ────────────────────────────────────────────────
+$color-primary:       #211456;
+$color-secondary:     #266BA6;
+$color-bg:            #F4F4F4;
+$color-white:         #FFFFFF;
+$color-icon-profile:  #D98B29;
+$color-icon-menu:     #D94625;
+$color-info-bar:      #D989A6;
+$color-text:          #1A1A2E;
+$color-text-muted:    #6B7280;
+
+$font-family:   'Roboto', 'Helvetica Neue', sans-serif;
+$radius:        8px;
+$transition:    0.25s ease;
+
+// ── Reset / base ─────────────────────────────────────────────
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: $font-family;
+  font-size: 1rem;
+  line-height: 1.5;
+  color: $color-text;
+  background-color: $color-bg;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: $color-secondary;
+  text-decoration: none;
+  transition: color $transition;
+  &:hover { color: color.adjust($color-secondary, $lightness: -10%); }
+}
+
+img { max-width: 100%; display: block; }
+
+// ── Contenedor principal ────────
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
