@@ -1,0 +1,156 @@
+@use 'sass:color';
+
+// ── Variables ─────────────────────────────────────────────────
+$color-primary: #211456;
+$color-secondary: #266BA6;
+$color-icon-profile: #D98B29;
+$color-icon-menu: #D94625;
+$color-white: #FFFFFF;
+$transition: 0.25s ease;
+
+$breakpoint-sm: 600px;
+
+// ── Header ────────────────────────────────────────────────────
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: $color-white;
+  height: 150px;
+  display: flex;
+  align-items: center;
+
+  // ── Contenedor inner ──────────────────────────────────────
+  &__container {
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  // ── Logo ──────────────────────────────────────────────────
+  &__logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+
+    .logo-img {
+      height: 35px;
+      width: auto;
+      max-width: 200px;
+      object-fit: contain;
+    }
+  }
+
+  // ── Acciones ──────────────────────────────────────────────
+  &__actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  // ── Enlace Alojamientos ───────────────────────────────────
+  &__nav-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 8px;
+    text-decoration: none;
+    color: $color-primary;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color $transition, color $transition;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+    }
+
+    &:hover {
+      background-color: rgba($color-secondary, 0.08);
+      color: $color-secondary;
+    }
+  }
+
+  // ── Texto "Alojamientos" — oculto en móvil ────────────────
+  &__nav-label {
+    @media (max-width: $breakpoint-sm) {
+      display: none;
+    }
+  }
+
+  // ── Botones icono circulares ───────────────────────────────
+  &__icon-btn {
+    width: 40px !important;
+    height: 40px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    transition: opacity $transition, transform $transition;
+
+    .menu-icon {
+      color: $color-white;
+      // font-size: 22px;
+      line-height: 1;
+    }
+
+    &:hover {
+      opacity: 0.85;
+    }
+
+    &--profile {
+      background-color: $color-icon-profile !important;
+    }
+
+    &--menu {
+      background-color: $color-icon-menu !important;
+    }
+  }
+}
+
+// ── Menú desplegable ──────────────────────────────────────────
+::ng-deep .mat-mdc-menu-panel.header-menu {
+  --mat-menu-container-shape: 16px;
+  background-color: $color-white !important;
+
+  .mat-mdc-menu-content {
+    padding: 8px 0;
+    min-width: 200px;
+    background-color: $color-white !important;
+  }
+
+  .mat-mdc-menu-item {
+    background-color: $color-white !important;
+
+    .mat-mdc-menu-item-text {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &:hover {
+      background-color: rgba($color-secondary, 0.08) !important;
+    }
+  }
+}
+
+// ── Nombre de usuario en el menú ──────────────────────────────
+.menu-user-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px 8px;
+  color: $color-primary;
+  font-weight: 700;
+  // font-size: 0.95rem;
+  pointer-events: none;
+
+  .material-symbols-outlined {
+    color: $color-icon-profile;
+  }
+}

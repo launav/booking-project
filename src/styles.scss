@@ -11,7 +11,7 @@ $color-info-bar:      #D989A6;
 $color-text:          #1A1A2E;
 $color-text-muted:    #6B7280;
 
-$font-family:   'Roboto', 'Helvetica Neue', sans-serif;
+$font-family: 'Open Sans', 'Helvetica Neue', sans-serif;
 $radius:        8px;
 $transition:    0.25s ease;
 
@@ -44,7 +44,7 @@ img { max-width: 100%; display: block; }
 // ── Contenedor principal ────────
 .container {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1440px;
   margin: 0 auto;
   padding: 0 16px;
 }

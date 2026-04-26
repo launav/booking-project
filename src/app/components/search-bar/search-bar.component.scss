@@ -1,0 +1,559 @@
+@use 'sass:color';
+
+// Variables
+$color-primary: #211456;
+$color-secondary: #266BA6;
+$color-white: #FFFFFF;
+$color-border: #d0d0d0;
+$color-text-muted: #888;
+$transition: 0.25s ease;
+
+:host {
+  display: block;
+  width: 100%;
+  background-color: $color-white;
+}
+
+.container {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 0 20px 40px 20px;
+  box-sizing: border-box;
+
+  .search-bar {
+    width: 100%;
+    max-width: 860px;
+    margin: 0 auto;
+    position: relative;
+
+    &__inner {
+      display: flex;
+      align-items: center;
+      border: 1.5px solid $color-border;
+      border-radius: 50px;
+      padding: 0 6px 0 0;
+      height: 66px;
+      transition: box-shadow $transition;
+    }
+
+    // Campo
+    &__field {
+      position: relative;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-radius: 50px;
+      transition: background-color $transition, box-shadow $transition;
+      height: 100%;
+
+      &--active {
+        background-color: $color-white;
+        box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+        cursor: default;
+      }
+    }
+
+    &__label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: $color-primary;
+      margin-bottom: 2px;
+      white-space: nowrap;
+    }
+
+    &__value {
+      font-size: 0.85rem;
+      color: $color-text-muted;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      animation: fadeInInput 0.2s ease forwards;
+
+      &--filled {
+        color: $color-primary;
+      }
+    }
+
+    // Input inline (destino)
+    &__inline-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.85rem;
+      color: $color-primary;
+      width: 100%;
+      padding: 0;
+      font-family: inherit;
+      opacity: 0;
+      animation: fadeInInput 0.2s ease forwards;
+
+      &::placeholder {
+        color: $color-text-muted;
+      }
+    }
+
+    // Separador
+    &__divider {
+      width: 1px;
+      height: 32px;
+      background-color: $color-border;
+      flex-shrink: 0;
+      transition: opacity 0.3s ease;
+
+      &--hidden {
+        opacity: 0;
+      }
+    }
+
+    // Panel desplegable
+    &__panel {
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 0;
+      background-color: $color-white;
+      // border: 1px solid $color-border;
+      border-radius: 16px;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+      z-index: 200;
+      min-width: 260px;
+      animation: fadeInPanel 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+
+      &--fecha {
+        min-width: 340px;
+      }
+    }
+
+    // Input dentro del panel
+    &__input {
+      width: 100%;
+      border: 1px solid $color-border;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 0.9rem;
+      color: $color-primary;
+      outline: none;
+      transition: border-color $transition;
+      box-sizing: border-box;
+
+      &:focus {
+        border-color: $color-secondary;
+      }
+    }
+
+    // Contador habitaciones
+    &__counter {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    &__counter-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1.5px solid $color-border;
+      background: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: border-color $transition, background-color $transition;
+
+      .material-symbols-outlined {
+        font-size: 18px;
+        color: $color-primary;
+      }
+
+      &:hover:not(:disabled) {
+        border-color: $color-primary;
+        background-color: rgba($color-primary, 0.05);
+      }
+
+      &:disabled {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+    }
+
+    &__counter-value {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: $color-primary;
+      min-width: 24px;
+      text-align: center;
+    }
+
+    // Fecha
+    &__fecha-row {
+      display: flex;
+      gap: 16px;
+    }
+
+    &__fecha-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+    }
+
+    &__fecha-label {
+      // font-size: 0.78rem;
+      font-weight: 700;
+      color: $color-primary;
+    }
+
+    // Botón buscar
+    &__btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 20px;
+      height: 52px;
+      border-radius: 50px;
+      background-color: $color-primary;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: background-color $transition, transform $transition;
+
+      .material-symbols-outlined {
+        color: $color-white;
+        font-size: 20px;
+      }
+
+      &:hover {
+        background-color: color.adjust($color-primary, $lightness: 8%);
+        transform: scale(1.02);
+      }
+    }
+
+    &__btn-label {
+      color: $color-white;
+      font-size: 0.9rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .traveler-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &__icon {
+    font-size: 28px;
+    color: $color-primary;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  &__label {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: $color-primary;
+  }
+
+  &__sublabel {
+    font-size: 0.75rem;
+    color: $color-text-muted;
+  }
+}
+
+  }
+
+  @keyframes fadeInInput {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes fadeInPanel {
+    from {
+      opacity: 0;
+      transform: translateY(-8px) scale(0.98);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+  }
+
+  // Calendar panel
+  .search-bar__panel--calendar {
+    min-width: 660px;
+    padding: 24px;
+  }
+
+  .calendar {
+
+    &__nav {
+      display: flex;
+      justify-content: space-between;
+      position: absolute;
+      top: 24px;
+      left: 24px;
+      right: 24px;
+      pointer-events: none;
+
+      button {
+        pointer-events: all;
+      }
+    }
+
+    &__nav-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid $color-border;
+      background: $color-white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color $transition;
+
+      .material-symbols-outlined {
+        font-size: 18px;
+        color: $color-primary;
+      }
+
+      &:hover {
+        background-color: rgba($color-primary, 0.06);
+      }
+    }
+
+    &__months {
+      display: flex;
+      gap: 32px;
+    }
+
+    &__month {
+      flex: 1;
+    }
+
+    &__month-title {
+      text-align: center;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: $color-primary;
+      margin-bottom: 16px;
+      text-transform: capitalize;
+    }
+
+    &__grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      row-gap: 2px;
+      column-gap: 0;
+    }
+
+    &__weekday {
+      text-align: center;
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: $color-text-muted;
+      padding: 6px 0;
+    }
+
+    &__day {
+      width: 100%;
+      aspect-ratio: 1;
+      border: none;
+      background: none;
+      border-radius: 50%;
+      font-size: 0.82rem;
+      color: $color-primary;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      transition: background-color $transition, color $transition;
+
+      &::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: transparent;
+        z-index: -1;
+        transition: background-color $transition;
+      }
+
+      &:hover:not(:disabled):not(.calendar__day--check-in):not(.calendar__day--check-out) {
+        background-color: rgba($color-primary, 0.08);
+      }
+
+      &--check-in,
+      &--check-out {
+        background-color: $color-primary;
+        color: $color-white;
+        font-weight: 700;
+        border-radius: 50%;
+      }
+
+      &--range-start::before {
+        left: 50%;
+        right: 0;
+        border-radius: 0;
+        background-color: rgba($color-primary, 0.1);
+      }
+
+      &--range-end::before {
+        left: 0;
+        right: 50%;
+        border-radius: 0;
+        background-color: rgba($color-primary, 0.1);
+      }
+
+      &--in-range {
+        background: none;
+        color: $color-primary;
+        border-radius: 0;
+
+        &::before {
+          background-color: rgba($color-primary, 0.1);
+          border-radius: 0;
+        }
+      }
+
+      &--past {
+        color: $color-border;
+        cursor: not-allowed;
+      }
+    }
+
+    &__footer {
+      display: flex;
+      gap: 8px;
+    }
+
+    &__footer-input {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.85rem;
+      color: $color-primary;
+      font-family: inherit;
+      width: 100%;
+      cursor: pointer;
+
+      &::-webkit-calendar-picker-indicator {
+        opacity: 0.5;
+        cursor: pointer;
+      }
+    }
+
+    &__footer-field {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding: 10px 14px;
+      border: 1px solid $color-border;
+      border-radius: 10px;
+    }
+
+    &__footer-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: $color-primary;
+    }
+
+    &__footer-value {
+      font-size: 0.85rem;
+      color: $color-text-muted;
+    }
+
+    &__footer-divider {
+      width: 1px;
+      height: 36px;
+      background-color: $color-border;
+    }
+  }
+
+  // Calendar responsive
+  @media (max-width: 700px) {
+    .search-bar__panel--calendar {
+      min-width: unset;
+      width: calc(100vw - 48px);
+    }
+
+    .calendar__months {
+      flex-direction: column;
+      gap: 24px;
+    }
+  }
+
+  // Responsive
+  @media (max-width: 600px) {
+    .search-bar {
+      &__inner {
+        border-radius: 20px;
+        height: auto;
+        flex-direction: column;
+        padding: 8px;
+        gap: 4px;
+      }
+
+      &__field {
+        width: 100%;
+        border-radius: 12px;
+        height: auto;
+      }
+
+      &__divider {
+        width: 90%;
+        height: 1px;
+
+        &--hidden {
+          display: none;
+        }
+      }
+
+      &__btn {
+        width: 100%;
+        border-radius: 12px;
+        height: 44px;
+        justify-content: center;
+      }
+
+      &__panel {
+        left: 0;
+        right: 0;
+        min-width: unset;
+
+        &--fecha {
+          min-width: unset;
+        }
+      }
+
+      &__fecha-row {
+        flex-direction: column;
+      }
+    }
+  }
+}
