@@ -1,1 +1,21 @@
-<p>section works!</p>
+<main class="section">
+
+  <h1 class="section__title">{{ title() }}</h1>
+
+  @if (section() === 'visits') {
+    <app-carousel [items]="visits()" [visible]="2" />
+  } @else {
+    <div class="section__grid">
+      @for (card of cards(); track card.id) {
+        <app-card
+          [card]="card"
+          [isFavorite]="card.isFavorite ?? false"
+          (cardClick)="onCardClick($event)"
+        />
+      } @empty {
+        <p class="section__empty">No hay resultados disponibles</p>
+      }
+    </div>
+  }
+
+</main>

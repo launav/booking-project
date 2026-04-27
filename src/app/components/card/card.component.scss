@@ -1,0 +1,120 @@
+$color-primary: #211456;
+$color-favorite: #D94625;
+$color-white: #FFFFFF;
+$color-text-muted: #666;
+$color-star: #F5A623;
+$transition: 0.25s ease;
+
+.card {
+  width: 100%;
+  max-width: 300px;
+  height: 280px;
+  border-radius: 20px;
+  background-color: $color-white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform $transition, box-shadow $transition;
+
+  &__image-wrapper {
+    position: relative;
+    width: 100%;
+    height: 191px;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+  }
+
+  &__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+
+    .card:hover & {
+      transform: scale(1.04);
+    }
+  }
+
+  // Favorite button styles
+  &__favorite {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: transform $transition;
+
+    .material-symbols-outlined {
+      font-size: 28px;
+      color: $color-white;
+      transition: color $transition, transform $transition;
+    }
+
+    &--active .material-symbols-outlined {
+      color: $color-favorite;
+    }
+
+    &:hover {
+      transform: scale(1.15);
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 14px 16px 16px;
+  }
+
+  &__text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__subtitle {
+    font-size: 0.85rem;
+    color: $color-text-muted;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__rating {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+
+  &__rating-star {
+    font-size: 18px;
+    color: $color-star;
+  }
+
+  &__rating-value {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: $color-primary;
+  }
+}

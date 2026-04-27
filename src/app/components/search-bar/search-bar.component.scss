@@ -44,7 +44,7 @@ $transition: 0.25s ease;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 10px 20px;
+      padding: 10px 40px;
       cursor: pointer;
       border-radius: 50px;
       transition: background-color $transition, box-shadow $transition;
@@ -213,8 +213,9 @@ $transition: 0.25s ease;
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 0 20px;
+      padding: 0 15px;
       height: 52px;
+      width: 52px;
       border-radius: 50px;
       background-color: $color-primary;
       border: none;
@@ -224,12 +225,10 @@ $transition: 0.25s ease;
 
       .material-symbols-outlined {
         color: $color-white;
-        font-size: 20px;
       }
 
       &:hover {
         background-color: color.adjust($color-primary, $lightness: 8%);
-        transform: scale(1.02);
       }
     }
 

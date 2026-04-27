@@ -1,0 +1,19 @@
+<div class="carousel">
+
+  <div class="carousel__track">
+    @for (item of visibleItems(); track item.id) {
+      <div class="carousel__slide" [style.backgroundImage]="'url(' + item.imageUrl + ')'">
+        <div class="carousel__overlay">
+          <h3 class="carousel__title">{{ item.title }}</h3>
+          <p class="carousel__description">{{ item.description }}</p>
+          <a class="carousel__link" [href]="item.linkUrl ?? '#'">{{ item.linkText }}</a>
+        </div>
+      </div>
+    }
+  </div>
+
+  <button class="carousel__btn" (click)="next()" aria-label="Siguiente">
+    <span class="material-symbols-outlined">chevron_right</span>
+  </button>
+
+</div>

@@ -1,1 +1,55 @@
-<p>home works!</p>
+<main class="home">
+
+  <section class="home__section">
+    <div class="home__section-header">
+      <h2 class="home__section-title">Habitaciones populares en {{ location() }}</h2>
+      <button class="home__section-more" (click)="goToSection('rooms')" aria-label="Ver más habitaciones">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    </div>
+    <div class="home__grid">
+      @for (room of rooms(); track room.id) {
+        <app-card
+          [card]="room"
+          [isFavorite]="room.isFavorite ?? false"
+          (favoriteToggle)="onFavoriteToggle($event)"
+          (cardClick)="onCardClick($event)"
+        />
+      } @empty {
+        <p class="home__empty">No hay habitaciones disponibles</p>
+      }
+    </div>
+  </section>
+
+  <section class="home__section">
+    <div class="home__section-header">
+      <h2 class="home__section-title">Eventos próximos en {{ location() }}</h2>
+      <button class="home__section-more" (click)="goToSection('events')" aria-label="Ver más eventos">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    </div>
+    <div class="home__grid">
+      @for (event of events(); track event.id) {
+        <app-card
+          [card]="event"
+          [isFavorite]="event.isFavorite ?? false"
+          (favoriteToggle)="onFavoriteToggle($event)"
+          (cardClick)="onCardClick($event)"
+        />
+      } @empty {
+        <p class="home__empty">No hay eventos disponibles</p>
+      }
+    </div>
+  </section>
+
+  <section class="home__section">
+    <div class="home__section-header">
+      <h2 class="home__section-title">Visitas populares en {{ location() }}</h2>
+      <button class="home__section-more" (click)="goToSection('visits')" aria-label="Ver más visitas">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    </div>
+    <app-carousel [items]="visits()" [visible]="2" />
+  </section>
+
+</main>
