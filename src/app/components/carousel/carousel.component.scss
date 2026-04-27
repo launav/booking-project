@@ -1,6 +1,6 @@
-$radius:     16px;
+$radius: 16px;
 $transition: 0.3s ease;
-$btn-size:   40px;
+$btn-size: 40px;
 
 .carousel {
   position: relative;
@@ -34,7 +34,7 @@ $btn-size:   40px;
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.1) 55%, transparent 100%);
     }
   }
 
@@ -63,7 +63,6 @@ $btn-size:   40px;
     margin: 0;
     line-height: 1.4;
     display: -webkit-box;
-    -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
   }
@@ -76,7 +75,9 @@ $btn-size:   40px;
     cursor: pointer;
     width: fit-content;
 
-    &:hover { opacity: 0.8; }
+    &:hover {
+      opacity: 0.8;
+    }
   }
 
   &__btn {
@@ -88,7 +89,6 @@ $btn-size:   40px;
     height: $btn-size;
     border-radius: 50%;
     border: 2px solid #ccc;
-    background: #fff;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -103,8 +103,11 @@ $btn-size:   40px;
     }
 
     &:hover {
-      border-color: #211456;
-      .material-symbols-outlined { color: #211456; }
+      background-color: #ccc;
+
+      .material-symbols-outlined {
+        color: #211456;
+      }
     }
   }
 }

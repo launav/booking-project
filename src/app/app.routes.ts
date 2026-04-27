@@ -16,12 +16,7 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent),
       },
       {
-        path: 'admin',
-        canActivate: [AuthGuard],
-        loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
-      },
-      {
-        path: 'booking/:id',
+        path: 'room/:id',
         loadComponent: () => import('./pages/booking-detail/booking-detail.component').then(m => m.BookingDetailComponent),
       },
       {
@@ -35,6 +30,11 @@ export const routes: Routes = [
       {
         path: 'success',
         loadComponent: () => import('./pages/success/success.component').then(m => m.SuccessComponent),
+      },
+      {
+        path: 'admin',
+        canActivate: [AuthGuard],
+        loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),
       },
       {
         path: ':section',

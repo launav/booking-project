@@ -3,7 +3,7 @@
   <section class="home__section">
     <div class="home__section-header">
       <h2 class="home__section-title">Habitaciones populares en {{ location() }}</h2>
-      <button class="home__section-more" aria-label="Ver más habitaciones">
+      <button class="home__section-more" (click)="goToSection('rooms')" aria-label="Ver más habitaciones">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     </div>
@@ -24,7 +24,7 @@
   <section class="home__section">
     <div class="home__section-header">
       <h2 class="home__section-title">Eventos próximos en {{ location() }}</h2>
-      <button class="home__section-more" aria-label="Ver más eventos">
+      <button class="home__section-more" (click)="goToSection('events')" aria-label="Ver más eventos">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     </div>
@@ -45,7 +45,7 @@
   <section class="home__section">
     <div class="home__section-header">
       <h2 class="home__section-title">Visitas populares en {{ location() }}</h2>
-      <button class="home__section-more" aria-label="Ver más visitas">
+      <button class="home__section-more" (click)="goToSection('visits')" aria-label="Ver más visitas">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     </div>
