@@ -1,0 +1,44 @@
+<footer class="footer">
+  <div class="footer__inner container">
+
+    <!-- Columnas -->
+    <div class="footer__columns">
+      @for (column of columns(); track column.title) {
+        <div class="footer__column">
+          <h4 class="footer__column-title">{{ column.title }}</h4>
+          <ul class="footer__link-list">
+            @for (link of column.links; track link.label) {
+              <li>
+                @if (link.route) {
+                  <a class="footer__link" [routerLink]="link.route">{{ link.label }}</a>
+                } @else {
+                  <a class="footer__link" [href]="link.url" target="_blank" rel="noopener">{{ link.label }}</a>
+                }
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+
+    <!-- Divider -->
+    <hr class="footer__divider" />
+
+    <!-- Barra legal -->
+    <div class="footer__legal">
+      <span class="footer__copyright">
+        {{ copyrightText() }}
+        @for (link of legalLinks(); track link.label) {
+          <span class="footer__legal-separator"> | </span>
+          @if (link.route) {
+            <a class="footer__legal-link" [routerLink]="link.route">{{ link.label }}</a>
+          } @else {
+            <a class="footer__legal-link" [href]="link.url" target="_blank" rel="noopener">{{ link.label }}</a>
+          }
+        }
+      </span>
+      <span class="footer__locale">{{ locale() }}</span>
+    </div>
+
+  </div>
+</footer>

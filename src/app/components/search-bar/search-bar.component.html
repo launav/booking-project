@@ -1,0 +1,132 @@
+<div class="container">
+  <div class="search-bar" (clickOutside)="closePanels()">
+    <div class="search-bar__inner" [class.search-bar__inner--active]="activePanel() !== null">
+
+      <!-- Destination -->
+      <div class="search-bar__field" [class.search-bar__field--active]="activePanel() === 'destination'"
+        (click)="togglePanel('destination')">
+        <span class="search-bar__label">Destino</span>
+        @if (activePanel() === 'destination') {
+        <input class="search-bar__inline-input" type="text" placeholder="Ciudad, hotel, zona..."
+          [ngModel]="destination()" (ngModelChange)="destination.set($event)" (click)="$event.stopPropagation()"
+          autofocus />
+        } @else {
+        <span class="search-bar__value" [class.search-bar__value--filled]="hasDestination()">
+          {{ destinationLabel() }}
+        </span>
+        }
+      </div>
+
+      <!-- Date -->
+      <div class="search-bar__field" [class.search-bar__field--active]="activePanel() === 'date'"
+        (click)="togglePanel('date')">
+        <span class="search-bar__label">Fechas</span>
+        <span class="search-bar__value" [class.search-bar__value--filled]="hasDate()">
+          {{ dateLabel() }}
+        </span>
+
+        @if (activePanel() === 'date') {
+        <div class="search-bar__panel search-bar__panel--calendar" (click)="$event.stopPropagation()">
+
+          <!-- Navigation -->
+          <div class="calendar__nav">
+            <button class="calendar__nav-btn" (click)="prevMonth()">
+              <span class="material-symbols-outlined">chevron_left</span>
+            </button>
+            <button class="calendar__nav-btn" (click)="nextMonthNav()">
+              <span class="material-symbols-outlined">chevron_right</span>
+            </button>
+          </div>
+
+          <!-- Two months -->
+          <div class="calendar__months">
+
+            @for (month of [currentMonth(), nextMonth()]; track month) {
+            <div class="calendar__month">
+              <div class="calendar__month-title">{{ getMonthLabel(month) }}</div>
+
+              <!-- Week days header -->
+              <div class="calendar__grid">
+                @for (day of weekDays; track day) {
+                <div class="calendar__weekday">{{ day }}</div>
+                }
+
+                <!-- Days -->
+                @for (date of getDays(month); track $index) {
+                @if (date === null) {
+                <div></div>
+                } @else {
+                <button class="calendar__day" [class.calendar__day--check-in]="isCheckIn(date)"
+                  [class.calendar__day--check-out]="isCheckOut(date)"
+                  [class.calendar__day--range-start]="isRangeStart(date)"
+                  [class.calendar__day--range-end]="isRangeEnd(date)" [class.calendar__day--in-range]="isInRange(date)"
+                  [class.calendar__day--past]="isPast(date)" [disabled]="isPast(date)" (click)="selectDate(date)"
+                  (mouseenter)="hoveredDate.set(date)" (mouseleave)="hoveredDate.set(null)">
+                  {{ date.getDate() }}
+                </button>
+                }
+                }
+              </div>
+            </div>
+            }
+
+          </div>
+
+          <!-- Footer labels -->
+          <div class="calendar__footer">
+            <div class="calendar__footer-field">
+              <label class="calendar__footer-label">Entrada</label>
+              <input class="calendar__footer-input" type="date" [ngModel]="checkIn() | date:'yyyy-MM-dd'"
+                (ngModelChange)="setCheckIn($event)" placeholder="dd/mm/aaaa" />
+            </div>
+            <div class="calendar__footer-field">
+              <label class="calendar__footer-label">Salida</label>
+              <input class="calendar__footer-input" type="date" [ngModel]="checkOut() | date:'yyyy-MM-dd'"
+                (ngModelChange)="setCheckOut($event)" placeholder="dd/mm/aaaa" />
+            </div>
+          </div>
+
+        </div>
+        }
+      </div>
+
+      <!-- Rooms: Filtra las habitaciones por viajero -->
+      <div class="search-bar__field" [class.search-bar__field--active]="activePanel() === 'rooms'"
+        (click)="togglePanel('rooms')">
+        <span class="search-bar__label">Viajeros</span>
+        <span class="search-bar__value" [class.search-bar__value--filled]="hasRooms()">
+          {{ roomsLabel() }}
+        </span>
+
+        @if (activePanel() === 'rooms') {
+        <div class="search-bar__panel" (click)="$event.stopPropagation()">
+          <div class="traveler-row">
+            <div class="traveler-row__info">
+              <span class="material-symbols-outlined traveler-row__icon">person</span>
+              <div class="traveler-row__text">
+                <span class="traveler-row__label">Viajeros</span>
+                <span class="traveler-row__sublabel">¿Cuántas personas viajan?</span>
+              </div>
+            </div>
+            <div class="search-bar__counter">
+              <button class="search-bar__counter-btn" (click)="decrementRooms()" [disabled]="rooms() <= 1">
+                <span class="material-symbols-outlined">remove</span>
+              </button>
+              <span class="search-bar__counter-value">{{ rooms() }}</span>
+              <button class="search-bar__counter-btn" (click)="incrementRooms()">
+                <span class="material-symbols-outlined">add</span>
+              </button>
+            </div>
+          </div>
+        </div>
+        }
+      </div>
+
+      <!-- Search button -->
+      <button class="search-bar__btn" (click)="onSearch()" aria-label="Buscar">
+        <span class="material-symbols-outlined">search</span>
+      </button>
+
+    </div>
+  </div>
+</div>
