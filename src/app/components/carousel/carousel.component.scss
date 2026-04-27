@@ -1,0 +1,110 @@
+$radius:     16px;
+$transition: 0.3s ease;
+$btn-size:   40px;
+
+.carousel {
+  position: relative;
+  width: 100%;
+  padding-right: calc($btn-size + 12px);
+
+  @media (max-width: 600px) {
+    padding-right: 0;
+  }
+
+  &__track {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+
+    @media (max-width: 600px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__slide {
+    position: relative;
+    height: 320px;
+    border-radius: $radius;
+    background-size: cover;
+    background-position: center;
+    overflow: hidden;
+    cursor: pointer;
+
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.1) 55%, transparent 100%);
+    }
+  }
+
+  &__overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 24px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    margin: 0;
+  }
+
+  &__description {
+    font-size: 0.875rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin: 0;
+    line-height: 1.4;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  &__link {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #fff;
+    text-decoration: underline;
+    cursor: pointer;
+    width: fit-content;
+
+    &:hover { opacity: 0.8; }
+  }
+
+  &__btn {
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translateY(-50%);
+    width: $btn-size;
+    height: $btn-size;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color $transition;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+    z-index: 2;
+
+    .material-symbols-outlined {
+      font-size: 20px;
+      color: #333;
+    }
+
+    &:hover {
+      border-color: #211456;
+      .material-symbols-outlined { color: #211456; }
+    }
+  }
+}
