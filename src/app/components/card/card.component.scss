@@ -16,6 +16,12 @@ $transition: 0.25s ease;
   cursor: pointer;
   transition: transform $transition, box-shadow $transition;
 
+  &--static {
+    cursor: default;
+
+    &:hover .card__image { transform: none; }
+  }
+
   &__image-wrapper {
     position: relative;
     width: 100%;

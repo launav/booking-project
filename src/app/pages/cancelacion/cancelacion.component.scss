@@ -1,0 +1,54 @@
+$color-primary:   #211456;
+$color-secondary: #266BA6;
+$color-muted:     #6B7280;
+$color-bg:        #F4F4F4;
+$color-border:    #E5E7EB;
+
+:host { display: block; }
+
+.info-page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 48px 20px 72px;
+
+  &__header {
+    margin-bottom: 40px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid $color-border;
+  }
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0 0 10px;
+  }
+
+  &__subtitle {
+    font-size: 1rem;
+    color: $color-muted;
+    margin: 0;
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+    gap: 36px;
+  }
+}
+
+.info-section {
+  &__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0 0 10px;
+  }
+
+  &__text {
+    font-size: 0.95rem;
+    color: #374151;
+    line-height: 1.75;
+    margin: 0;
+  }
+}

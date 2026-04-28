@@ -24,20 +24,14 @@
   <section class="home__section">
     <div class="home__section-header">
       <h2 class="home__section-title">Eventos próximos en {{ location() }}</h2>
-      <button class="home__section-more" (click)="goToSection('events')" aria-label="Ver más eventos">
-        <span class="material-symbols-outlined">chevron_right</span>
-      </button>
     </div>
     <div class="home__grid">
       @for (event of events(); track event.id) {
         <app-card
           [card]="event"
-          [isFavorite]="event.isFavorite ?? false"
-          (favoriteToggle)="onFavoriteToggle($event)"
-          (cardClick)="onCardClick($event)"
+          [showFavorite]="false"
+          [interactive]="false"
         />
-      } @empty {
-        <p class="home__empty">No hay eventos disponibles</p>
       }
     </div>
   </section>
