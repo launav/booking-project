@@ -1,0 +1,335 @@
+$color-primary: #211456;
+$color-secondary: #266BA6;
+$color-white: #FFFFFF;
+$color-bg: #F4F4F4;
+$color-muted: #6B7280;
+$color-border: #D1D5DB;
+$radius: 16px;
+$input-radius: 8px;
+
+:host {
+  display: block;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 32px 16px 120px;
+}
+
+// ── Cabecera ──────────────────────────────────────────────────
+.payment__header {
+  margin-bottom: 28px;
+}
+
+.payment__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: $color-primary;
+  margin: 0 0 10px;
+}
+
+.payment__steps {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.payment__step {
+  font-size: 0.85rem;
+  color: $color-muted;
+
+  &--active {
+    color: $color-primary;
+    font-weight: 700;
+  }
+}
+
+// ── Tarjetas ──────────────────────────────────────────────────
+.payment__card {
+  border-radius: $radius;
+  border: 1px solid $color-border;
+  padding: 24px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.payment__card-title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: $color-primary;
+  margin: 0;
+}
+
+// ── Filas del formulario ──────────────────────────────────────
+.payment__row {
+  display: grid;
+  gap: 12px;
+
+  &--1 {
+    grid-template-columns: 1fr;
+  }
+
+  &--2 {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  &--3 {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+  @media (max-width: 640px) {
+
+    &--2,
+    &--3 {
+      grid-template-columns: 1fr;
+    }
+  }
+}
+
+.payment__field {
+  display: flex;
+  flex-direction: column;
+}
+
+.payment__input {
+  height: 44px;
+  padding: 0 14px;
+  border: 1px solid $color-border;
+  border-radius: $input-radius;
+  font-size: 0.88rem;
+  color: $color-primary;
+  background: $color-bg;
+  outline: none;
+  transition: border-color 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+
+  &::placeholder {
+    color: $color-muted;
+  }
+
+  &:focus {
+    border-color: $color-secondary;
+    background: $color-white;
+  }
+}
+
+.payment__select {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24'%3E%3Cpath fill='%236B7280' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+// ── Checkbox ──────────────────────────────────────────────────
+.payment__checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: #374151;
+  cursor: pointer;
+  user-select: none;
+}
+
+.payment__checkbox {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: $color-secondary;
+  flex-shrink: 0;
+}
+
+// ── Métodos de pago ───────────────────────────────────────────
+.payment__method {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+}
+
+// Radio personalizado
+.payment__radio {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid $color-border;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: border-color 0.2s;
+
+  &--checked {
+    border-color: $color-secondary;
+
+    &::after {
+      content: '';
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: $color-secondary;
+    }
+  }
+}
+
+.payment__method-name {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: $color-primary;
+  flex-shrink: 0;
+}
+
+// ── Logos tarjetas ────────────────────────────────────────────
+.payment__logos {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-left: 4px;
+}
+
+.payment__logo {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: 4px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+
+  &--visa {
+    background: #1A1F71;
+    color: #fff;
+  }
+
+  &--mc {
+    background: #EB001B;
+    color: #fff;
+    border-right: 4px solid #F79E1B;
+  }
+
+  &--discover {
+    background: #FF6600;
+    color: #fff;
+  }
+
+  &--amex {
+    background: #007BC1;
+    color: #fff;
+  }
+
+  &--diners {
+    background: #004A97;
+    color: #fff;
+  }
+
+  &--jcb {
+    background: #003087;
+    color: #fff;
+  }
+
+  &--union {
+    background: #C0392B;
+    color: #fff;
+  }
+}
+
+// ── Logo PayPal ───────────────────────────────────────────────
+.payment__logo-paypal {
+  font-size: 1rem;
+  font-weight: 700;
+  font-style: italic;
+  margin-left: 4px;
+}
+
+.payment__paypal-pay {
+  color: #003087;
+}
+
+.payment__paypal-pal {
+  color: #009CDE;
+}
+
+// ── Logo Google Pay ───────────────────────────────────────────
+.payment__logo-gpay {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 26px;
+  padding: 0 10px;
+  border: 1px solid $color-border;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #374151;
+  // background: $color-white;
+  margin-left: 4px;
+}
+
+// ── Footer fijo ───────────────────────────────────────────────
+.payment__footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: $color-white;
+  border-top: 1px solid $color-border;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  z-index: 100;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+}
+
+.payment__footer-total {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.payment__footer-label {
+  font-size: 0.8rem;
+  color: $color-muted;
+}
+
+.payment__footer-price {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: $color-primary;
+}
+
+.payment__footer-btn {
+  background: $color-secondary;
+  color: $color-white;
+  border: none;
+  border-radius: 24px;
+  padding: 14px 36px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.4;
+  transition: opacity 0.2s, background 0.2s;
+  white-space: nowrap;
+
+  &--active {
+    opacity: 1;
+    cursor: pointer;
+
+    &:hover {
+      background: darken($color-secondary, 8%);
+    }
+  }
+
+  &:disabled {
+    pointer-events: none;
+  }
+}

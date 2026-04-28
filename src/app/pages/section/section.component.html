@@ -1,6 +1,11 @@
 <main class="section">
 
-  <h1 class="section__title">{{ title() }}</h1>
+  <div class="section__header">
+    <h1 class="section__title">{{ title() }}</h1>
+    <button class="section__back-btn" (click)="goBack()" aria-label="Volver">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+  </div>
 
   @if (section() === 'visits') {
     <app-carousel [items]="visits()" [visible]="2" />

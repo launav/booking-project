@@ -1,9 +1,13 @@
 <app-header />
 
-<app-search-bar/>
+@if (!hideSearchBar()) {
+  <app-search-bar />
+}
 
 <main class="main-content">
   <router-outlet />
 </main>
 
-<app-footer />
+@if (!hideFooter()) {
+  <app-footer />
+}

@@ -1,0 +1,385 @@
+$color-primary: #211456;
+$color-secondary: #266BA6;
+$color-pink: #D989A6;
+$color-pink-light: #FFD4E3;
+$color-white: #FFFFFF;
+$color-bg: #F4F4F4;
+$color-muted: #6B7280;
+$radius: 20px;
+
+:host {
+  display: block;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────
+.detail__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+
+  &-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: $color-primary;
+  }
+}
+
+.detail__back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background-color: #e0e0e0;
+  color: $color-primary;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background-color 0.2s;
+
+  span {
+    font-size: 22px;
+  }
+
+  &:hover {
+    background-color: #bdbdbd;
+  }
+}
+
+// ── Tarjeta principal (750px) ─────────────────────────────────
+.detail__card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: $color-white;
+  border-radius: 20px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 20px;
+  margin-bottom: 16px;
+  overflow: hidden;
+
+  @media (max-width: 768px) {
+    height: auto;
+  }
+}
+
+// ── Primer contenedor: carrusel + info (260px) ────────────────
+.detail__top {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 28px;
+  height: 239px;
+  flex-shrink: 0;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+}
+
+// ── Carrusel ──────────────────────────────────────────────────
+.detail__carousel {
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 100%;
+
+  &-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  &-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(255, 255, 255, 0.85);
+    color: $color-primary;
+    cursor: pointer;
+    transition: background 0.2s;
+    z-index: 2;
+
+    span {
+      font-size: 22px;
+    }
+
+    &:hover {
+      background: $color-white;
+    }
+
+    &--prev {
+      left: 10px;
+    }
+
+    &--next {
+      right: 10px;
+    }
+  }
+}
+
+// ── Info habitación ───────────────────────────────────────────
+.detail__info {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow: hidden;
+
+  &-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.detail__room-type {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: $color-primary;
+  margin: 0;
+}
+
+.detail__ver-detalles {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: none;
+  border: none;
+  color: $color-muted;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0;
+
+  span {
+    font-size: 16px;
+  }
+
+  &:hover {
+    color: $color-secondary;
+  }
+}
+
+.detail__specs {
+  font-size: 0.9rem;
+  color: $color-muted;
+  margin: 0;
+}
+
+.detail__price {
+  font-size: 0.95rem;
+  color: $color-muted;
+  margin: 0;
+}
+
+.detail__description {
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+// ── Amenities ─────────────────────────────────────────────────
+.detail__amenities {
+  list-style: none;
+  padding: 0;
+  margin: 4px 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.detail__amenity {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: $color-primary;
+  width: 120px;
+  flex-direction: column;
+}
+
+.detail__amenity-icon {
+  font-size: 24px;
+  color: $color-secondary;
+}
+
+// ── Segundo contenedor: condiciones (42px) ────────────────────
+.detail__conditions {
+  display: flex;
+  align-items: stretch;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: $color-pink;
+
+  &-left {
+    flex: 1;
+  }
+
+  &-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: $color-pink-light;
+    border-radius: $radius;
+    padding: 0 20px;
+    flex-shrink: 0;
+  }
+
+  &-btn {
+    background: none;
+    border: none;
+    color: $color-primary;
+    cursor: pointer;
+    white-space: nowrap;
+
+    &:hover {
+      color: $color-secondary;
+    }
+  }
+}
+
+// ── Tercer contenedor: opciones de precio (100px c/u) ─────────
+.detail__options {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+}
+
+.detail__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100px;
+  flex-shrink: 0;
+  background: $color-white;
+  border-radius: $radius;
+  border: 1px solid #E5E7EB;
+  padding: 0 20px;
+  gap: 16px;
+
+  @media (max-width: 600px) {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+    padding: 16px 20px;
+  }
+
+  &-left {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  &-price {
+    font-size: 0.85rem;
+    color: $color-secondary;
+    font-weight: 600;
+  }
+
+  &-name {
+    font-size: 0.9rem;
+    color: #374151;
+  }
+
+  &-right {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    flex-shrink: 0;
+  }
+
+  &-taxes-total {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+  }
+
+  &-taxes {
+    font-size: 0.8rem;
+    color: $color-muted;
+  }
+
+  &-total {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $color-primary;
+    min-width: 90px;
+    text-align: right;
+  }
+
+  &-btn {
+    background: $color-secondary;
+    color: $color-white;
+    border: none;
+    border-radius: 24px;
+    padding: 10px 20px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background 0.2s, opacity 0.2s;
+
+    &:hover {
+      background: darken($color-secondary, 8%);
+    }
+
+    &--selected {
+      background: $color-muted;
+      cursor: default;
+
+      &:hover {
+        background: $color-muted;
+      }
+    }
+
+
+  }
+}
+
+// ── Footer continuar ──────────────────────────────────────────
+.detail__footer {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.detail__continue-btn {
+  background: $color-secondary;
+  color: $color-white;
+  border: none;
+  border-radius: 24px;
+  padding: 12px 36px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: not-allowed;
+  opacity: 0.4;
+  transition: opacity 0.2s, background 0.2s;
+
+  &--active {
+    opacity: 1;
+    cursor: pointer;
+
+    &:hover {
+      background: darken($color-secondary, 8%);
+    }
+  }
+
+  &:disabled {
+    pointer-events: none;
+  }
+}

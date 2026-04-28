@@ -1,1 +1,86 @@
-<p>resume works!</p>
+@if (booking(); as b) {
+
+  <!-- Cabecera -->
+  <div class="resume__header">
+    <h1 class="resume__title">Finalizar reserva</h1>
+    <nav class="resume__steps">
+      <span class="resume__step resume__step--active">1. Detalles de la reserva</span>
+      <span class="resume__step-sep">|</span>
+      <span class="resume__step">2. Forma de pago</span>
+      <span class="resume__step-sep">|</span>
+      <span class="resume__step">3. Confirmación</span>
+    </nav>
+  </div>
+
+  <!-- Tarjeta de resumen -->
+  <div class="resume__card">
+
+    <!-- Imagen -->
+    <img [src]="b.room.images[0]" [alt]="b.room.name" class="resume__img" />
+
+    <!-- Información -->
+    <div class="resume__info">
+
+      <!-- Fila superior: nombre + botón Modificar -->
+      <div class="resume__info-top">
+        <div>
+          <h2 class="resume__name">{{ b.room.name }} - {{ b.room.roomType }}</h2>
+          <div class="resume__stars">
+            @for (s of stars(); track s) {
+              <span class="material-symbols-outlined resume__star">star</span>
+            }
+          </div>
+        </div>
+        <button class="resume__modify-btn" (click)="goBack()">Modificar</button>
+      </div>
+
+      <!-- Rejilla de detalles -->
+      <div class="resume__details">
+
+        <!-- Columna izquierda -->
+        <div class="resume__details-left">
+          <div class="resume__detail-item">
+            <span class="resume__detail-label">Ocupación</span>
+            <span class="resume__detail-value">{{ adults() }} adultos, {{ roomCount() }} habitaciones</span>
+          </div>
+          <div class="resume__detail-item">
+            <span class="resume__detail-label">Check-in</span>
+            <span class="resume__detail-value">{{ checkInLabel() }}</span>
+          </div>
+          <div class="resume__detail-item">
+            <span class="resume__detail-label">Check-out</span>
+            <span class="resume__detail-value">{{ checkOutLabel() }}</span>
+          </div>
+        </div>
+
+        <!-- Columna derecha -->
+        <div class="resume__details-right">
+          <div class="resume__detail-item">
+            <span class="resume__detail-label">Habitaciones</span>
+            <span class="resume__detail-value">{{ roomLabel() }}</span>
+          </div>
+          <div class="resume__detail-item">
+            <span class="resume__detail-label">Régimen de comidas</span>
+            <span class="resume__detail-value">{{ mealRegime() }}</span>
+          </div>
+          <hr class="resume__hr" />
+          <div class="resume__payment-row">
+            <span class="resume__payment-label">Tipo de pago: <strong>Online</strong></span>
+            <span class="resume__payment-price">{{ totalPrice() | number:'1.2-2' }} €</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Barra inferior fija -->
+  <div class="resume__footer">
+    <div class="resume__footer-total">
+      <span class="resume__footer-label">Total</span>
+      <span class="resume__footer-price">{{ totalPrice() | number:'1.2-2' }} €</span>
+    </div>
+    <button class="resume__footer-btn" (click)="continue()">Continuar con el pago</button>
+  </div>
+
+}

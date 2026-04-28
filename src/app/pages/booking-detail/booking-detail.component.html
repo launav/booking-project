@@ -1,1 +1,93 @@
-<p>booking-detail works!</p>
+@if (room(); as r) {
+
+<!-- Breadcrumb + Flecha -->
+<div class="detail__breadcrumb">
+  <span class="detail__breadcrumb-text">{{ breadcrumb() }}</span>
+  <button class="detail__back-btn" (click)="goBack()" aria-label="Volver">
+    <span class="material-symbols-outlined">chevron_left</span>
+  </button>
+</div>
+
+<!-- Tarjeta principal -->
+<div class="detail__card">
+
+  <!-- Primer contenedor: carrusel + info -->
+  <div class="detail__top">
+
+    <!-- Carrusel -->
+    <div class="detail__carousel">
+      <button class="detail__carousel-btn detail__carousel-btn--prev" (click)="prevImage()"
+        aria-label="Imagen anterior">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <img [src]="currentImage()" [alt]="r.name" class="detail__carousel-img" />
+      <button class="detail__carousel-btn detail__carousel-btn--next" (click)="nextImage()"
+        aria-label="Imagen siguiente">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+    </div>
+
+    <!-- Info habitación -->
+    <div class="detail__info">
+      <div class="detail__info-header">
+        <h2 class="detail__room-type">{{ r.roomType }}</h2>
+      </div>
+      <p class="detail__specs">{{ r.bedType }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ r.size }}m²</p>
+      <p class="detail__price">{{ r.basePrice }} €/noche</p>
+      <p class="detail__description">{{ r.description }}</p>
+      <ul class="detail__amenities">
+        @for (amenity of r.amenities; track amenity.label) {
+        <li class="detail__amenity">
+          <span class="material-symbols-outlined detail__amenity-icon">{{ amenity.icon }}</span>
+          <span>{{ amenity.label }}</span>
+        </li>
+        }
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Segundo contenedor: condiciones -->
+  <div class="detail__conditions">
+    <div class="detail__conditions-left"></div>
+    <div class="detail__conditions-right">
+      <button class="detail__conditions-btn">Condiciones de la reserva</button>
+    </div>
+  </div>
+
+  <!-- Tercer contenedor: opciones de precio -->
+  <div class="detail__options">
+    @for (option of r.pricingOptions; track option.name) {
+    <div class="detail__option" [class.detail__option--selected]="isSelected(option)">
+
+      <div class="detail__option-left">
+        <span class="detail__option-price">{{ option.pricePerNight }} €/noche</span>
+        <span class="detail__option-name">{{ option.name }}</span>
+      </div>
+
+      <div class="detail__option-right">
+        <div class="detail__option-taxes-total">
+          <span class="detail__option-taxes">Impuestos incluidos</span>
+          <span class="detail__option-total">{{ option.totalPrice | number:'1.2-2' }} €</span>
+        </div>
+        <button class="detail__option-btn" [class.detail__option-btn--selected]="isSelected(option)"
+          (click)="selectOption(option)">
+          {{ isSelected(option) ? 'Seleccionada' : 'Seleccionar habitación' }}
+        </button>
+      </div>
+
+    </div>
+    }
+  </div>
+
+</div>
+
+<!-- Botón continuar -->
+<div class="detail__footer">
+  <button class="detail__continue-btn" [disabled]="!selectedOption()"
+    [class.detail__continue-btn--active]="selectedOption()" (click)="continue()">
+    Continuar
+  </button>
+</div>
+
+}
