@@ -1,0 +1,80 @@
+.res-page {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px 16px;
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #211456;
+    margin: 0 0 32px;
+  }
+
+  &__guest,
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    border-radius: 20px;
+    align-items: center;
+    gap: 12px;
+    padding: 64px 16px;
+    color: #6B7280;
+    text-align: center;
+
+    p { margin: 0; font-size: 1rem; }
+  }
+
+  &__guest-icon  { font-size: 56px; color: #266BA6; }
+  &__empty-icon  { font-size: 56px; color: #D989A6; }
+
+  &__login-link {
+    margin-top: 4px;
+    color: #266BA6;
+    font-weight: 600;
+    text-decoration: underline;
+    font-size: 0.95rem;
+
+    &:hover { opacity: 0.8; }
+  }
+
+  &__list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.res-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+
+  &__info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .material-symbols-outlined { color: #266BA6; font-size: 28px; }
+
+    p { margin: 0; }
+  }
+
+  &__dates { font-size: 0.875rem; color: #6B7280; }
+  &__room  { font-weight: 600; color: #211456; }
+
+  &__status {
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+
+    &--confirmed { background: #D1FAE5; color: #065F46; }
+    &--pending   { background: #FEF3C7; color: #92400E; }
+    &--cancelled { background: #FEE2E2; color: #991B1B; }
+  }
+}

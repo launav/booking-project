@@ -1,0 +1,81 @@
+<div class="auth">
+  <div class="auth__card">
+
+    @if (!isRegister()) {
+
+      <h1 class="auth__title">Iniciar sesión</h1>
+
+      <form class="auth__form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
+        <div class="auth__field">
+          <label class="auth__label">Email</label>
+          <input class="auth__input" type="email" formControlName="email" placeholder="tucorreo@email.com" />
+          @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
+            <span class="auth__error">Introduce un email válido</span>
+          }
+        </div>
+
+        <div class="auth__field">
+          <label class="auth__label">Contraseña</label>
+          <input class="auth__input" type="password" formControlName="password" placeholder="••••••••" />
+          @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
+            <span class="auth__error">La contraseña es obligatoria</span>
+          }
+        </div>
+
+        @if (error()) {
+          <p class="auth__error-global">{{ error() }}</p>
+        }
+
+        <button class="auth__submit" type="submit">Entrar</button>
+      </form>
+
+      <p class="auth__toggle">
+        ¿No estás registrado?
+        <button class="auth__toggle-btn" type="button" (click)="toggleMode()">Crear cuenta</button>
+      </p>
+
+    } @else {
+
+      <h1 class="auth__title">Crear cuenta</h1>
+
+      <form class="auth__form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
+        <div class="auth__field">
+          <label class="auth__label">Nombre</label>
+          <input class="auth__input" type="text" formControlName="first_name" placeholder="Tu nombre" />
+          @if (registerForm.get('first_name')?.touched && registerForm.get('first_name')?.invalid) {
+            <span class="auth__error">El nombre es obligatorio</span>
+          }
+        </div>
+
+        <div class="auth__field">
+          <label class="auth__label">Email</label>
+          <input class="auth__input" type="email" formControlName="email" placeholder="tucorreo@email.com" />
+          @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
+            <span class="auth__error">Introduce un email válido</span>
+          }
+        </div>
+
+        <div class="auth__field">
+          <label class="auth__label">Contraseña</label>
+          <input class="auth__input" type="password" formControlName="password" placeholder="Mínimo 6 caracteres" />
+          @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
+            <span class="auth__error">Mínimo 6 caracteres</span>
+          }
+        </div>
+
+        @if (error()) {
+          <p class="auth__error-global">{{ error() }}</p>
+        }
+
+        <button class="auth__submit" type="submit">Registrarse</button>
+      </form>
+
+      <p class="auth__toggle">
+        ¿Ya tienes cuenta?
+        <button class="auth__toggle-btn" type="button" (click)="toggleMode()">Iniciar sesión</button>
+      </p>
+
+    }
+
+  </div>
+</div>

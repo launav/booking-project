@@ -44,6 +44,18 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/publicar/publicar.component').then(m => m.PublicarComponent),
       },
       {
+        path: 'login',
+        loadComponent: () => import('./pages/login/login.component').then(m => m.LoginComponent),
+      },
+      {
+        path: 'favorites',
+        loadComponent: () => import('./pages/favorites/favorites.component').then(m => m.FavoritesComponent),
+      },
+      {
+        path: 'reservations',
+        loadComponent: () => import('./pages/reservations/reservations.component').then(m => m.ReservationsComponent),
+      },
+      {
         path: 'admin',
         canActivate: [AuthGuard],
         loadComponent: () => import('./pages/admin/admin.component').then(m => m.AdminComponent),

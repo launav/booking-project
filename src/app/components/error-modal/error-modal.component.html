@@ -1,0 +1,21 @@
+@if (modalService.error(); as err) {
+  <div class="modal-backdrop" (click)="modalService.close()">
+    <div class="modal" (click)="$event.stopPropagation()">
+
+      <div class="modal__header">
+        <span class="material-symbols-outlined modal__icon">error</span>
+        <h2 class="modal__title">{{ err.title }}</h2>
+        <button class="modal__close" (click)="modalService.close()" aria-label="Cerrar">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <p class="modal__message">{{ err.message }}</p>
+
+      <div class="modal__footer">
+        <button class="modal__btn" (click)="modalService.close()">Aceptar</button>
+      </div>
+
+    </div>
+  </div>
+}
