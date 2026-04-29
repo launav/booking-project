@@ -1,13 +1,44 @@
 .section {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 32px 16px;
+  padding: 50px 16px;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 24px;
+  }
 
   &__title {
-    font-size: 1.5rem;
+    font-size: 1.35rem;
     font-weight: 700;
     color: #211456;
-    margin: 0 0 24px;
+    margin: 0;
+  }
+
+  &__back-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: none;
+    background-color: #e0e0e0;
+    color: #211456;
+    cursor: pointer;
+    flex-shrink: 0;
+    transition: background-color 0.25s ease;
+
+    span {
+      font-size: 22px;
+      line-height: 1;
+    }
+
+    &:hover {
+      background-color: #bdbdbd;
+    }
   }
 
   &__grid {

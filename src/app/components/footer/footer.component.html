@@ -28,14 +28,6 @@
     <div class="footer__legal">
       <span class="footer__copyright">
         {{ copyrightText() }}
-        @for (link of legalLinks(); track link.label) {
-          <span class="footer__legal-separator"> | </span>
-          @if (link.route) {
-            <a class="footer__legal-link" [routerLink]="link.route">{{ link.label }}</a>
-          } @else {
-            <a class="footer__legal-link" [href]="link.url" target="_blank" rel="noopener">{{ link.label }}</a>
-          }
-        }
       </span>
       <span class="footer__locale">{{ locale() }}</span>
     </div>

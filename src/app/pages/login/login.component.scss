@@ -1,0 +1,107 @@
+.auth {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px 16px;
+  background-color: #F4F4F4;
+
+  &__card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 40px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+  }
+
+  &__title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #211456;
+    margin: 0 0 28px;
+    text-align: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  &__field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: #1A1A2E;
+  }
+
+  &__input {
+    padding: 10px 14px;
+    border: 1.5px solid #E0E0E0;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-family: inherit;
+    outline: none;
+    transition: border-color 0.2s ease;
+
+    &:focus {
+      border-color: #266BA6;
+    }
+
+    &::placeholder {
+      color: #9CA3AF;
+    }
+  }
+
+  &__error {
+    font-size: 0.8rem;
+    color: #D94625;
+  }
+
+  &__error-global {
+    font-size: 0.875rem;
+    color: #D94625;
+    text-align: center;
+    margin: 0;
+  }
+
+  &__submit {
+    margin-top: 8px;
+    padding: 12px;
+    background-color: #211456;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover { background-color: darken(#211456, 5%); }
+  }
+
+  &__toggle {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 0.875rem;
+    color: #6B7280;
+  }
+
+  &__toggle-btn {
+    background: none;
+    border: none;
+    color: #266BA6;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.875rem;
+    padding: 0;
+    text-decoration: underline;
+
+    &:hover { opacity: 0.8; }
+  }
+}

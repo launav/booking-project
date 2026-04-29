@@ -8,7 +8,7 @@ import { HomeService } from '../../core/services/user/home.service';
 type SectionType = 'rooms' | 'events' | 'visits' | string;
 
 const SECTION_TITLES: Record<string, string> = {
-  rooms:  'Habitaciones en',
+  rooms: 'Habitaciones populares en',
   events: 'Eventos en',
   visits: 'Visitas en',
 };
@@ -22,19 +22,19 @@ const SECTION_TITLES: Record<string, string> = {
 })
 export class SectionComponent implements OnInit {
 
-  private route       = inject(ActivatedRoute);
-  private router      = inject(Router);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private homeService = inject(HomeService);
 
   location = this.homeService.location;
-  section  = signal<SectionType>('');
+  section = signal<SectionType>('');
 
-  cards  = signal<CardData[]>([]);
+  cards = signal<CardData[]>([]);
   visits = signal<CarouselItem[]>([]);
 
   title = computed(() => {
     const base = SECTION_TITLES[this.section()] ?? this.section();
-    return `${base} ${this.location()}`;
+    return `Habitaciones populares en ${this.location()}`;
   });
 
   ngOnInit(): void {
@@ -43,6 +43,10 @@ export class SectionComponent implements OnInit {
       this.section.set(section);
       this.loadData(section);
     });
+  }
+
+  goBack(): void {
+    history.back();
   }
 
   onCardClick(id: number): void {

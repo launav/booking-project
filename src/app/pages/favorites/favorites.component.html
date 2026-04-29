@@ -1,0 +1,22 @@
+<main class="fav-page">
+  <h1 class="fav-page__title">Mis favoritos</h1>
+
+  @if (!authService.isLoggedIn()) {
+    <div class="fav-page__guest">
+      <span class="material-symbols-outlined fav-page__guest-icon">favorite</span>
+      <p>Debes estar logado para ver tus favoritos.</p>
+      <a routerLink="/login" class="fav-page__login-link">Iniciar sesión</a>
+    </div>
+  } @else if (favorites().length === 0) {
+    <div class="fav-page__empty">
+      <span class="material-symbols-outlined fav-page__empty-icon">favorite_border</span>
+      <p>Aún no tienes favoritos guardados.</p>
+    </div>
+  } @else {
+    <div class="fav-page__grid">
+      @for (card of favorites(); track card.id) {
+        <app-card [card]="card" [isFavorite]="true" />
+      }
+    </div>
+  }
+</main>

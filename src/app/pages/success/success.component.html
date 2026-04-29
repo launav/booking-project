@@ -1,1 +1,21 @@
-<p>success works!</p>
+<div class="success">
+
+  <div class="success__content">
+
+    <h1 class="success__title">Tu reserva se ha registrado<br />correctamente.</h1>
+    <p class="success__subtitle">Recibirás un email con la confirmación de la reserva.</p>
+
+    @if (formData(); as d) {
+      <div class="success__info">
+        <h2 class="success__info-title">Información</h2>
+        <p class="success__info-line">{{ fullName() }}</p>
+        <p class="success__info-line">{{ addressLine() }}</p>
+        <p class="success__info-line">{{ locationLine() }}</p>
+        <p class="success__info-line">{{ d.email }}</p>
+        <p class="success__info-line">{{ d.telefono }}</p>
+      </div>
+    }
+
+  </div>
+
+</div>

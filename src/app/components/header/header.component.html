@@ -1,21 +1,18 @@
-<header class="header">
+<header class="header" [class.header--scrolled]="scrolled()">
   <div class="header__container">
 
-    <!-- Logotipo -->
     <a class="header__logo" routerLink="/home" aria-label="Ir a inicio">
       <img src="/images/logotipo-roomify.png" alt="Roomify" class="logo-img">
     </a>
 
-    <!-- Acciones -->
     <nav class="header__actions">
 
-      <!-- Botón Alojamientos -->
-      <a class="header__nav-link" routerLink="/alojamientos">
+      <a class="header__nav-link" routerLink="/rooms">
         <span class="material-symbols-outlined">home</span>
         <span class="header__nav-label">Alojamientos</span>
       </a>
 
-      <!-- Icono usuario (naranja) -->
+      <!-- Icono usuario -->
       <button class="header__icon-btn header__icon-btn--profile"
               mat-icon-button
               [matMenuTriggerFor]="userMenu"
@@ -23,21 +20,16 @@
         <span class="material-symbols-outlined menu-icon">person</span>
       </button>
 
-      <!-- Menú usuario -->
       <mat-menu #userMenu="matMenu" class="header-menu">
-        @if (isLoggedIn()) {
+        @if (authService.isLoggedIn()) {
           <div class="menu-user-name">
             <span class="material-symbols-outlined">account_circle</span>
-            <span>{{ userName() }}</span>
+            <span>{{ authService.userName() }}</span>
           </div>
           <mat-divider />
           <button mat-menu-item (click)="goToProfile()">
             <span class="material-symbols-outlined">manage_accounts</span>
-            <span>Mis datos</span>
-          </button>
-          <button mat-menu-item (click)="deleteAccount()">
-            <span class="material-symbols-outlined">delete_outline</span>
-            <span>Eliminar cuenta</span>
+            <span>Ver perfil</span>
           </button>
           <mat-divider />
           <button mat-menu-item (click)="logout()">
@@ -49,14 +41,10 @@
             <span class="material-symbols-outlined">login</span>
             <span>Iniciar sesión</span>
           </button>
-          <button mat-menu-item routerLink="/register">
-            <span class="material-symbols-outlined">person_add</span>
-            <span>Registrarse</span>
-          </button>
         }
       </mat-menu>
 
-      <!-- Icono menú (rojo) -->
+      <!-- Icono menú -->
       <button class="header__icon-btn header__icon-btn--menu"
               mat-icon-button
               [matMenuTriggerFor]="navMenu"
@@ -64,14 +52,13 @@
         <span class="material-symbols-outlined menu-icon">menu</span>
       </button>
 
-      <!-- Menú navegación -->
       <mat-menu #navMenu="matMenu" class="header-menu">
         <button mat-menu-item (click)="goToFavorites()">
           <span class="material-symbols-outlined">favorite</span>
           <span>Favoritos</span>
         </button>
         <button mat-menu-item (click)="goToReservations()">
-          <span class="material-symbols-outlined">home</span>
+          <span class="material-symbols-outlined">calendar_month</span>
           <span>Reservas</span>
         </button>
       </mat-menu>

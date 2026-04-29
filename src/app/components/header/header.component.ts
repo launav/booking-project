@@ -1,12 +1,11 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, inject, signal, HostListener } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-
-import { MatToolbarModule }   from '@angular/material/toolbar';
-import { MatIconModule }      from '@angular/material/icon';
-import { MatButtonModule }    from '@angular/material/button';
-import { MatMenuModule }      from '@angular/material/menu';
-import { MatDividerModule }   from '@angular/material/divider';
+import { MatIconModule }    from '@angular/material/icon';
+import { MatButtonModule }  from '@angular/material/button';
+import { MatMenuModule }    from '@angular/material/menu';
+import { MatDividerModule } from '@angular/material/divider';
+import { AuthService }      from '../../core/services/user/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -14,7 +13,6 @@ import { MatDividerModule }   from '@angular/material/divider';
   imports: [
     CommonModule,
     RouterLink,
-    MatToolbarModule,
     MatIconModule,
     MatButtonModule,
     MatMenuModule,
@@ -25,44 +23,18 @@ import { MatDividerModule }   from '@angular/material/divider';
 })
 export class HeaderComponent {
 
-  // ── Estado de autenticación ────────────────────────────────
-  private _token = signal<string | null>(localStorage.getItem('token'));
+  authService    = inject(AuthService);
+  private router = inject(Router);
 
-  isLoggedIn = computed(() => !!this._token());
+  scrolled = signal(false);
 
-  userName = computed(() => {
-    const raw = localStorage.getItem('user');
-    if (!raw) return '';
-    try {
-      const user = JSON.parse(raw);
-      return user.first_name ?? '';
-    } catch { return ''; }
-  });
-
-  constructor(private router: Router) {}
-
-  // ── Acciones del menú de usuario ───────────────────────────
-  goToProfile(): void {
-    this.router.navigate(['/profile']);
+  @HostListener('window:scroll')
+  onScroll(): void {
+    this.scrolled.set(window.scrollY > 10);
   }
 
-  goToFavorites(): void {
-    this.router.navigate(['/favorites']);
-  }
-
-  goToReservations(): void {
-    this.router.navigate(['/reservations']);
-  }
-
-  logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    this._token.set(null);
-    this.router.navigate(['/home']);
-  }
-
-  deleteAccount(): void {
-    // El diálogo de confirmación se implementará en la página de perfil
-    this.router.navigate(['/profile'], { queryParams: { action: 'delete' } });
-  }
+  goToFavorites(): void    { this.router.navigate(['/favorites']); }
+  goToReservations(): void { this.router.navigate(['/reservations']); }
+  goToProfile(): void      { this.router.navigate(['/profile']); }
+  logout(): void           { this.authService.logout(); }
 }

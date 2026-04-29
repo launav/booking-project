@@ -1,0 +1,33 @@
+<main class="res-page">
+  <h1 class="res-page__title">Mis reservas</h1>
+
+  @if (!authService.isLoggedIn()) {
+    <div class="res-page__guest">
+      <span class="material-symbols-outlined res-page__guest-icon">calendar_month</span>
+      <p>Debes estar logado para ver tus reservas.</p>
+      <a routerLink="/login" class="res-page__login-link">Iniciar sesión</a>
+    </div>
+  } @else if (reservations().length === 0) {
+    <div class="res-page__empty">
+      <span class="material-symbols-outlined res-page__empty-icon">event_busy</span>
+      <p>Todavía no tienes ninguna reserva.</p>
+    </div>
+  } @else {
+    <div class="res-page__list">
+      @for (res of reservations(); track res.id) {
+        <div class="res-card">
+          <div class="res-card__info">
+            <span class="material-symbols-outlined">home</span>
+            <div>
+              <p class="res-card__dates">{{ res.checkIn }} → {{ res.checkOut }}</p>
+              <p class="res-card__room">Habitación #{{ res.roomId }}</p>
+            </div>
+          </div>
+          <span class="res-card__status res-card__status--{{ res.status }}">
+            {{ res.status }}
+          </span>
+        </div>
+      }
+    </div>
+  }
+</main>

@@ -30,10 +30,8 @@ export class FooterComponent {
     {
       title: 'Roomify',
       links: [
-        { label: 'Centro de ayuda', route: '/ayuda' },
+        { label: 'Centro de ayuda',        route: '/ayuda' },
         { label: 'Opciones de cancelación', route: '/cancelacion' },
-        { label: 'Empleos', route: '/empleos' },
-        { label: 'Contacto', route: '/contacto' },
       ],
     },
     {
@@ -42,13 +40,6 @@ export class FooterComponent {
         { label: '¿Cómo publico mi hotel?', route: '/publicar' },
       ],
     },
-  ]);
-
-  legalLinks = input<FooterLink[]>([
-    { label: 'Aviso Legal', route: '/aviso-legal' },
-    { label: 'Política de Cookies', route: '/cookies' },
-    { label: 'Política de Privacidad', route: '/privacidad' },
-    { label: 'Contacto', route: '/contacto' },
   ]);
 
   // ── Estado interno ──────────────────────────────────────────

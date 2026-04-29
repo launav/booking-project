@@ -20,8 +20,10 @@ export interface CardData {
 export class CardComponent {
 
   // Inputs
-  card = input.required<CardData>();
-  isFavorite = input<boolean>(false);
+  card          = input.required<CardData>();
+  isFavorite    = input<boolean>(false);
+  showFavorite  = input<boolean>(true);   // oculta el botón de favorito
+  interactive   = input<boolean>(true);   // false: sin cursor pointer ni click
 
   // Outputs
   favoriteToggle = output<number>();
@@ -46,6 +48,7 @@ export class CardComponent {
   }
 
   onClick(): void {
+    if (!this.interactive()) return;
     this.cardClick.emit(this.card().id);
   }
 }
