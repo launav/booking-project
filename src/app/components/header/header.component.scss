@@ -65,21 +65,22 @@ $breakpoint-sm: 600px;
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 6px 12px;
-    border-radius: 8px;
+    padding: 7px 14px;
+    border-radius: 20px;
     text-decoration: none;
     color: $color-primary;
     font-weight: 600;
-    font-size: 1rem;
-    transition: background-color $transition, color $transition;
+    font-size: 0.95rem;
+    transition: background-color $transition, color $transition, box-shadow $transition;
 
     .material-symbols-outlined {
       font-size: 20px;
     }
 
     &:hover {
-      background-color: rgba($color-secondary, 0.08);
+      background-color: rgba($color-secondary, 0.09);
       color: $color-secondary;
+      box-shadow: 0 2px 8px rgba($color-secondary, 0.1);
     }
   }
 
@@ -98,24 +99,30 @@ $breakpoint-sm: 600px;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    transition: opacity $transition, transform $transition;
+    transition: opacity $transition, transform $transition, box-shadow $transition;
 
     .menu-icon {
       color: $color-white;
-      // font-size: 22px;
       line-height: 1;
     }
 
     &:hover {
-      opacity: 0.85;
+      opacity: 0.9;
+      transform: scale(1.06);
+    }
+
+    &:active {
+      transform: scale(0.95);
     }
 
     &--profile {
       background-color: $color-icon-profile !important;
+      box-shadow: 0 2px 8px rgba($color-icon-profile, 0.35);
     }
 
     &--menu {
       background-color: $color-icon-menu !important;
+      box-shadow: 0 2px 8px rgba($color-icon-menu, 0.35);
     }
   }
 }

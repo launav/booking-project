@@ -1,15 +1,19 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterOutlet, Router, NavigationEnd, NavigationStart } from '@angular/router';
 import { filter } from 'rxjs/operators';
-import { HeaderComponent }     from '../../components/header/header.component';
-import { FooterComponent }     from '../../components/footer/footer.component';
-import { SearchBarComponent }  from '../../components/search-bar/search-bar.component';
-import { LoadingComponent }    from '../../components/loading/loading.component';
+import { HeaderComponent } from '../../components/header/header.component';
+import { FooterComponent } from '../../components/footer/footer.component';
+import { SearchBarComponent, SearchParams } from '../../components/search-bar/search-bar.component';
+import { LoadingComponent } from '../../components/loading/loading.component';
 import { ErrorModalComponent } from '../../components/error-modal/error-modal.component';
-import { LoadingService }      from '../../core/services/loading.service';
+import { LoadingService } from '../../core/services/loading/loading.service';
+import { ToastComponent } from '../../components/toast/toast.component';
+import { PreviousRouteService } from '../../core/services/loading/previous-route.service';
+import { HomeService } from '../../core/services/user/home.service';
 
-const NO_SEARCHBAR_NO_FOOTER    = ['/resume', '/payment'];
-const NO_SEARCHBAR_WITH_FOOTER  = ['/success', '/login'];
+const NO_SEARCHBAR_NO_FOOTER = ['/resume', '/payment'];
+const NO_SEARCHBAR_WITH_FOOTER = ['/success', '/login', '/admin', '/profile'];
 
 @Component({
   selector: 'app-main-layout',
@@ -21,28 +25,46 @@ const NO_SEARCHBAR_WITH_FOOTER  = ['/success', '/login'];
     SearchBarComponent,
     LoadingComponent,
     ErrorModalComponent,
+    ToastComponent,
   ],
   templateUrl: './main-layout.component.html',
   styleUrl: './main-layout.component.scss',
 })
 export class MainLayoutComponent {
 
-  private router         = inject(Router);
+  private router       = inject(Router);
   private loadingService = inject(LoadingService);
+  private prevRoute    = inject(PreviousRouteService);
+  private homeService  = inject(HomeService);
+  private destroyRef   = inject(DestroyRef);
 
   hideSearchBar = signal(this.checkHideSearch(this.router.url));
-  hideFooter    = signal(this.checkHideFooter(this.router.url));
+  hideFooter = signal(this.checkHideFooter(this.router.url));
 
   constructor() {
-    this.router.events.pipe(filter(e => e instanceof NavigationStart))
+    this.router.events
+      .pipe(
+        filter(e => e instanceof NavigationStart),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe(() => this.loadingService.show());
 
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd))
+    this.router.events
+      .pipe(
+        filter(e => e instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
       .subscribe((e: NavigationEnd) => {
         this.loadingService.hide();
         this.hideSearchBar.set(this.checkHideSearch(e.urlAfterRedirects));
         this.hideFooter.set(this.checkHideFooter(e.urlAfterRedirects));
+        this.prevRoute.track(e.urlAfterRedirects);
       });
+  }
+
+  onSearch(params: SearchParams): void {
+    // Actualizar el location del servicio para que la home refleje la ciudad buscada
+    this.homeService.location.set(params.destination ?? '');
   }
 
   private checkHideSearch(url: string): boolean {

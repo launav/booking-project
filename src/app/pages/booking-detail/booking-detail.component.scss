@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $color-primary: #211456;
 $color-secondary: #266BA6;
 $color-pink: #D989A6;
@@ -36,18 +38,19 @@ $radius: 20px;
   height: 34px;
   border-radius: 50%;
   border: none;
-  background-color: #e0e0e0;
+  background-color: rgba($color-primary, 0.08);
   color: $color-primary;
   cursor: pointer;
   flex-shrink: 0;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, transform 0.2s;
 
   span {
     font-size: 22px;
   }
 
   &:hover {
-    background-color: #bdbdbd;
+    background-color: rgba($color-primary, 0.15);
+    transform: translateX(-2px);
   }
 }
 
@@ -150,6 +153,18 @@ $radius: 20px;
   font-weight: 700;
   color: $color-primary;
   margin: 0;
+}
+
+.detail__hotel-name {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.85rem;
+  color: $color-secondary;
+  font-weight: 500;
+  margin: 4px 0 0;
+
+  .material-symbols-outlined { font-size: 16px; }
 }
 
 .detail__ver-detalles {
@@ -272,6 +287,12 @@ $radius: 20px;
   border: 1px solid #E5E7EB;
   padding: 0 20px;
   gap: 16px;
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+    border-color: #D1D5DB;
+  }
 
   @media (max-width: 600px) {
     flex-direction: column;
@@ -336,7 +357,7 @@ $radius: 20px;
     transition: background 0.2s, opacity 0.2s;
 
     &:hover {
-      background: darken($color-secondary, 8%);
+      background: color.adjust($color-secondary, $lightness: -8%);
     }
 
     &--selected {
@@ -359,7 +380,7 @@ $radius: 20px;
 }
 
 .detail__continue-btn {
-  background: $color-secondary;
+  background: linear-gradient(135deg, $color-secondary, color.adjust($color-secondary, $lightness: -10%));
   color: $color-white;
   border: none;
   border-radius: 24px;
@@ -367,15 +388,20 @@ $radius: 20px;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: not-allowed;
-  opacity: 0.4;
-  transition: opacity 0.2s, background 0.2s;
+  opacity: 0.35;
+  transition: opacity 0.25s, box-shadow 0.25s, transform 0.2s;
 
   &--active {
     opacity: 1;
     cursor: pointer;
 
     &:hover {
-      background: darken($color-secondary, 8%);
+      box-shadow: 0 6px 20px rgba($color-secondary, 0.4);
+      transform: translateY(-1px);
+    }
+
+    &:active {
+      transform: translateY(0);
     }
   }
 

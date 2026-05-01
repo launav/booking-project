@@ -1,1 +1,253 @@
-<p>admin works!</p>
+<div class="admin">
+
+  <div class="admin__header">
+    <h1 class="admin__title">Panel de administración</h1>
+    @if (canAdd) {
+    <button class="admin__add-btn" (click)="openAddModal()">
+      <span class="material-symbols-outlined">add</span>
+      Añadir {{ activeTab() === 'habitaciones' ? 'habitación' : 'hotel' }}
+    </button>
+    }
+  </div>
+
+  <!-- Tabs -->
+  <nav class="admin__tabs">
+    <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'hoteles'" (click)="selectTab('hoteles')">
+      <span class="material-symbols-outlined">hotel</span> Hoteles
+    </button>
+    <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'habitaciones'"
+      (click)="selectTab('habitaciones')">
+      <span class="material-symbols-outlined">bed</span> Habitaciones
+    </button>
+    <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'usuarios'" (click)="selectTab('usuarios')">
+      <span class="material-symbols-outlined">group</span> Usuarios
+    </button>
+    <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'reservas'" (click)="selectTab('reservas')">
+      <span class="material-symbols-outlined">calendar_month</span> Reservas
+    </button>
+  </nav>
+
+  <!-- Tabla -->
+  <div class="admin__card">
+
+    @if (activeData.length === 0) {
+    <div class="admin__empty">
+      <span class="material-symbols-outlined">inbox</span>
+      <p>No hay datos disponibles</p>
+    </div>
+    } @else {
+    <div class="admin__table-wrapper">
+      <table class="admin__table">
+        <thead>
+          <tr>
+            @for (col of activeColumns; track col) {
+            <th class="admin__th">{{ columnLabel(col) }}</th>
+            }
+            <th class="admin__th admin__th--actions">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (row of activeData; track row) {
+          <tr class="admin__tr">
+            @for (col of activeColumns; track col) {
+            <td class="admin__td">
+              @if (col === 'reservation_status' || col === 'status' || col === 'role') {
+              <span class="admin__badge admin__badge--{{ row[col] }}">{{ row[col] }}</span>
+              } @else {
+              {{ row[col] ?? '—' }}
+              }
+            </td>
+            }
+            <!-- Acciones -->
+            <td class="admin__td admin__td--actions">
+              @if (confirmDeleteId() === row[activeIdField]) {
+              <span class="admin__confirm-text">¿Seguro?</span>
+              <button class="admin__action-btn admin__action-btn--danger" (click)="confirmDelete()">Sí</button>
+              <button class="admin__action-btn" (click)="cancelDelete()">No</button>
+              } @else {
+              @if (canEdit) {
+              <button class="admin__action-btn admin__action-btn--edit" (click)="openEditModal(row)" title="Editar">
+                <span class="material-symbols-outlined">edit</span>
+              </button>
+              }
+              <button class="admin__action-btn admin__action-btn--danger" (click)="askDelete(row[activeIdField])"
+                title="Eliminar">
+                <span class="material-symbols-outlined">delete</span>
+              </button>
+              }
+            </td>
+          </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Paginación -->
+    <div class="admin__pagination">
+      <span class="admin__pagination-info">
+        {{ total() }} registros · Página {{ page() }} de {{ totalPages }}
+      </span>
+      <div class="admin__pagination-btns">
+        <button class="admin__page-btn" [disabled]="page() === 1" (click)="prevPage()">
+          <span class="material-symbols-outlined">chevron_left</span>
+        </button>
+        <button class="admin__page-btn" [disabled]="page() === totalPages" (click)="nextPage()">
+          <span class="material-symbols-outlined">chevron_right</span>
+        </button>
+      </div>
+    </div>
+    }
+
+  </div>
+</div>
+
+<!-- Modal añadir / editar -->
+@if (showModal()) {
+<div class="admin-modal-backdrop" (click)="closeModal()">
+  <div class="admin-modal" (click)="$event.stopPropagation()">
+
+    <div class="admin-modal__header">
+      <h2 class="admin-modal__title">
+        {{ modalMode() === 'add' ? 'Añadir' : 'Editar' }}
+        {{ activeTab() === 'habitaciones' ? 'habitación' : 'hotel' }}
+      </h2>
+      <button class="admin-modal__close" (click)="closeModal()">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <!-- Formulario habitación -->
+    @if (activeTab() === 'habitaciones') {
+    <form class="admin-modal__form" [formGroup]="roomForm" (ngSubmit)="saveModal()">
+      <div class="admin-modal__row">
+        <div class="admin-modal__field">
+          <label>ID Hotel *</label>
+          <input type="number" formControlName="id_hotel" placeholder="1" />
+        </div>
+        <div class="admin-modal__field">
+          <label>Nº Habitación *</label>
+          <input type="text" formControlName="room_number" placeholder="101" />
+        </div>
+      </div>
+      <div class="admin-modal__row">
+        <div class="admin-modal__field">
+          <label>Tipo *</label>
+          <select formControlName="type">
+            @for (t of roomTypes; track t) { <option [value]="t">{{ t }}</option> }
+          </select>
+        </div>
+        <div class="admin-modal__field">
+          <label>Capacidad *</label>
+          <input type="number" formControlName="capacity" min="1" />
+        </div>
+      </div>
+      <div class="admin-modal__row">
+        <div class="admin-modal__field">
+          <label>Precio / noche (€) *</label>
+          <input type="number" formControlName="price_per_night" min="0" step="0.01" />
+        </div>
+        <div class="admin-modal__field">
+          <label>Estado</label>
+          <select formControlName="status">
+            @for (s of roomStatuses; track s) { <option [value]="s">{{ s }}</option> }
+          </select>
+        </div>
+      </div>
+      <div class="admin-modal__field admin-modal__field--full">
+        <label>Descripción</label>
+        <textarea formControlName="description" rows="3" placeholder="Descripción opcional…"></textarea>
+      </div>
+
+      <!-- URLs de imágenes -->
+      <div class="admin-modal__field admin-modal__field--full">
+        <label>Imágenes (URLs)</label>
+        @for (url of imageUrls(); track $index) {
+        <div class="admin-modal__url-row">
+          <input type="url" [value]="url"
+            (input)="updateImageUrl($index, $any($event.target).value)"
+            placeholder="https://images.unsplash.com/…" />
+          @if (imageUrls().length > 1) {
+          <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" title="Eliminar">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          }
+        </div>
+        }
+        <button type="button" class="admin-modal__url-add" (click)="addImageUrl()">
+          <span class="material-symbols-outlined">add</span> Añadir imagen
+        </button>
+      </div>
+
+      <div class="admin-modal__actions">
+        <button type="button" class="admin-modal__btn admin-modal__btn--cancel" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="admin-modal__btn admin-modal__btn--save" [disabled]="saving()">
+          @if (saving()) { Guardando… } @else { Guardar }
+        </button>
+      </div>
+    </form>
+    }
+
+    <!-- Formulario hotel -->
+    @if (activeTab() === 'hoteles') {
+    <form class="admin-modal__form" [formGroup]="hotelForm" (ngSubmit)="saveModal()">
+      <div class="admin-modal__row">
+        <div class="admin-modal__field">
+          <label>Nombre *</label>
+          <input type="text" formControlName="name" placeholder="Hotel Sol" />
+        </div>
+        <div class="admin-modal__field">
+          <label>Ciudad *</label>
+          <input type="text" formControlName="city" placeholder="Madrid" />
+        </div>
+      </div>
+      <div class="admin-modal__field admin-modal__field--full">
+        <label>Dirección *</label>
+        <input type="text" formControlName="address" placeholder="Gran Vía, 45" />
+      </div>
+      <div class="admin-modal__row">
+        <div class="admin-modal__field">
+          <label>Teléfono</label>
+          <input type="tel" formControlName="phone" placeholder="912 345 678" />
+        </div>
+        <div class="admin-modal__field">
+          <label>Email</label>
+          <input type="email" formControlName="email" placeholder="info@hotel.com" />
+        </div>
+      </div>
+      <div class="admin-modal__field admin-modal__field--full">
+        <label>Descripción</label>
+        <textarea formControlName="description" rows="3" placeholder="Descripción opcional…"></textarea>
+      </div>
+
+      <!-- URLs de imágenes -->
+      <div class="admin-modal__field admin-modal__field--full">
+        <label>Imágenes (URLs)</label>
+        @for (url of imageUrls(); track $index) {
+        <div class="admin-modal__url-row">
+          <input type="url" [value]="url"
+            (input)="updateImageUrl($index, $any($event.target).value)"
+            placeholder="https://images.unsplash.com/…" />
+          @if (imageUrls().length > 1) {
+          <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" title="Eliminar">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+          }
+        </div>
+        }
+        <button type="button" class="admin-modal__url-add" (click)="addImageUrl()">
+          <span class="material-symbols-outlined">add</span> Añadir imagen
+        </button>
+      </div>
+
+      <div class="admin-modal__actions">
+        <button type="button" class="admin-modal__btn admin-modal__btn--cancel" (click)="closeModal()">Cancelar</button>
+        <button type="submit" class="admin-modal__btn admin-modal__btn--save" [disabled]="saving()">
+          @if (saving()) { Guardando… } @else { Guardar }
+        </button>
+      </div>
+    </form>
+    }
+
+  </div>
+</div>
+}

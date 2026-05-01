@@ -1,3 +1,11 @@
+$color-primary: #211456;
+$color-secondary: #266BA6;
+$color-pink: #D989A6;
+$color-muted: #6B7280;
+$color-white: #FFFFFF;
+$color-border: #E5E7EB;
+$transition: 0.25s ease;
+
 .res-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -6,75 +14,135 @@
   &__title {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #211456;
+    color: $color-primary;
     margin: 0 0 32px;
+    padding-left: 12px;
+    border-left: 3px solid $color-secondary;
+    line-height: 1.3;
   }
 
   &__guest,
   &__empty {
     display: flex;
     flex-direction: column;
-    background-color: #fff;
+    background-color: $color-white;
     border-radius: 20px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
     align-items: center;
     gap: 12px;
     padding: 64px 16px;
-    color: #6B7280;
+    color: $color-muted;
     text-align: center;
 
-    p { margin: 0; font-size: 1rem; }
+    p {
+      margin: 0;
+      font-size: 1rem;
+    }
   }
 
-  &__guest-icon  { font-size: 56px; color: #266BA6; }
-  &__empty-icon  { font-size: 56px; color: #D989A6; }
+  &__guest-icon {
+    font-size: 56px;
+    color: $color-secondary;
+  }
+
+  &__empty-icon {
+    font-size: 56px;
+    color: $color-pink;
+  }
 
   &__login-link {
     margin-top: 4px;
-    color: #266BA6;
+    color: $color-secondary;
     font-weight: 600;
     text-decoration: underline;
     font-size: 0.95rem;
+    transition: opacity $transition;
 
-    &:hover { opacity: 0.8; }
+    &:hover {
+      opacity: 0.75;
+    }
   }
 
   &__list {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
   }
 }
 
 .res-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 16px 20px;
+  background: $color-white;
+  border-radius: 14px;
+  padding: 18px 22px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid transparent;
+  transition: box-shadow $transition, border-color $transition, transform $transition;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+    border-color: rgba($color-secondary, 0.15);
+    transform: translateY(-1px);
+  }
 
   &__info {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 14px;
 
-    .material-symbols-outlined { color: #266BA6; font-size: 28px; }
+    .material-symbols-outlined {
+      color: $color-secondary;
+      font-size: 28px;
+      flex-shrink: 0;
+    }
 
-    p { margin: 0; }
+    p {
+      margin: 0;
+    }
   }
 
-  &__dates { font-size: 0.875rem; color: #6B7280; }
-  &__room  { font-weight: 600; color: #211456; }
+  &__hotel {
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0;
+    font-size: 0.95rem;
+  }
+
+  &__room {
+    font-size: 0.85rem;
+    color: $color-secondary;
+    margin: 0;
+  }
+
+  &__dates {
+    font-size: 0.8rem;
+    color: $color-muted;
+    margin: 0;
+  }
 
   &__status {
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 4px 12px;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 5px 14px;
     border-radius: 20px;
+    flex-shrink: 0;
+    letter-spacing: 0.02em;
 
-    &--confirmed { background: #D1FAE5; color: #065F46; }
-    &--pending   { background: #FEF3C7; color: #92400E; }
-    &--cancelled { background: #FEE2E2; color: #991B1B; }
+    &--confirmed {
+      background: #D1FAE5;
+      color: #065F46;
+    }
+
+    &--pending {
+      background: #FEF3C7;
+      color: #92400E;
+    }
+
+    &--cancelled {
+      background: #FEE2E2;
+      color: #991B1B;
+    }
   }
 }

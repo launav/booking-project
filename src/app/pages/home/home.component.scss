@@ -1,54 +1,63 @@
+$color-primary:   #211456;
+$color-secondary: #266BA6;
+$color-muted:     #6B7280;
+$color-border:    #E5E7EB;
+$transition:      0.25s ease;
+
 .home {
   max-width: 1200px;
   margin: 0 auto;
   padding: 50px 16px;
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: 52px;
 
   &__section {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    gap: 22px;
   }
 
   &__section-header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    justify-content: space-between;
+    gap: 12px;
   }
 
   &__section-title {
     font-size: 1.35rem;
     font-weight: 700;
-    color: #211456;
+    color: $color-primary;
     margin: 0;
+    padding-left: 12px;
+    border-left: 3px solid $color-secondary;
+    line-height: 1.3;
   }
 
   &__section-more {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: none;
-    border: 2px solid #ccc;
+    width: 34px;
+    height: 34px;
     border-radius: 50%;
-    width: 32px;
-    height: 32px;
+    border: 1.5px solid $color-border;
+    background: none;
+    color: $color-muted;
     cursor: pointer;
-    padding: 0;
-    transition: border-color 0.2s ease;
+    flex-shrink: 0;
+    transition: border-color $transition, color $transition, background $transition, transform $transition;
 
     .material-symbols-outlined {
       font-size: 20px;
-      color: #666;
     }
 
     &:hover {
-      background-color: #cccccc;
-
-      .material-symbols-outlined {
-        color: #211456;
-      }
+      border-color: $color-secondary;
+      color: $color-secondary;
+      background: rgba($color-secondary, 0.07);
+      transform: translateX(2px);
     }
   }
 
@@ -67,7 +76,7 @@
   }
 
   &__empty {
-    color: #6B7280;
+    color: $color-muted;
     font-size: 0.9rem;
     grid-column: 1 / -1;
   }

@@ -20,7 +20,7 @@
         aria-label="Imagen anterior">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
-      <img [src]="currentImage()" [alt]="r.name" class="detail__carousel-img" />
+      <img [src]="currentImage()" [alt]="r.name" class="detail__carousel-img" (error)="onImgError($event)" />
       <button class="detail__carousel-btn detail__carousel-btn--next" (click)="nextImage()"
         aria-label="Imagen siguiente">
         <span class="material-symbols-outlined">chevron_right</span>
@@ -31,6 +31,13 @@
     <div class="detail__info">
       <div class="detail__info-header">
         <h2 class="detail__room-type">{{ r.roomType }}</h2>
+        @if (r.hotelName) {
+          <p class="detail__hotel-name">
+            <span class="material-symbols-outlined">hotel</span>
+            {{ r.hotelName }}
+            @if (r.hotelCity) { &nbsp;·&nbsp; {{ r.hotelCity }} }
+          </p>
+        }
       </div>
       <p class="detail__specs">{{ r.bedType }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ r.size }}m²</p>
       <p class="detail__price">{{ r.basePrice }} €/noche</p>

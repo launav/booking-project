@@ -109,7 +109,7 @@
               </div>
             </div>
             <div class="search-bar__counter">
-              <button class="search-bar__counter-btn" (click)="decrementRooms()" [disabled]="rooms() <= 1">
+              <button class="search-bar__counter-btn" (click)="decrementRooms()" [disabled]="rooms() <= 0">
                 <span class="material-symbols-outlined">remove</span>
               </button>
               <span class="search-bar__counter-value">{{ rooms() }}</span>

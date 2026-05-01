@@ -1,11 +1,23 @@
-import { Injectable, signal } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { CardData } from '../../../components/card/card.component';
-import { CarouselItem } from '../../../components/carousel/carousel.component';
+import { Injectable, signal, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable, forkJoin, of } from 'rxjs';
+import { switchMap, map, catchError } from 'rxjs/operators';
 
-export interface HomeSection {
-  rooms: CardData[];
-  events: CardData[];
+import { CardData } from '../../../components/card/model/card.model';
+import { CarouselItem } from '../../../components/carousel/carousel.component';
+import { RoomService } from '../user/room.service';
+import { ActiveFilters } from '../../../pages/section/section.component';
+import { RoomImage } from './models/room-image.model';
+import { Hotel } from '../admin/models/hotel.model';
+import { PaginatedResponse } from '../admin/models/pagination.model';
+import { environment } from '../../../../environments/environment';
+
+const HOTEL_FALLBACK = 'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80';
+
+function buildImageUrl(url: string): string {
+  if (url.startsWith('http')) return url;
+  const clean = url.startsWith('/') ? url.slice(1) : url;
+  return `${environment.apiUrl.replace('/api', '')}/${clean}`;
 }
 
 @Injectable({
@@ -13,69 +25,10 @@ export interface HomeSection {
 })
 export class HomeService {
 
-  location = signal<string>('Madrid');
+  private http       = inject(HttpClient);
+  private roomService = inject(RoomService);
 
-  private readonly mockRooms: CardData[] = [
-    {
-      id: 1,
-      title: 'Habitación en Gran Vía',
-      subtitle: 'Viva la Gran Vía',
-      rating: 4.5,
-      imageUrl: 'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
-    },
-    {
-      id: 2,
-      title: 'Suite en Tetuán',
-      subtitle: 'Viva Tetuán',
-      rating: 4.8,
-      imageUrl: 'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80',
-    },
-    {
-      id: 3,
-      title: 'Estudio para dos',
-      subtitle: 'Viva el estudio',
-      rating: 4.2,
-      imageUrl: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
-    },
-    {
-      id: 4,
-      title: 'Habitación Moncloa',
-      subtitle: 'Viva las habitaciones',
-      rating: 4.6,
-      imageUrl: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
-    },
-  ];
-
-  private readonly mockEvents: CardData[] = [
-    {
-      id: 10,
-      title: 'Conciertos',
-      subtitle: 'Viva la música',
-      rating: 0,
-      imageUrl: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=600&q=80',
-    },
-    {
-      id: 11,
-      title: 'Candlelight',
-      subtitle: 'Viva el espectáculo',
-      rating: 0,
-      imageUrl: 'https://images.unsplash.com/photo-1514525253161-7a46d19cd819?w=600&q=80',
-    },
-    {
-      id: 12,
-      title: 'Cata',
-      subtitle: 'Viva el vino',
-      rating: 0,
-      imageUrl: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?w=600&q=80',
-    },
-    {
-      id: 13,
-      title: 'Degustación',
-      subtitle: 'Viva la comida',
-      rating: 4.6,
-      imageUrl: 'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80',
-    },
-  ];
+  location = signal<string>('');
 
   private readonly mockVisits: CarouselItem[] = [
     {
@@ -112,12 +65,53 @@ export class HomeService {
     },
   ];
 
-  getRooms(): Observable<CardData[]> {
-    return of(this.mockRooms);
+  getRooms(limit: number, filters?: ActiveFilters): Observable<CardData[]> {
+    const apiFilters = filters
+      ? {
+          city:     filters.destination || undefined,
+          checkIn:  filters.checkIn  ? filters.checkIn.toISOString().split('T')[0]  : undefined,
+          checkOut: filters.checkOut ? filters.checkOut.toISOString().split('T')[0] : undefined,
+          capacity: filters.travelers || undefined,
+        }
+      : undefined;
+
+    return this.roomService.getRoomsAsCards(limit, apiFilters);
   }
 
-  getEvents(): Observable<CardData[]> {
-    return of(this.mockEvents);
+  getHotels(limit = 4): Observable<CardData[]> {
+    return this.http
+      .get<PaginatedResponse<Hotel>>(`${environment.apiUrl}/hotels?limit=${limit}`)
+      .pipe(
+        switchMap(res => {
+          const hotels = res.data;
+          if (!hotels.length) return of([]);
+
+          const imageReqs = hotels.map(h =>
+            this.http
+              .get<RoomImage[]>(`${environment.apiUrl}/images?hotel_id=${h.id_hotel}`)
+              .pipe(catchError(() => of([])))
+          );
+
+          return forkJoin(imageReqs).pipe(
+            map(allImages =>
+              hotels.map((hotel, i) => {
+                const imgs = allImages[i] as RoomImage[];
+                const imageUrl = imgs.length ? buildImageUrl(imgs[0].url) : HOTEL_FALLBACK;
+
+                return {
+                  id:       hotel.id_hotel,
+                  title:    hotel.name,
+                  subtitle: hotel.city,
+                  location: hotel.address,
+                  rating:   0,
+                  imageUrl,
+                } as CardData;
+              })
+            )
+          );
+        }),
+        catchError(() => of([]))
+      );
   }
 
   getVisits(): Observable<CarouselItem[]> {

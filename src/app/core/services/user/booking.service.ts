@@ -1,35 +1,31 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { from, Observable } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
-export interface Booking {
-  id: number;
-  roomId: number;
-  userId: number;
-  checkIn: string;
-  checkOut: string;
-  status: 'pending' | 'confirmed' | 'cancelled';
-}
+import {
+  Booking,
+  CreateBookingRequest,
+  CreateBookingResponse
+} from './models/booking.model';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class BookingService {
 
-  // TODO: inyectar HttpClient cuando se conecte al backend
-  // constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private base = `${environment.apiUrl}/reservations`;
 
   getUserBookings(userId: number): Observable<Booking[]> {
-    // TODO: return this.http.get<Booking[]>(`${environment.apiUrl}/bookings?userId=${userId}`)
-    return of([]);
+    return this.http.get<Booking[]>(`${this.base}/my/${userId}`);
   }
 
-  createBooking(booking: Partial<Booking>): Observable<Booking> {
-    // TODO: return this.http.post<Booking>(`${environment.apiUrl}/bookings`, booking)
-    return of({} as Booking);
+  createBooking(data: CreateBookingRequest): Observable<CreateBookingResponse> {
+    return this.http.post<CreateBookingResponse>(this.base, data);
   }
 
-  cancelBooking(bookingId: number): Observable<void> {
-    // TODO: return this.http.patch<void>(`${environment.apiUrl}/bookings/${bookingId}/cancel`, {})
-    return of(void 0);
+  cancelBooking(bookingId: number): Observable<{ message: string }> {
+    return this.http.delete<{ message: string }>(
+      `${this.base}/${bookingId}`
+    );
   }
 }

@@ -1,17 +1,7 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-interface BookingForm {
-  nombre:          string;
-  apellido:        string;
-  segundoApellido: string;
-  direccion:       string;
-  pais:            string;
-  ciudad:          string;
-  codigoPostal:    string;
-  email:           string;
-  telefono:        string;
-}
+import { Router } from '@angular/router';
+import { BookingContextService } from '../../core/services/user/booking-context.service';
 
 @Component({
   selector: 'app-success',
@@ -20,30 +10,36 @@ interface BookingForm {
   templateUrl: './success.component.html',
   styleUrl: './success.component.scss'
 })
-export class SuccessComponent implements OnInit {
+export class SuccessComponent {
 
-  formData = signal<BookingForm | null>(null);
+  private ctx = inject(BookingContextService);
+  private router = inject(Router);
 
-  fullName    = () => {
-    const d = this.formData();
-    if (!d) return '';
-    return [d.nombre, d.apellido, d.segundoApellido].filter(Boolean).join(' ');
-  };
+  // Datos de la reserva confirmada
+  room = computed(() => this.ctx.selectedRoom());
+  option = computed(() => this.ctx.selectedOption());
+  reservationId = computed(() => this.ctx.reservationId());
+  totalPrice = computed(() => this.ctx.totalPrice());
+  nights = computed(() => this.ctx.nights());
+  checkInLabel = computed(() => this.formatDate(this.ctx.checkIn()));
+  checkOutLabel = computed(() => this.formatDate(this.ctx.checkOut()));
 
-  addressLine = () => {
-    const d = this.formData();
-    return d ? d.direccion : '';
-  };
+  // Acciones
 
-  locationLine = () => {
-    const d = this.formData();
-    return d ? `${d.pais}, ${d.ciudad}, ${d.codigoPostal}` : '';
-  };
+  goHome(): void {
+    this.ctx.clear();
+    this.router.navigate(['/home']);
+  }
 
-  ngOnInit(): void {
-    const raw = sessionStorage.getItem('bookingForm');
-    if (raw) {
-      try { this.formData.set(JSON.parse(raw)); } catch { /* noop */ }
-    }
+  // Helpers
+
+  private formatDate(date: Date | null): string {
+    if (!date) return '—';
+    return date.toLocaleDateString('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    });
   }
 }

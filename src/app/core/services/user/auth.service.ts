@@ -1,25 +1,47 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { from, Observable, tap } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
-export interface AuthUser {
-  id: number;
-  first_name: string;
-  email: string;
-}
+import {
+  AuthUser,
+  LoginRequest,
+  RegisterRequest,
+  LoginResponse,
+  RegisterResponse
+} from './models/auth.model';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
 
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
   private _token = signal<string | null>(localStorage.getItem('token'));
-  private _user  = signal<AuthUser | null>(this.loadUser());
+  private _user = signal<AuthUser | null>(this.loadUser());
+
+  readonly token = this._token.asReadonly();
 
   isLoggedIn = computed(() => !!this._token());
   currentUser = computed(() => this._user());
-  userName    = computed(() => this._user()?.first_name ?? '');
+  userName = computed(() => this._user()?.first_name ?? '');
+  isAdmin = computed(() => this._user()?.role === 'admin');
 
-  constructor(private router: Router) {}
+  login$(credentials: LoginRequest): Observable<LoginResponse> {
+    return this.http
+      .post<LoginResponse>(`${environment.apiUrl}/auth/login`, credentials)
+      .pipe(tap(res => this.saveSession(res.token, res.user)));
+  }
 
-  login(token: string, user: AuthUser): void {
+  register$(data: RegisterRequest): Observable<RegisterResponse> {
+    return this.http.post<RegisterResponse>(
+      `${environment.apiUrl}/auth/register`,
+      data
+    );
+  }
+
+  saveSession(token: string, user: AuthUser): void {
     localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
     this._token.set(token);
@@ -38,6 +60,8 @@ export class AuthService {
     try {
       const raw = localStorage.getItem('user');
       return raw ? JSON.parse(raw) : null;
-    } catch { return null; }
+    } catch {
+      return null;
+    }
   }
 }
