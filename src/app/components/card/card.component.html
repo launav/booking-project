@@ -1,7 +1,7 @@
 <div class="card" [class.card--static]="!interactive()" (click)="onClick()">
 
   <div class="card__image-wrapper">
-    <img class="card__image" [src]="card().imageUrl" [alt]="card().title" loading="lazy" />
+    <img class="card__image" [src]="card().imageUrl" [alt]="card().title" loading="lazy" (error)="onImgError($event)" />
 
     @if (showFavorite()) {
       <button class="card__favorite" [class.card__favorite--active]="favorite()" (click)="toggleFavorite($event)"

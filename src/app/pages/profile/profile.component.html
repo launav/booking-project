@@ -1,0 +1,74 @@
+<div class="profile">
+
+  <!-- Cabecera con botón volver -->
+  <div class="profile__header">
+    <button class="profile__back" (click)="goBack()">
+      <span class="material-symbols-outlined">arrow_back</span>
+      Volver
+    </button>
+    <h1 class="profile__title">Mi perfil</h1>
+  </div>
+
+  @if (user(); as u) {
+  <div class="profile__card">
+
+    <!-- Avatar + info básica -->
+    <div class="profile__avatar-row">
+      <span class="material-symbols-outlined profile__avatar-icon">account_circle</span>
+      <div class="profile__avatar-info">
+        <p class="profile__fullname">{{ u.first_name }} {{ u.last_name }}</p>
+        <p class="profile__email">{{ u.email }}</p>
+      </div>
+    </div>
+
+    <!-- Formulario de edición -->
+    <form class="profile__form" [formGroup]="form" (ngSubmit)="save()">
+
+      <div class="profile__row">
+        <div class="profile__field">
+          <label class="profile__label">Nombre</label>
+          <input class="profile__input" type="text" formControlName="first_name" />
+          @if (form.get('first_name')?.touched && form.get('first_name')?.invalid) {
+          <span class="profile__error">El nombre es obligatorio</span>
+          }
+        </div>
+        <div class="profile__field">
+          <label class="profile__label">Apellidos</label>
+          <input class="profile__input" type="text" formControlName="last_name" />
+          @if (form.get('last_name')?.touched && form.get('last_name')?.invalid) {
+          <span class="profile__error">Los apellidos son obligatorios</span>
+          }
+        </div>
+      </div>
+
+      <div class="profile__field">
+        <label class="profile__label">Teléfono</label>
+        <input class="profile__input" type="tel" formControlName="phone" placeholder="600 000 000" />
+      </div>
+
+      <div class="profile__field">
+        <label class="profile__label">
+          Nueva contraseña
+        </label>
+        <div class="profile__input-wrap">
+          <input class="profile__input" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
+            placeholder="Nueva contraseña" autocomplete="new-password" />
+          <button type="button" class="profile__eye" (click)="togglePassword()" aria-label="Ver contraseña">
+            <span class="material-symbols-outlined">
+              {{ showPassword() ? 'visibility_off' : 'visibility' }}
+            </span>
+          </button>
+        </div>
+      </div>
+
+      <div class="profile__actions">
+        <button class="profile__save" type="submit" [disabled]="saving() || form.invalid">
+          @if (saving()) { Guardando… } @else { Guardar cambios }
+        </button>
+      </div>
+
+    </form>
+  </div>
+  }
+
+</div>

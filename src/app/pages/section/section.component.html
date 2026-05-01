@@ -7,20 +7,31 @@
     </button>
   </div>
 
+  @if (hasFilters()) {
+  <div class="section__filters">
+    <span class="section__filters-label">
+      <span class="material-symbols-outlined">filter_list</span>
+      {{ filtersLabel() }}
+    </span>
+    <button class="section__filters-clear" (click)="clearFilters()">
+      Limpiar filtros
+    </button>
+  </div>
+  }
+
   @if (section() === 'visits') {
-    <app-carousel [items]="visits()" [visible]="2" />
+  <app-carousel [items]="visits()" [visible]="2" />
   } @else {
-    <div class="section__grid">
-      @for (card of cards(); track card.id) {
-        <app-card
-          [card]="card"
-          [isFavorite]="card.isFavorite ?? false"
-          (cardClick)="onCardClick($event)"
-        />
-      } @empty {
-        <p class="section__empty">No hay resultados disponibles</p>
-      }
-    </div>
+  <div class="section__grid">
+    @for (card of cards(); track card.id) {
+    <app-card [card]="card" [isFavorite]="card.isFavorite ?? false" [showFavorite]="section() !== 'events'"
+      [interactive]="section() !== 'events'" (cardClick)="onCardClick($event)" />
+    } @empty {
+    <p class="section__empty">
+      No hay resultados para tu búsqueda
+    </p>
+    }
+  </div>
   }
 
 </main>

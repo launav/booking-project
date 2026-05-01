@@ -1,38 +1,32 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { CardData } from '../../../components/card/card.component';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { Observable } from 'rxjs';
 
-export interface Room extends CardData {
-  price: number;
-  location: string;
-  available: boolean;
-}
+import { Room, CreateRoomDto, UpdateRoomDto } from './models/room.model';
+import { PaginatedResponse } from './models/pagination.model';
 
-@Injectable({
-  providedIn: 'root'
-})
-export class RoomsAdminService {
+@Injectable({ providedIn: 'root' })
+export class RoomsService {
 
-  // TODO: inyectar HttpClient cuando se conecte al backend
-  // constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private base = `${environment.apiUrl}/rooms`;
 
-  getAllRooms(): Observable<Room[]> {
-    // TODO: return this.http.get<Room[]>(`${environment.apiUrl}/admin/rooms`)
-    return of([]);
+  getAll(page: number, limit: number): Observable<PaginatedResponse<Room>> {
+    return this.http.get<PaginatedResponse<Room>>(
+      `${this.base}?page=${page}&limit=${limit}`
+    );
   }
 
-  createRoom(room: Partial<Room>): Observable<Room> {
-    // TODO: return this.http.post<Room>(`${environment.apiUrl}/admin/rooms`, room)
-    return of({} as Room);
+  create(data: CreateRoomDto): Observable<Room> {
+    return this.http.post<Room>(this.base, data);
   }
 
-  updateRoom(roomId: number, room: Partial<Room>): Observable<Room> {
-    // TODO: return this.http.put<Room>(`${environment.apiUrl}/admin/rooms/${roomId}`, room)
-    return of({} as Room);
+  update(id: number, data: UpdateRoomDto): Observable<Room> {
+    return this.http.put<Room>(`${this.base}/${id}`, data);
   }
 
-  deleteRoom(roomId: number): Observable<void> {
-    // TODO: return this.http.delete<void>(`${environment.apiUrl}/admin/rooms/${roomId}`)
-    return of(void 0);
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
   }
 }

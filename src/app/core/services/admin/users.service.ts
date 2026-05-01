@@ -1,27 +1,26 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { UserProfile } from '../user/profile.service';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { Observable } from 'rxjs';
+
+import { User } from './models/user.model';
+import { PaginatedResponse } from './models/pagination.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UsersAdminService {
+export class UsersService {
 
-  // TODO: inyectar HttpClient cuando se conecte al backend
-  // constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private base = `${environment.apiUrl}/users`;
 
-  getAllUsers(): Observable<UserProfile[]> {
-    // TODO: return this.http.get<UserProfile[]>(`${environment.apiUrl}/admin/users`)
-    return of([]);
+  getAll(page: number, limit: number): Observable<PaginatedResponse<User>> {
+    return this.http.get<PaginatedResponse<User>>(
+      `${this.base}?page=${page}&limit=${limit}`
+    );
   }
 
-  getUserById(userId: number): Observable<UserProfile> {
-    // TODO: return this.http.get<UserProfile>(`${environment.apiUrl}/admin/users/${userId}`)
-    return of({} as UserProfile);
-  }
-
-  deleteUser(userId: number): Observable<void> {
-    // TODO: return this.http.delete<void>(`${environment.apiUrl}/admin/users/${userId}`)
-    return of(void 0);
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
   }
 }

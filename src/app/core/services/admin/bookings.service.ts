@@ -1,27 +1,25 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
-import { Booking } from '../user/booking.service';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../environments/environment';
+import { Booking } from './models/booking.model';
+import { PaginatedResponse } from './models/pagination.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class BookingsAdminService {
+export class BookingsService {
 
-  // TODO: inyectar HttpClient cuando se conecte al backend
-  // constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+  private base = `${environment.apiUrl}/reservations`;
 
-  getAllBookings(): Observable<Booking[]> {
-    // TODO: return this.http.get<Booking[]>(`${environment.apiUrl}/admin/bookings`)
-    return of([]);
+  getAll(page: number, limit: number): Observable<PaginatedResponse<Booking>> {
+    return this.http.get<PaginatedResponse<Booking>>(
+      `${this.base}?page=${page}&limit=${limit}`
+    );
   }
 
-  updateBookingStatus(bookingId: number, status: Booking['status']): Observable<Booking> {
-    // TODO: return this.http.patch<Booking>(`${environment.apiUrl}/admin/bookings/${bookingId}`, { status })
-    return of({} as Booking);
-  }
-
-  deleteBooking(bookingId: number): Observable<void> {
-    // TODO: return this.http.delete<void>(`${environment.apiUrl}/admin/bookings/${bookingId}`)
-    return of(void 0);
+  delete(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/${id}`);
   }
 }

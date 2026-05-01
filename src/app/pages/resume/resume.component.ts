@@ -1,13 +1,7 @@
-import { Component, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
-import { RoomDetail, PricingOption } from '../booking-detail/booking-detail.component';
-
-interface StoredBooking {
-  room: RoomDetail;
-  option: PricingOption;
-}
 
 @Component({
   selector: 'app-resume',
@@ -16,68 +10,62 @@ interface StoredBooking {
   templateUrl: './resume.component.html',
   styleUrl: './resume.component.scss'
 })
-export class ResumeComponent implements OnInit {
+export class ResumeComponent {
 
-  private router  = inject(Router);
-  private ctx     = inject(BookingContextService);
+  private router = inject(Router);
+  ctx = inject(BookingContextService);
 
-  booking = signal<StoredBooking | null>(null);
+  // Datos de la selección
+  // `booking` keeps the same shape the template uses (b.room / b.option)
+  booking = computed(() => {
+    const room = this.ctx.selectedRoom();
+    const option = this.ctx.selectedOption();
+    if (!room || !option) return null;
+    return { room, option };
+  });
 
-  // ── Datos derivados ───────────────────────────────────────────
+  room = computed(() => this.ctx.selectedRoom());
+  option = computed(() => this.ctx.selectedOption());
 
   stars = computed(() => {
-    const n = this.booking()?.room.stars ?? 5;
+    const n = this.room()?.stars ?? 5;
     return Array.from({ length: n }, (_, i) => i);
   });
 
   mealRegime = computed(() => {
-    const name = this.booking()?.option.name ?? '';
+    const name = this.option()?.name ?? '';
     if (name.includes('Media pensión')) return 'Media pensión';
-    if (name.includes('Desayuno'))      return 'Desayuno';
+    if (name.includes('Desayuno')) return 'Desayuno';
     return 'Sin régimen';
   });
 
   roomLabel = computed(() => {
-    const type  = this.booking()?.room.roomType ?? '';
+    const type = this.room()?.roomType ?? '';
     const count = this.ctx.roomCount();
     return `${type} x ${count}`;
   });
 
-  totalPrice = computed(() => this.booking()?.option.totalPrice ?? 0);
-
+  totalPrice = computed(() => this.ctx.totalPrice());
   checkInLabel = computed(() => this.formatDate(this.ctx.checkIn()));
   checkOutLabel = computed(() => this.formatDate(this.ctx.checkOut()));
+  nights = computed(() => this.ctx.nights());
+  hasDates = computed(() => !!this.ctx.checkIn() && !!this.ctx.checkOut());
 
-  adults    = this.ctx.adults;
+  adults = this.ctx.adults;
   roomCount = this.ctx.roomCount;
   eventName = this.ctx.eventName;
 
-  // ── Lifecycle ─────────────────────────────────────────────────
-
-  ngOnInit(): void {
-    const raw = sessionStorage.getItem('selectedOption');
-    if (raw) {
-      try {
-        this.booking.set(JSON.parse(raw) as StoredBooking);
-      } catch {
-        this.router.navigate(['/home']);
-      }
-    } else {
+  // Guard: si no hay selección, volvemos al inicio
+  constructor() {
+    if (!this.ctx.isComplete()) {
       this.router.navigate(['/home']);
-    }
-
-    // Mock de contexto de búsqueda si no viene informado
-    if (!this.ctx.checkIn()) {
-      const ci = new Date(2025, 6, 21); // 21 julio 2025
-      const co = new Date(2025, 6, 24); // 24 julio 2025
-      this.ctx.setContext({ checkIn: ci, checkOut: co, adults: 1, roomCount: 1, eventName: 'Evento Fitur' });
     }
   }
 
-  // ── Acciones ──────────────────────────────────────────────────
+  // Acciones
 
   goBack(): void {
-    const id = this.booking()?.room.id;
+    const id = this.room()?.id;
     if (id) this.router.navigate(['/room', id]);
     else history.back();
   }
@@ -86,7 +74,23 @@ export class ResumeComponent implements OnInit {
     this.router.navigate(['/payment']);
   }
 
-  // ── Helpers ───────────────────────────────────────────────────
+  onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.onerror = null;
+    const type = this.room()?.roomType?.toLowerCase() ?? 'default';
+    const fallbacks: Record<string, string> = {
+      individual: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
+      single:     'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
+      doble:      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
+      double:     'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
+      suite:      'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80',
+      studio:     'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
+      default:    'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80',
+    };
+    img.src = fallbacks[type] ?? fallbacks['default'];
+  }
+
+  // Helpers
 
   private formatDate(date: Date | null): string {
     if (!date) return '—';

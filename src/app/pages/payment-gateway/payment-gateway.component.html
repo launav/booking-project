@@ -24,7 +24,8 @@
         <input class="payment__input" formControlName="apellido" placeholder="Apellido" type="text" />
       </div>
       <div class="payment__field">
-        <input class="payment__input" formControlName="segundoApellido" placeholder="Segundo apellido (Opcional)" type="text" />
+        <input class="payment__input" formControlName="segundoApellido" placeholder="Segundo apellido (Opcional)"
+          type="text" />
       </div>
     </div>
 
@@ -41,7 +42,7 @@
         <select class="payment__input payment__select" formControlName="pais" (change)="onPaisChange()">
           <option value="" disabled selected>País</option>
           @for (p of paises; track p) {
-            <option [value]="p">{{ p }}</option>
+          <option [value]="p">{{ p }}</option>
           }
         </select>
       </div>
@@ -49,7 +50,7 @@
         <select class="payment__input payment__select" formControlName="ciudad">
           <option value="" disabled selected>Ciudad</option>
           @for (c of ciudadesList; track c) {
-            <option [value]="c">{{ c }}</option>
+          <option [value]="c">{{ c }}</option>
           }
         </select>
       </div>
@@ -81,7 +82,7 @@
 
     <!-- Tarjeta de crédito / débito -->
     <label class="payment__method" [class.payment__method--selected]="paymentMethod() === 'tarjeta'"
-           (click)="selectPayment('tarjeta')">
+      (click)="selectPayment('tarjeta')">
       <span class="payment__radio" [class.payment__radio--checked]="paymentMethod() === 'tarjeta'"></span>
       <span class="payment__method-name">Tarjeta de crédito / débito</span>
       <div class="payment__logos">
@@ -91,7 +92,7 @@
 
     <!-- PayPal -->
     <label class="payment__method" [class.payment__method--selected]="paymentMethod() === 'paypal'"
-           (click)="selectPayment('paypal')">
+      (click)="selectPayment('paypal')">
       <span class="payment__radio" [class.payment__radio--checked]="paymentMethod() === 'paypal'"></span>
       <span class="payment__method-name">Paypal</span>
       <span class="payment__logo-paypal">
@@ -101,7 +102,7 @@
 
     <!-- Google Pay -->
     <label class="payment__method" [class.payment__method--selected]="paymentMethod() === 'googlepay'"
-           (click)="selectPayment('googlepay')">
+      (click)="selectPayment('googlepay')">
       <span class="payment__radio" [class.payment__radio--checked]="paymentMethod() === 'googlepay'"></span>
       <span class="payment__method-name">Google Pay</span>
       <span class="payment__logo-gpay">G Pay</span>
@@ -116,10 +117,8 @@
     <span class="payment__footer-label">Total</span>
     <span class="payment__footer-price">{{ totalPrice() | number:'1.2-2' }} €</span>
   </div>
-  <button class="payment__footer-btn"
-          [disabled]="!canContinue()"
-          [class.payment__footer-btn--active]="canContinue()"
-          (click)="continue()">
+  <button class="payment__footer-btn" [disabled]="!canContinue()" [class.payment__footer-btn--active]="canContinue()"
+    (click)="continue()">
     Continuar con el pago
   </button>
 </div>

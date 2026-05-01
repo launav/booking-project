@@ -1,3 +1,5 @@
+@use 'sass:color';
+
 $color-primary: #211456;
 $color-secondary: #266BA6;
 $color-white: #FFFFFF;
@@ -46,12 +48,19 @@ $input-radius: 8px;
 // ── Tarjetas ──────────────────────────────────────────────────
 .payment__card {
   border-radius: $radius;
-  border: 1px solid $color-border;
+  border: 1px solid transparent;
+  background: $color-white;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
   padding: 24px;
   margin-bottom: 20px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  transition: box-shadow 0.25s ease;
+
+  &:hover {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
 }
 
 .payment__card-title {
@@ -95,13 +104,13 @@ $input-radius: 8px;
 .payment__input {
   height: 44px;
   padding: 0 14px;
-  border: 1px solid $color-border;
+  border: 1.5px solid $color-border;
   border-radius: $input-radius;
   font-size: 0.88rem;
   color: $color-primary;
   background: $color-bg;
   outline: none;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
   width: 100%;
   box-sizing: border-box;
 
@@ -112,6 +121,7 @@ $input-radius: 8px;
   &:focus {
     border-color: $color-secondary;
     background: $color-white;
+    box-shadow: 0 0 0 3px rgba($color-secondary, 0.12);
   }
 }
 
@@ -150,6 +160,16 @@ $input-radius: 8px;
   align-items: center;
   gap: 14px;
   cursor: pointer;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1.5px solid transparent;
+  transition: background 0.2s, border-color 0.2s;
+  margin: -10px -12px;
+
+  &:hover {
+    background: rgba($color-secondary, 0.05);
+    border-color: rgba($color-secondary, 0.2);
+  }
 }
 
 // Radio personalizado
@@ -279,15 +299,17 @@ $input-radius: 8px;
   bottom: 0;
   left: 0;
   right: 0;
-  background: $color-white;
-  border-top: 1px solid $color-border;
+  background: rgba(255, 255, 255, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-top: 1px solid rgba($color-border, 0.8);
   padding: 16px 32px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 24px;
   z-index: 100;
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.07);
 }
 
 .payment__footer-total {
@@ -308,7 +330,7 @@ $input-radius: 8px;
 }
 
 .payment__footer-btn {
-  background: $color-secondary;
+  background: linear-gradient(135deg, $color-secondary, color.adjust($color-secondary, $lightness: -10%));
   color: $color-white;
   border: none;
   border-radius: 24px;
@@ -316,8 +338,8 @@ $input-radius: 8px;
   font-size: 0.95rem;
   font-weight: 600;
   cursor: not-allowed;
-  opacity: 0.4;
-  transition: opacity 0.2s, background 0.2s;
+  opacity: 0.35;
+  transition: opacity 0.25s, box-shadow 0.25s, transform 0.2s;
   white-space: nowrap;
 
   &--active {
@@ -325,8 +347,11 @@ $input-radius: 8px;
     cursor: pointer;
 
     &:hover {
-      background: darken($color-secondary, 8%);
+      box-shadow: 0 6px 20px rgba($color-secondary, 0.4);
+      transform: translateY(-1px);
     }
+
+    &:active { transform: translateY(0); }
   }
 
   &:disabled {

@@ -34,7 +34,12 @@ $transition: 0.25s ease;
       border-radius: 50px;
       padding: 0 6px 0 0;
       height: 66px;
-      transition: box-shadow $transition;
+      transition: box-shadow $transition, border-color $transition;
+
+      &:hover {
+        border-color: rgba($color-secondary, 0.4);
+        box-shadow: 0 4px 20px rgba($color-secondary, 0.1);
+      }
     }
 
     // Campo
@@ -217,18 +222,23 @@ $transition: 0.25s ease;
       height: 52px;
       width: 52px;
       border-radius: 50px;
-      background-color: $color-primary;
+      background: linear-gradient(135deg, $color-primary 0%, color.adjust($color-primary, $lightness: 10%) 100%);
       border: none;
       cursor: pointer;
       flex-shrink: 0;
-      transition: background-color $transition, transform $transition;
+      transition: box-shadow $transition, transform $transition;
 
       .material-symbols-outlined {
         color: $color-white;
       }
 
       &:hover {
-        background-color: color.adjust($color-primary, $lightness: 8%);
+        box-shadow: 0 4px 16px rgba($color-primary, 0.38);
+        transform: scale(1.04);
+      }
+
+      &:active {
+        transform: scale(0.97);
       }
     }
 

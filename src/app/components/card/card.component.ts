@@ -1,14 +1,6 @@
 import { Component, computed, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
-export interface CardData {
-  id: number;
-  title: string;
-  subtitle: string;
-  rating: number;
-  imageUrl: string;
-  isFavorite?: boolean;
-}
+import { CardData } from './model/card.model';
 
 @Component({
   selector: 'app-card',
@@ -20,10 +12,10 @@ export interface CardData {
 export class CardComponent {
 
   // Inputs
-  card          = input.required<CardData>();
-  isFavorite    = input<boolean>(false);
-  showFavorite  = input<boolean>(true);   // oculta el botón de favorito
-  interactive   = input<boolean>(true);   // false: sin cursor pointer ni click
+  card = input.required<CardData>();
+  isFavorite = input<boolean>(false);
+  showFavorite = input<boolean>(true);   // oculta el botón de favorito
+  interactive = input<boolean>(true);   // false: sin cursor pointer ni click
 
   // Outputs
   favoriteToggle = output<number>();
@@ -38,6 +30,13 @@ export class CardComponent {
 
   ngOnInit(): void {
     this.favorite.set(this.isFavorite());
+  }
+
+  // Fallback si la imagen no carga (URL rota en BBDD)
+  onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.onerror = null; // evita bucle infinito
+    // img.src = 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80';
   }
 
   // Actions

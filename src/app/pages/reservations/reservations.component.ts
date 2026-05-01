@@ -1,8 +1,10 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/user/auth.service';
-import { Booking, BookingService } from '../../core/services/user/booking.service';
+import { BookingService } from '../../core/services/user/booking.service';
+import { Booking } from '../../core/services/user/models/booking.model';
 
 @Component({
   selector: 'app-reservations',
@@ -13,16 +15,29 @@ import { Booking, BookingService } from '../../core/services/user/booking.servic
 })
 export class ReservationsComponent implements OnInit {
 
-  authService    = inject(AuthService);
+  authService = inject(AuthService);
   bookingService = inject(BookingService);
+  private destroyRef = inject(DestroyRef);
 
   reservations = signal<Booking[]>([]);
 
+  // Obtener el ID del usuario actual para cargar sus reservas
+  userId = this.authService.currentUser()?.id_user as any;
+
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) return;
-    // TODO: cargar reservas reales
-    // this.bookingService.getUserBookings(this.authService.currentUser()!.id)
-    //   .subscribe(data => this.reservations.set(data));
-    this.reservations.set([]);
+
+    if (!this.userId) return;
+
+    this.setBooking();
+  }
+
+  setBooking() {
+    this.bookingService.getUserBookings(this.userId)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: data => this.reservations.set(data),
+        error: () => this.reservations.set([]),
+      });
   }
 }

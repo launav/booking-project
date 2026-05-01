@@ -1,10 +1,11 @@
 <app-loading />
 <app-error-modal />
+<app-toast />
 
 <app-header />
 
 @if (!hideSearchBar()) {
-  <app-search-bar />
+<app-search-bar (search)="onSearch($event)" />
 }
 
 <main class="main-content">
@@ -12,5 +13,5 @@
 </main>
 
 @if (!hideFooter()) {
-  <app-footer />
+<app-footer />
 }

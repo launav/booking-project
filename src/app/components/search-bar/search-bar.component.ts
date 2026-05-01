@@ -37,18 +37,18 @@ export interface SearchParams {
 export class SearchBarComponent {
 
   // Inputs
-  destinationPlaceholder = input<string>('Prueba con Meliá, Madrid');
-  roomsPlaceholder = input<string>('Añade habitaciones');
+  destinationPlaceholder = input<string>('Prueba con Madrid');
+  roomsPlaceholder = input<string>('Añade viajeros');
   datePlaceholder = input<string>('Introduce las fechas');
   navigateOnSearch = input<boolean>(true);
-  searchRoute = input<string>('/alojamientos');
+  searchRoute = input<string>('/rooms');
 
   // Output
   search = output<SearchParams>();
 
   // Internal state
   destination = signal<string>('');
-  rooms = signal<number>(1);
+  rooms = signal<number>(0);
   checkIn = signal<Date | null>(null);
   checkOut = signal<Date | null>(null);
 
@@ -198,7 +198,7 @@ export class SearchBarComponent {
   }
 
   decrementRooms(): void {
-    this.rooms.update(r => Math.max(1, r - 1));
+    this.rooms.update(r => Math.max(0, r - 1));
   }
 
   // Search
@@ -216,7 +216,7 @@ export class SearchBarComponent {
       this.router.navigate([this.searchRoute()], {
         queryParams: {
           destination: params.destination || null,
-          rooms: params.rooms,
+          rooms: params.rooms > 0 ? params.rooms : null,  // null = sin filtro de viajeros
           checkIn: params.checkIn?.toISOString() || null,
           checkOut: params.checkOut?.toISOString() || null,
         }

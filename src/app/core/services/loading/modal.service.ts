@@ -1,9 +1,5 @@
 import { Injectable, signal } from '@angular/core';
-
-export interface ModalError {
-  title:   string;
-  message: string;
-}
+import { ModalError } from './model/error.model';
 
 @Injectable({ providedIn: 'root' })
 export class ModalService {
