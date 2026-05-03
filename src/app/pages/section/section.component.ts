@@ -19,13 +19,6 @@ const SECTION_TITLES: Record<SectionType, string> = {
   visits: 'Visitas en',
 };
 
-export interface ActiveFilters {
-  destination: string;
-  travelers: number;
-  checkIn: Date | null;
-  checkOut: Date | null;
-}
-
 @Component({
   selector: 'app-section',
   standalone: true,
