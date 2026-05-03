@@ -27,6 +27,17 @@ $transition: 0.25s ease;
     margin: 0 auto;
     position: relative;
 
+    &__date-error {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin: 8px 0 0 16px;
+      font-size: 0.8rem;
+      color: #EF4444;
+
+      .material-symbols-outlined { font-size: 16px; }
+    }
+
     &__inner {
       display: flex;
       align-items: center;

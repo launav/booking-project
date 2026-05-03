@@ -128,5 +128,12 @@
       </button>
 
     </div>
+
+    @if (dateError()) {
+    <p class="search-bar__date-error">
+      <span class="material-symbols-outlined">error</span>
+      {{ dateError() }}
+    </p>
+    }
   </div>
 </div>

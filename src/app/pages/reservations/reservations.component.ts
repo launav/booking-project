@@ -21,19 +21,13 @@ export class ReservationsComponent implements OnInit {
 
   reservations = signal<Booking[]>([]);
 
-  // Obtener el ID del usuario actual para cargar sus reservas
-  userId = this.authService.currentUser()?.id_user as any;
-
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) return;
-
-    if (!this.userId) return;
-
-    this.setBooking();
+    this.loadReservations();
   }
 
-  setBooking() {
-    this.bookingService.getUserBookings(this.userId)
+  loadReservations(): void {
+    this.bookingService.getUserBookings()
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: data => this.reservations.set(data),

@@ -11,7 +11,7 @@
     </div>
     <div class="home__grid">
       @for (room of rooms(); track room.id) {
-      <app-card [card]="room" [isFavorite]="room.isFavorite ?? false" (favoriteToggle)="onFavoriteToggle($event)"
+      <app-card [card]="room"
         (cardClick)="onCardClick($event)" />
       } @empty {
       <p class="home__empty">No hay habitaciones disponibles</p>
@@ -25,7 +25,7 @@
     </div>
     <div class="home__grid">
       @for (hotel of hotels(); track hotel.id) {
-        <app-card [card]="hotel" [showFavorite]="false" [interactive]="false" />
+        <app-card [card]="hotel" [showFavorite]="false" (cardClick)="onHotelClick($event)" />
       } @empty {
         <p class="home__empty">No hay hoteles disponibles</p>
       }

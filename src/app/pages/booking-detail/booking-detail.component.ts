@@ -1,10 +1,12 @@
-import { Component, DestroyRef, inject, OnInit, signal, computed } from '@angular/core';
+import { Component, DestroyRef, effect, inject, OnInit, signal, computed } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { combineLatest } from 'rxjs';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { DateRangePickerComponent } from '../../components/date-range-picker/date-range-picker.component';
+import { ClickOutsideDirective } from '../../directives/click-outside.directive';
+import { combineLatest, Subscription } from 'rxjs';
 import { HomeService } from '../../core/services/user/home.service';
-import { RoomService } from '../../core/services/user/room.service';
+import { RoomService, fallbackImage } from '../../core/services/user/room.service';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
 import { RoomDetail } from '../../core/services/user/models/room-detail.model';
 import { Hotel } from '../../core/services/user/models/hotel.model';
@@ -36,8 +38,8 @@ function mapToDetail(room: Room, images: string[], hotel: Hotel | null): RoomDet
       room.capacity <= 1
         ? 'Cama individual'
         : room.capacity <= 2
-        ? 'Cama doble'
-        : 'Varias camas',
+          ? 'Cama doble'
+          : 'Varias camas',
     size: 0,
     basePrice: priceBase,
     stars: 4,
@@ -50,8 +52,8 @@ function mapToDetail(room: Room, images: string[], hotel: Hotel | null): RoomDet
       { icon: 'tv', label: 'Televisión' },
     ],
     images,
-    hotelCity:  hotel?.city,
-    hotelName:  hotel?.name,
+    hotelCity: hotel?.city,
+    hotelName: hotel?.name,
     pricingOptions: [
       { name: 'Alojamiento', pricePerNight: priceBase, totalPrice: priceBase * 4 },
       { name: 'Alojamiento + Desayuno', pricePerNight: priceBase + 50, totalPrice: (priceBase + 50) * 4 },
@@ -63,7 +65,7 @@ function mapToDetail(room: Room, images: string[], hotel: Hotel | null): RoomDet
 @Component({
   selector: 'app-booking-detail',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, DateRangePickerComponent, ClickOutsideDirective, RouterLink],
   templateUrl: './booking-detail.component.html',
   styleUrl: './booking-detail.component.scss',
 })
@@ -86,6 +88,83 @@ export class BookingDetailComponent implements OnInit {
   // Lightbox
   lightboxOpen = signal(false);
   lightboxIndex = signal(0);
+
+  // Fechas: referencias directas al contexto para two-way binding con el picker
+  checkIn = this.ctx.checkIn;
+  checkOut = this.ctx.checkOut;
+  nights = computed(() => this.ctx.nights());
+
+  // Calendario colapsable
+  calendarOpen = signal(false);
+
+  toggleCalendar(): void {
+    this.calendarOpen.update(v => !v);
+  }
+
+  datesLabel = computed(() => {
+    const ci = this.checkIn();
+    const co = this.checkOut();
+    if (!ci) return 'Añade las fechas de tu estancia';
+    const fmt = (d: Date) => d.toLocaleDateString('es-ES', { day: '2-digit', month: 'short' });
+    return co ? `${fmt(ci)} – ${fmt(co)}` : fmt(ci);
+  });
+
+  // Disponibilidad
+  unavailable = signal(false);
+  checkingAvailability = signal(false);
+  private _availabilitySub: Subscription | null = null;
+
+  // Comprueba disponibilidad y auto-cierra el calendario cuando se seleccionan las dos fechas.
+  // IMPORTANTE: no leer calendarOpen() aquí — si lo leyéramos, abrir el calendario
+  // volvería a disparar el efecto y lo cerraría inmediatamente.
+  private _autoClose = effect(() => {
+    const ci = this.checkIn();
+    const co = this.checkOut();
+
+    // Cancela la petición anterior si aún está en vuelo
+    this._availabilitySub?.unsubscribe();
+    this._availabilitySub = null;
+
+    if (ci && co) {
+      // Cierra el calendario (escritura pura, sin lectura → no reactiva)
+      setTimeout(() => this.calendarOpen.set(false), 350);
+
+      const room = this.room();
+      if (!room) return;
+
+      const checkIn  = ci.toISOString().split('T')[0];
+      const checkOut = co.toISOString().split('T')[0];
+
+      this.unavailable.set(false);
+      this.checkingAvailability.set(true);
+
+      this._availabilitySub = this.roomService
+        .checkAvailability(room.id, checkIn, checkOut)
+        .pipe(takeUntilDestroyed(this.destroyRef))
+        .subscribe({
+          next: ({ available }) => {
+            this.unavailable.set(!available);
+            this.checkingAvailability.set(false);
+          },
+          error: () => {
+            this.checkingAvailability.set(false);
+          },
+        });
+    } else {
+      this.unavailable.set(false);
+    }
+  });
+
+  // Opciones con total dinámico según noches seleccionadas
+  dynamicOptions = computed(() => {
+    const r = this.room();
+    if (!r) return [];
+    const n = this.ctx.nights();
+    return r.pricingOptions.map(opt => ({
+      ...opt,
+      totalPrice: n > 0 ? opt.pricePerNight * n : opt.totalPrice,
+    }));
+  });
 
   breadcrumb = computed(() => {
     const r = this.room();
@@ -149,6 +228,40 @@ export class BookingDetailComponent implements OnInit {
     this.imageIndex.update(i => (i + 1) % r.images.length);
   }
 
+  // ── Lightbox ───────────────────────────────────────────────────
+  openLightbox(index: number): void {
+    this.lightboxIndex.set(index);
+    this.lightboxOpen.set(true);
+  }
+
+  closeLightbox(): void {
+    this.lightboxOpen.set(false);
+  }
+
+  lightboxPrev(): void {
+    const r = this.room();
+    if (!r) return;
+    this.lightboxIndex.update(i => (i - 1 + r.images.length) % r.images.length);
+  }
+
+  lightboxNext(): void {
+    const r = this.room();
+    if (!r) return;
+    this.lightboxIndex.update(i => (i + 1) % r.images.length);
+  }
+
+  lightboxImage = computed(() => {
+    const r = this.room();
+    if (!r || r.images.length === 0) return '';
+    return r.images[this.lightboxIndex()];
+  });
+
+  onLightboxKey(event: KeyboardEvent): void {
+    if (event.key === 'Escape') this.closeLightbox();
+    if (event.key === 'ArrowLeft') this.lightboxPrev();
+    if (event.key === 'ArrowRight') this.lightboxNext();
+  }
+
   selectOption(option: PricingOption): void {
     this.selectedOption.set(option);
   }
@@ -157,10 +270,18 @@ export class BookingDetailComponent implements OnInit {
     return this.selectedOption()?.name === option.name;
   }
 
+  canContinue = computed(() =>
+    !!this.selectedOption() &&
+    !!this.ctx.checkIn() &&
+    !!this.ctx.checkOut() &&
+    !this.unavailable() &&
+    !this.checkingAvailability()
+  );
+
   continue(): void {
     const option = this.selectedOption();
     const room = this.room();
-    if (!option || !room) return;
+    if (!option || !room || !this.ctx.checkIn() || !this.ctx.checkOut()) return;
     this.ctx.setSelection(room, option);
     this.router.navigate(['/resume']);
   }
@@ -172,16 +293,6 @@ export class BookingDetailComponent implements OnInit {
   onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.onerror = null;
-    const type = this.room()?.roomType?.toLowerCase() ?? 'default';
-    const fallbacks: Record<string, string> = {
-      individual: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
-      single:     'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
-      doble:      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
-      double:     'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
-      suite:      'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80',
-      studio:     'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
-      default:    'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80',
-    };
-    img.src = fallbacks[type] ?? fallbacks['default'];
+    img.src = fallbackImage(this.room()?.roomType ?? 'default');
   }
 }

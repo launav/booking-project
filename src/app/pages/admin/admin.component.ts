@@ -44,6 +44,9 @@ export class AdminComponent implements OnInit {
 
   activeTab = signal<AdminTab>('hoteles');
 
+  // Lista completa de hoteles para el dropdown del formulario de habitaciones
+  hotelsList = signal<Hotel[]>([]);
+
   // Datos
   hoteles = signal<Hotel[]>([]);
   habitaciones = signal<Room[]>([]);
@@ -57,6 +60,9 @@ export class AdminComponent implements OnInit {
 
   get totalPages(): number { return Math.ceil(this.total() / this.limit); }
 
+  get pageFrom(): number { return Math.min((this.page() - 1) * this.limit + 1, this.total()); }
+  get pageTo(): number { return Math.min(this.page() * this.limit, this.total()); }
+
   // Modal
   showModal = signal(false);
   modalMode = signal<ModalMode>('add');
@@ -68,11 +74,11 @@ export class AdminComponent implements OnInit {
 
   // Formulario habitación
   roomForm = this.fb.nonNullable.group({
-    id_hotel: 0,
-    room_number: '',
+    id_hotel: [0, [Validators.required, Validators.min(1)]],
+    room_number: ['', Validators.required],
     type: 'individual' as RoomType,
-    capacity: 1,
-    price_per_night: 0,
+    capacity: [1, [Validators.required, Validators.min(1)]],
+    price_per_night: [0, [Validators.required, Validators.min(0.01)]],
     description: '',
     status: 'available' as Room['status'],
   });
@@ -103,8 +109,37 @@ export class AdminComponent implements OnInit {
   readonly roomTypes = ['individual', 'doble', 'suite', 'studio'];
   readonly roomStatuses = ['available', 'occupied', 'maintenance'];
 
+  formatDate(value: string): string {
+    if (!value) return '—';
+    const d = new Date(value);
+    if (isNaN(d.getTime())) return value;
+    const day   = String(d.getUTCDate()).padStart(2, '0');
+    const month = String(d.getUTCMonth() + 1).padStart(2, '0');
+    const year  = d.getUTCFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  hotelNameById(id: number): string {
+    return this.hotelsList().find(h => h.id_hotel === id)?.name ?? '—';
+  }
+
+  isRoomInvalid(field: string): boolean {
+    const ctrl = this.roomForm.get(field);
+    return !!(ctrl && ctrl.invalid && ctrl.touched);
+  }
+
+  isHotelInvalid(field: string): boolean {
+    const ctrl = this.hotelForm.get(field);
+    return !!(ctrl && ctrl.invalid && ctrl.touched);
+  }
+
   // Lifecycle
-  ngOnInit(): void { this.loadTab('hoteles'); }
+  ngOnInit(): void {
+    this.loadTab('hoteles');
+    this.hotelsService.getAllForSelect()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({ next: res => this.hotelsList.set(res.data) });
+  }
 
   // Tabs
   selectTab(tab: AdminTab): void {
@@ -296,9 +331,9 @@ export class AdminComponent implements OnInit {
 
   // Columnas
   hotelColumns = ['id_hotel', 'name', 'city', 'address', 'phone'];
-  roomColumns = ['id_room', 'id_hotel', 'room_number', 'type', 'capacity', 'price_per_night', 'status'];
+  roomColumns = ['id_room', 'hotel_name', 'room_number', 'type', 'capacity', 'price_per_night', 'status'];
   userColumns = ['id_user', 'first_name', 'last_name', 'email', 'role'];
-  reservaColumns = ['id_reservation', 'id_user', 'id_room', 'check_in_date', 'check_out_date', 'reservation_status'];
+  reservaColumns = ['id_reservation', 'hotel_name', 'email', 'type', 'check_in_date', 'check_out_date', 'reservation_status'];
 
   get activeColumns(): string[] {
     return ({
@@ -327,18 +362,20 @@ export class AdminComponent implements OnInit {
   private readonly labelMap = new Map<string, string>([
     ['id_hotel', 'ID'], ['name', 'Nombre'], ['address', 'Dirección'],
     ['city', 'Ciudad'], ['phone', 'Teléfono'],
-    ['id_room', 'ID'], ['room_number', 'Nº hab.'], ['type', 'Tipo'],
+    ['id_room', 'ID'], ['hotel_name', 'Hotel'], ['room_number', 'Nº hab.'], ['type', 'Tipo'],
     ['capacity', 'Cap.'], ['price_per_night', 'Precio/noche'], ['status', 'Estado'],
     ['id_user', 'ID'], ['first_name', 'Nombre'], ['last_name', 'Apellido'],
     ['email', 'Email'], ['role', 'Rol'],
     ['id_reservation', 'ID'], ['check_in_date', 'Check-in'],
     ['check_out_date', 'Check-out'], ['reservation_status', 'Estado'],
+    ['type', 'Habitación'],
   ]);
 
   columnLabel(col: string): string {
     if (this.activeTab() === 'reservas') {
-      if (col === 'id_user') return 'Usuario';
-      if (col === 'id_room') return 'Habitación';
+      if (col === 'hotel_name') return 'Hotel';
+      if (col === 'email')      return 'Usuario';
+      if (col === 'type')       return 'Habitación';
     }
     return this.labelMap.get(col) ?? col;
   }

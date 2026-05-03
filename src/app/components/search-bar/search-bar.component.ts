@@ -1,4 +1,4 @@
-import { Component, computed, input, output, signal } from '@angular/core';
+import { Component, computed, inject, input, output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -9,14 +9,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
-
-
-export interface SearchParams {
-  destination: string;
-  rooms: number;
-  checkIn: Date | null;
-  checkOut: Date | null;
-}
+import { BookingContextService } from '../../core/services/user/booking-context.service';
+import { SearchParams } from './models/search.model';
 
 @Component({
   selector: 'app-search-bar',
@@ -51,6 +45,7 @@ export class SearchBarComponent {
   rooms = signal<number>(0);
   checkIn = signal<Date | null>(null);
   checkOut = signal<Date | null>(null);
+  dateError = signal<string | null>(null);
 
   // Active panel
   activePanel = signal<'destination' | 'rooms' | 'date' | null>(null);
@@ -137,6 +132,7 @@ export class SearchBarComponent {
   selectDate(date: Date): void {
     const ci = this.checkIn();
     const co = this.checkOut();
+    this.dateError.set(null);
 
     if (!ci || (ci && co)) {
       this.checkIn.set(date);
@@ -172,7 +168,15 @@ export class SearchBarComponent {
     return date < today;
   }
 
-  constructor(private router: Router) { }
+  private bookingCtx = inject(BookingContextService);
+
+  constructor(private router: Router) {
+    // Restaura las fechas del contexto si el usuario ya las había seleccionado
+    const ci = this.bookingCtx.checkIn();
+    const co = this.bookingCtx.checkOut();
+    if (ci) this.checkIn.set(ci);
+    if (co) this.checkOut.set(co);
+  }
 
   // Panel
   togglePanel(panel: 'destination' | 'rooms' | 'date'): void {
@@ -203,11 +207,35 @@ export class SearchBarComponent {
 
   // Search
   onSearch(): void {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const ci = this.checkIn();
+    const co = this.checkOut();
+
+    if (ci && ci < today) {
+      this.dateError.set('La fecha de entrada no puede ser anterior a hoy');
+      return;
+    }
+    if (co && co < today) {
+      this.dateError.set('La fecha de salida no puede ser anterior a hoy');
+      return;
+    }
+    if (ci && co && co <= ci) {
+      this.dateError.set('La fecha de salida debe ser posterior a la de entrada');
+      return;
+    }
+
+    this.dateError.set(null);
+
+    // Sincroniza las fechas con el contexto de reserva (null las limpia)
+    this.bookingCtx.setContext({ checkIn: ci ?? null, checkOut: co ?? null });
+
     const params: SearchParams = {
       destination: this.destination(),
       rooms: this.rooms(),
-      checkIn: this.checkIn(),
-      checkOut: this.checkOut(),
+      checkIn: ci,
+      checkOut: co,
     };
 
     this.search.emit(params);

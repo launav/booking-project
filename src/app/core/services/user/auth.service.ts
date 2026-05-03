@@ -11,6 +11,7 @@ import {
   LoginResponse,
   RegisterResponse
 } from './models/auth.model';
+import { STORAGE_KEYS } from '../../constants/storage-keys';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -18,7 +19,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
 
-  private _token = signal<string | null>(localStorage.getItem('token'));
+  private _token = signal<string | null>(localStorage.getItem(STORAGE_KEYS.TOKEN));
   private _user = signal<AuthUser | null>(this.loadUser());
 
   readonly token = this._token.asReadonly();
@@ -42,15 +43,15 @@ export class AuthService {
   }
 
   saveSession(token: string, user: AuthUser): void {
-    localStorage.setItem('token', token);
-    localStorage.setItem('user', JSON.stringify(user));
+    localStorage.setItem(STORAGE_KEYS.TOKEN, token);
+    localStorage.setItem(STORAGE_KEYS.USER, JSON.stringify(user));
     this._token.set(token);
     this._user.set(user);
   }
 
   logout(): void {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    localStorage.removeItem(STORAGE_KEYS.TOKEN);
+    localStorage.removeItem(STORAGE_KEYS.USER);
     this._token.set(null);
     this._user.set(null);
     this.router.navigate(['/home']);
@@ -58,7 +59,7 @@ export class AuthService {
 
   private loadUser(): AuthUser | null {
     try {
-      const raw = localStorage.getItem('user');
+      const raw = localStorage.getItem(STORAGE_KEYS.USER);
       return raw ? JSON.parse(raw) : null;
     } catch {
       return null;

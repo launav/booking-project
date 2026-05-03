@@ -6,7 +6,7 @@ import { switchMap, map, catchError } from 'rxjs/operators';
 import { CardData } from '../../../components/card/model/card.model';
 import { CarouselItem } from '../../../components/carousel/carousel.component';
 import { RoomService } from '../user/room.service';
-import { ActiveFilters } from '../../../pages/section/section.component';
+import { ActiveFilters } from './models/activeFilters.model';
 import { RoomImage } from './models/room-image.model';
 import { Hotel } from '../admin/models/hotel.model';
 import { PaginatedResponse } from '../admin/models/pagination.model';
