@@ -1,12 +1,13 @@
 import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
 
 @Component({
   selector: 'app-success',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './success.component.html',
   styleUrl: './success.component.scss'
 })

@@ -5,9 +5,9 @@
       <!-- Destination -->
       <div class="search-bar__field" [class.search-bar__field--active]="activePanel() === 'destination'"
         (click)="togglePanel('destination')">
-        <span class="search-bar__label">Destino</span>
+        <span class="search-bar__label">{{ 'searchBar.destination' | translate }}</span>
         @if (activePanel() === 'destination') {
-        <input class="search-bar__inline-input" type="text" placeholder="Ciudad, hotel, zona..."
+        <input class="search-bar__inline-input" type="text" [placeholder]="'searchBar.destinationPlaceholder' | translate"
           [ngModel]="destination()" (ngModelChange)="destination.set($event)" (click)="$event.stopPropagation()"
           autofocus />
         } @else {
@@ -20,7 +20,7 @@
       <!-- Date -->
       <div class="search-bar__field" [class.search-bar__field--active]="activePanel() === 'date'"
         (click)="togglePanel('date')">
-        <span class="search-bar__label">Fechas</span>
+        <span class="search-bar__label">{{ 'searchBar.dates' | translate }}</span>
         <span class="search-bar__value" [class.search-bar__value--filled]="hasDate()">
           {{ dateLabel() }}
         </span>
@@ -75,14 +75,14 @@
           <!-- Footer labels -->
           <div class="calendar__footer">
             <div class="calendar__footer-field">
-              <label class="calendar__footer-label">Entrada</label>
+              <label class="calendar__footer-label">{{ 'searchBar.checkIn' | translate }}</label>
               <input class="calendar__footer-input" type="date" [ngModel]="checkIn() | date:'yyyy-MM-dd'"
-                (ngModelChange)="setCheckIn($event)" placeholder="dd/mm/aaaa" />
+                (ngModelChange)="setCheckIn($event)" [placeholder]="'calendar.placeholder' | translate" />
             </div>
             <div class="calendar__footer-field">
-              <label class="calendar__footer-label">Salida</label>
+              <label class="calendar__footer-label">{{ 'searchBar.checkOut' | translate }}</label>
               <input class="calendar__footer-input" type="date" [ngModel]="checkOut() | date:'yyyy-MM-dd'"
-                (ngModelChange)="setCheckOut($event)" placeholder="dd/mm/aaaa" />
+                (ngModelChange)="setCheckOut($event)" [placeholder]="'calendar.placeholder' | translate" />
             </div>
           </div>
 
@@ -93,7 +93,7 @@
       <!-- Rooms: Filtra las habitaciones por viajero -->
       <div class="search-bar__field" [class.search-bar__field--active]="activePanel() === 'rooms'"
         (click)="togglePanel('rooms')">
-        <span class="search-bar__label">Viajeros</span>
+        <span class="search-bar__label">{{ 'searchBar.travelers' | translate }}</span>
         <span class="search-bar__value" [class.search-bar__value--filled]="hasRooms()">
           {{ roomsLabel() }}
         </span>
@@ -104,8 +104,8 @@
             <div class="traveler-row__info">
               <span class="material-symbols-outlined traveler-row__icon">person</span>
               <div class="traveler-row__text">
-                <span class="traveler-row__label">Viajeros</span>
-                <span class="traveler-row__sublabel">¿Cuántas personas viajan?</span>
+                <span class="traveler-row__label">{{ 'searchBar.travelers' | translate }}</span>
+                <span class="traveler-row__sublabel">{{ 'searchBar.travelersQuestion' | translate }}</span>
               </div>
             </div>
             <div class="search-bar__counter">
@@ -123,7 +123,7 @@
       </div>
 
       <!-- Search button -->
-      <button class="search-bar__btn" (click)="onSearch()" aria-label="Buscar">
+      <button class="search-bar__btn" (click)="onSearch()" [attr.aria-label]="'searchBar.destination' | translate">
         <span class="material-symbols-outlined">search</span>
       </button>
 

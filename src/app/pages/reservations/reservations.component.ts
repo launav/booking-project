@@ -2,6 +2,7 @@ import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { AuthService } from '../../core/services/user/auth.service';
 import { BookingService } from '../../core/services/user/booking.service';
 import { Booking } from '../../core/services/user/models/booking.model';
@@ -9,7 +10,7 @@ import { Booking } from '../../core/services/user/models/booking.model';
 @Component({
   selector: 'app-reservations',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './reservations.component.html',
   styleUrl: './reservations.component.scss'
 })

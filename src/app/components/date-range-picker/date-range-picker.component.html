@@ -48,16 +48,16 @@
   <!-- Footer: muestra las fechas seleccionadas -->
   <div class="calendar__footer">
     <div class="calendar__footer-field">
-      <span class="calendar__footer-label">Entrada</span>
+      <span class="calendar__footer-label">{{ 'calendar.checkIn' | translate }}</span>
       <span class="calendar__footer-value">
-        {{ checkIn() ? (checkIn() | date:'dd/MM/yyyy') : 'dd/mm/aaaa' }}
+        {{ checkIn() ? (checkIn() | date:'dd/MM/yyyy') : ('calendar.placeholder' | translate) }}
       </span>
     </div>
     <div class="calendar__footer-divider"></div>
     <div class="calendar__footer-field">
-      <span class="calendar__footer-label">Salida</span>
+      <span class="calendar__footer-label">{{ 'calendar.checkOut' | translate }}</span>
       <span class="calendar__footer-value">
-        {{ checkOut() ? (checkOut() | date:'dd/MM/yyyy') : 'dd/mm/aaaa' }}
+        {{ checkOut() ? (checkOut() | date:'dd/MM/yyyy') : ('calendar.placeholder' | translate) }}
       </span>
     </div>
   </div>

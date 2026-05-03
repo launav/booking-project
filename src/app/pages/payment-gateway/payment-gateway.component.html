@@ -1,10 +1,10 @@
 <!-- Cabecera -->
 <div class="payment__header">
-  <h1 class="payment__title">Finalizar reserva</h1>
+  <h1 class="payment__title">{{ 'payment.title' | translate }}</h1>
   <nav class="payment__steps">
-    <span class="payment__step">1. Detalles de la reserva</span>
-    <span class="payment__step payment__step--active">2. Forma de pago</span>
-    <span class="payment__step">3. Confirmación</span>
+    <span class="payment__step">{{ 'payment.step1' | translate }}</span>
+    <span class="payment__step payment__step--active">{{ 'payment.step2' | translate }}</span>
+    <span class="payment__step">{{ 'payment.step3' | translate }}</span>
   </nav>
 </div>
 
@@ -13,29 +13,29 @@
 
   <!-- Información personal -->
   <div class="payment__card">
-    <h2 class="payment__card-title">Información personal</h2>
+    <h2 class="payment__card-title">{{ 'payment.personalInfo' | translate }}</h2>
 
     <!-- Fila 1: nombre, apellido, segundo apellido -->
     <div class="payment__row payment__row--3">
       <div class="payment__field">
         <input class="payment__input"
           [class.payment__input--error]="isInvalid('nombre')"
-          formControlName="nombre" placeholder="Nombre" type="text" />
+          formControlName="nombre" [placeholder]="'payment.placeholderName' | translate" type="text" />
         @if (isInvalid('nombre')) {
-          <span class="payment__error">El nombre es obligatorio</span>
+          <span class="payment__error">{{ 'payment.errorName' | translate }}</span>
         }
       </div>
       <div class="payment__field">
         <input class="payment__input"
           [class.payment__input--error]="isInvalid('apellido')"
-          formControlName="apellido" placeholder="Apellido" type="text" />
+          formControlName="apellido" [placeholder]="'payment.placeholderLastName' | translate" type="text" />
         @if (isInvalid('apellido')) {
-          <span class="payment__error">El apellido es obligatorio</span>
+          <span class="payment__error">{{ 'payment.errorLastName' | translate }}</span>
         }
       </div>
       <div class="payment__field">
         <input class="payment__input" formControlName="segundoApellido"
-          placeholder="Segundo apellido (Opcional)" type="text" />
+          [placeholder]="'payment.placeholderSecondLastName' | translate" type="text" />
       </div>
     </div>
 
@@ -44,9 +44,9 @@
       <div class="payment__field">
         <input class="payment__input"
           [class.payment__input--error]="isInvalid('direccion')"
-          formControlName="direccion" placeholder="Dirección" type="text" />
+          formControlName="direccion" [placeholder]="'payment.placeholderAddress' | translate" type="text" />
         @if (isInvalid('direccion')) {
-          <span class="payment__error">La dirección es obligatoria</span>
+          <span class="payment__error">{{ 'payment.errorAddress' | translate }}</span>
         }
       </div>
     </div>
@@ -57,29 +57,29 @@
         <select class="payment__input payment__select"
           [class.payment__input--error]="isInvalid('pais')"
           formControlName="pais">
-          <option value="" disabled selected>País</option>
+          <option value="" disabled selected>{{ 'payment.placeholderCountry' | translate }}</option>
           @for (p of paises; track p) {
           <option [value]="p">{{ p }}</option>
           }
         </select>
         @if (isInvalid('pais')) {
-          <span class="payment__error">Selecciona un país</span>
+          <span class="payment__error">{{ 'payment.errorCountry' | translate }}</span>
         }
       </div>
       <div class="payment__field">
         <input class="payment__input"
           [class.payment__input--error]="isInvalid('ciudad')"
-          formControlName="ciudad" placeholder="Ciudad" type="text" />
+          formControlName="ciudad" [placeholder]="'payment.placeholderCity' | translate" type="text" />
         @if (isInvalid('ciudad')) {
-          <span class="payment__error">La ciudad es obligatoria</span>
+          <span class="payment__error">{{ 'payment.errorCity' | translate }}</span>
         }
       </div>
       <div class="payment__field">
         <input class="payment__input"
           [class.payment__input--error]="isInvalid('codigoPostal')"
-          formControlName="codigoPostal" placeholder="Código Postal" type="text" />
+          formControlName="codigoPostal" [placeholder]="'payment.placeholderPostalCode' | translate" type="text" />
         @if (isInvalid('codigoPostal')) {
-          <span class="payment__error">Código postal inválido (4-10 dígitos)</span>
+          <span class="payment__error">{{ 'payment.errorPostalCode' | translate }}</span>
         }
       </div>
     </div>
@@ -89,17 +89,17 @@
       <div class="payment__field">
         <input class="payment__input"
           [class.payment__input--error]="isInvalid('email')"
-          formControlName="email" placeholder="Email" type="email" />
+          formControlName="email" [placeholder]="'payment.placeholderEmail' | translate" type="email" />
         @if (isInvalid('email')) {
-          <span class="payment__error">Introduce un email válido</span>
+          <span class="payment__error">{{ 'payment.errorEmail' | translate }}</span>
         }
       </div>
       <div class="payment__field">
         <input class="payment__input"
           [class.payment__input--error]="isInvalid('telefono')"
-          formControlName="telefono" placeholder="Teléfono" type="tel" />
+          formControlName="telefono" [placeholder]="'payment.placeholderPhone' | translate" type="tel" />
         @if (isInvalid('telefono')) {
-          <span class="payment__error">Teléfono inválido</span>
+          <span class="payment__error">{{ 'payment.errorPhone' | translate }}</span>
         }
       </div>
     </div>
@@ -107,19 +107,19 @@
     <!-- Checkbox -->
     <label class="payment__checkbox-label">
       <input class="payment__checkbox" formControlName="mismaDireccion" type="checkbox" />
-      <span>La dirección de facturación es la misma</span>
+      <span>{{ 'payment.sameAddress' | translate }}</span>
     </label>
   </div>
 
   <!-- Método de pago -->
   <div class="payment__card">
-    <h2 class="payment__card-title">Método de pago</h2>
+    <h2 class="payment__card-title">{{ 'payment.paymentMethod' | translate }}</h2>
 
     <!-- Tarjeta de crédito / débito -->
     <label class="payment__method" [class.payment__method--selected]="paymentMethod() === 'tarjeta'"
       (click)="selectPayment('tarjeta')">
       <span class="payment__radio" [class.payment__radio--checked]="paymentMethod() === 'tarjeta'"></span>
-      <span class="payment__method-name">Tarjeta de crédito / débito</span>
+      <span class="payment__method-name">{{ 'payment.creditCard' | translate }}</span>
       <div class="payment__logos">
         <span class="payment__logo payment__logo--visa">VISA</span>
       </div>
@@ -129,7 +129,7 @@
     <label class="payment__method" [class.payment__method--selected]="paymentMethod() === 'paypal'"
       (click)="selectPayment('paypal')">
       <span class="payment__radio" [class.payment__radio--checked]="paymentMethod() === 'paypal'"></span>
-      <span class="payment__method-name">Paypal</span>
+      <span class="payment__method-name">{{ 'payment.paypal' | translate }}</span>
       <span class="payment__logo-paypal">
         <span class="payment__paypal-pay">Pay</span><span class="payment__paypal-pal">Pal</span>
       </span>
@@ -139,7 +139,7 @@
     <label class="payment__method" [class.payment__method--selected]="paymentMethod() === 'googlepay'"
       (click)="selectPayment('googlepay')">
       <span class="payment__radio" [class.payment__radio--checked]="paymentMethod() === 'googlepay'"></span>
-      <span class="payment__method-name">Google Pay</span>
+      <span class="payment__method-name">{{ 'payment.googlePay' | translate }}</span>
       <span class="payment__logo-gpay">G Pay</span>
     </label>
   </div>
@@ -149,11 +149,11 @@
 <!-- Barra inferior fija -->
 <div class="payment__footer">
   <div class="payment__footer-total">
-    <span class="payment__footer-label">Total</span>
+    <span class="payment__footer-label">{{ 'payment.total' | translate }}</span>
     <span class="payment__footer-price">{{ totalPrice() | number:'1.2-2' }} €</span>
   </div>
   <button class="payment__footer-btn" [disabled]="!canContinue()" [class.payment__footer-btn--active]="canContinue()"
     (click)="continue()">
-    Continuar con el pago
+    {{ 'payment.continueBtn' | translate }}
   </button>
 </div>

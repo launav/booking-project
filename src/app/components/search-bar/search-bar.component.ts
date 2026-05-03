@@ -8,6 +8,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
 import { SearchParams } from './models/search.model';
@@ -23,7 +24,8 @@ import { SearchParams } from './models/search.model';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDialogModule,
-    ClickOutsideDirective
+    ClickOutsideDirective,
+    TranslatePipe,
   ],
   templateUrl: './search-bar.component.html',
   styleUrl: './search-bar.component.scss',
@@ -169,6 +171,7 @@ export class SearchBarComponent {
   }
 
   private bookingCtx = inject(BookingContextService);
+  private translate  = inject(TranslateService);
 
   constructor(private router: Router) {
     // Restaura las fechas del contexto si el usuario ya las había seleccionado
@@ -214,15 +217,15 @@ export class SearchBarComponent {
     const co = this.checkOut();
 
     if (ci && ci < today) {
-      this.dateError.set('La fecha de entrada no puede ser anterior a hoy');
+      this.dateError.set(this.translate.instant('searchBar.errorPastCheckIn'));
       return;
     }
     if (co && co < today) {
-      this.dateError.set('La fecha de salida no puede ser anterior a hoy');
+      this.dateError.set(this.translate.instant('searchBar.errorPastCheckOut'));
       return;
     }
     if (ci && co && co <= ci) {
-      this.dateError.set('La fecha de salida debe ser posterior a la de entrada');
+      this.dateError.set(this.translate.instant('searchBar.errorOrder'));
       return;
     }
 

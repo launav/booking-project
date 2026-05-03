@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { forkJoin, of, switchMap } from 'rxjs';
 import { catchError } from 'rxjs/operators';
+import { TranslatePipe } from '@ngx-translate/core';
 import { ToastService } from '../../core/services/loading/toast.service';
 import { RoomsService } from '../../core/services/admin/rooms.service';
 import { UsersService } from '../../core/services/admin/users.service';
@@ -26,7 +27,7 @@ interface PaginatedResponse<T> {
 @Component({
   selector: 'app-admin',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './admin.component.html',
   styleUrl: './admin.component.scss',
 })

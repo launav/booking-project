@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { combineLatest, catchError } from 'rxjs';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 
 import { CardComponent } from '../../components/card/card.component';
 import { CarouselComponent, CarouselItem } from '../../components/carousel/carousel.component';
@@ -13,16 +14,16 @@ import { ActiveFilters } from '../../core/services/user/models/activeFilters.mod
 
 export type SectionType = 'rooms' | 'events' | 'visits';
 
-const SECTION_TITLES: Record<SectionType, string> = {
-  rooms: 'Habitaciones populares en',
-  events: 'Eventos en',
-  visits: 'Visitas en',
+const SECTION_TITLE_KEYS: Record<SectionType, string> = {
+  rooms: 'section.titleRooms',
+  events: 'section.titleEvents',
+  visits: 'section.titleVisits',
 };
 
 @Component({
   selector: 'app-section',
   standalone: true,
-  imports: [CommonModule, CardComponent, CarouselComponent],
+  imports: [CommonModule, CardComponent, CarouselComponent, TranslatePipe],
   templateUrl: './section.component.html',
   styleUrl: './section.component.scss'
 })
@@ -31,6 +32,7 @@ export class SectionComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private homeService = inject(HomeService);
+  private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
   location = this.homeService.location;
@@ -64,7 +66,7 @@ export class SectionComponent implements OnInit {
   });
 
   title = computed(() => {
-    const base = SECTION_TITLES[this.section()];
+    const base = this.translate.instant(SECTION_TITLE_KEYS[this.section()]);
     const raw = this.filters().destination || this.location();
     const dest = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : '';
     return `${base} ${dest}`;

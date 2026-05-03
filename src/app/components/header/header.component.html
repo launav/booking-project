@@ -1,7 +1,7 @@
 <header class="header" [class.header--scrolled]="scrolled()">
   <div class="header__container">
 
-    <a class="header__logo" [routerLink]="authService.isAdmin() ? '/admin' : '/home'" aria-label="Ir a inicio">
+    <a class="header__logo" [routerLink]="authService.isAdmin() ? '/admin' : '/home'" [attr.aria-label]="'nav.accommodations' | translate">
       <img src="/images/logotipo-roomify.png" alt="Roomify" class="logo-img">
     </a>
 
@@ -10,13 +10,13 @@
       @if (!authService.isAdmin()) {
       <a class="header__nav-link" routerLink="/rooms">
         <span class="material-symbols-outlined">home</span>
-        <span class="header__nav-label">Alojamientos</span>
+        <span class="header__nav-label">{{ 'nav.accommodations' | translate }}</span>
       </a>
       }
 
       <!-- Icono usuario -->
       <button class="header__icon-btn header__icon-btn--profile" mat-icon-button [matMenuTriggerFor]="userMenu"
-        aria-label="Menú de usuario">
+        [attr.aria-label]="'nav.userMenu' | translate">
         <span class="material-symbols-outlined menu-icon">person</span>
       </button>
 
@@ -29,24 +29,24 @@
         <mat-divider />
         <button mat-menu-item (click)="goToProfile()">
           <span class="material-symbols-outlined">manage_accounts</span>
-          <span>Ver perfil</span>
+          <span>{{ 'nav.profile' | translate }}</span>
         </button>
         <mat-divider />
         <button mat-menu-item (click)="logout()">
           <span class="material-symbols-outlined">logout</span>
-          <span>Cerrar sesión</span>
+          <span>{{ 'nav.logout' | translate }}</span>
         </button>
         } @else {
         <button mat-menu-item routerLink="/login">
           <span class="material-symbols-outlined">login</span>
-          <span>Iniciar sesión</span>
+          <span>{{ 'nav.login' | translate }}</span>
         </button>
         }
       </mat-menu>
 
       <!-- Icono menú -->
       <button class="header__icon-btn header__icon-btn--menu" mat-icon-button [matMenuTriggerFor]="navMenu"
-        aria-label="Menú de navegación">
+        [attr.aria-label]="'nav.userMenu' | translate">
         <span class="material-symbols-outlined menu-icon">menu</span>
       </button>
 
@@ -54,14 +54,14 @@
         @if (!authService.isAdmin()) {
         <button mat-menu-item (click)="goToReservations()">
           <span class="material-symbols-outlined">calendar_month</span>
-          <span>Reservas</span>
+          <span>{{ 'nav.bookings' | translate }}</span>
         </button>
         }
 
         @if (authService.isAdmin()) {
         <button mat-menu-item (click)="goToAdmin()">
           <span class="material-symbols-outlined">admin_panel_settings</span>
-          <span>Panel de administración</span>
+          <span>{{ 'nav.admin' | translate }}</span>
         </button>
         }
       </mat-menu>

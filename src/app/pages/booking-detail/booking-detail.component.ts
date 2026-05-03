@@ -2,6 +2,7 @@ import { Component, DestroyRef, effect, inject, OnInit, signal, computed } from 
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { DateRangePickerComponent } from '../../components/date-range-picker/date-range-picker.component';
 import { ClickOutsideDirective } from '../../directives/click-outside.directive';
 import { combineLatest, Subscription } from 'rxjs';
@@ -65,7 +66,7 @@ function mapToDetail(room: Room, images: string[], hotel: Hotel | null): RoomDet
 @Component({
   selector: 'app-booking-detail',
   standalone: true,
-  imports: [CommonModule, DateRangePickerComponent, ClickOutsideDirective, RouterLink],
+  imports: [CommonModule, DateRangePickerComponent, ClickOutsideDirective, RouterLink, TranslatePipe],
   templateUrl: './booking-detail.component.html',
   styleUrl: './booking-detail.component.scss',
 })

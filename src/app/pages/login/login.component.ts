@@ -7,10 +7,12 @@ import { AuthService } from '../../core/services/user/auth.service';
 
 const REMEMBER_KEY = 'rememberedEmail';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })

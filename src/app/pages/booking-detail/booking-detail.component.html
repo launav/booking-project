@@ -3,7 +3,7 @@
 <!-- Breadcrumb + Flecha -->
 <div class="detail__breadcrumb">
   <span class="detail__breadcrumb-text">{{ breadcrumb() }}</span>
-  <button class="detail__back-btn" (click)="goBack()" aria-label="Volver">
+  <button class="detail__back-btn" (click)="goBack()" [attr.aria-label]="'bookingDetail.ariaBack' | translate">
     <span class="material-symbols-outlined">chevron_left</span>
   </button>
 </div>
@@ -17,13 +17,14 @@
     <!-- Carrusel -->
     <div class="detail__carousel">
       <button class="detail__carousel-btn detail__carousel-btn--prev" (click)="prevImage()"
-        aria-label="Imagen anterior">
+        [attr.aria-label]="'bookingDetail.ariaPrevImage' | translate">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
       <img [src]="currentImage()" [alt]="r.name" class="detail__carousel-img detail__carousel-img--clickable"
-        (error)="onImgError($event)" (click)="openLightbox(imageIndex())" title="Ver imagen ampliada" />
+        (error)="onImgError($event)" (click)="openLightbox(imageIndex())"
+        [title]="'bookingDetail.titleEnlarge' | translate" />
       <button class="detail__carousel-btn detail__carousel-btn--next" (click)="nextImage()"
-        aria-label="Imagen siguiente">
+        [attr.aria-label]="'bookingDetail.ariaNextImage' | translate">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     </div>
@@ -41,7 +42,7 @@
         }
       </div>
       <p class="detail__specs">{{ r.bedType }}&nbsp;&nbsp;|&nbsp;&nbsp;{{ r.size }}m²</p>
-      <p class="detail__price">{{ r.basePrice }} €/noche</p>
+      <p class="detail__price">{{ r.basePrice }} {{ 'bookingDetail.perNight' | translate }}</p>
       <p class="detail__description">{{ r.description }}</p>
       <ul class="detail__amenities">
         @for (amenity of r.amenities; track amenity.label) {
@@ -63,7 +64,7 @@
     <button class="detail__date-trigger" type="button" (click)="toggleCalendar()">
       <span class="material-symbols-outlined">calendar_month</span>
       <div class="detail__date-trigger-text">
-        <span class="detail__date-trigger-label">Fechas de estancia</span>
+        <span class="detail__date-trigger-label">{{ 'bookingDetail.datesLabel' | translate }}</span>
         <span class="detail__date-trigger-value">{{ datesLabel() }}</span>
       </div>
       <span class="material-symbols-outlined detail__date-trigger-chevron">
@@ -85,7 +86,7 @@
   @if (unavailable()) {
   <div class="detail__unavailable">
     <span class="material-symbols-outlined">event_busy</span>
-    <span>Esta habitación no está disponible para las fechas seleccionadas. Por favor, elige otras fechas.</span>
+    <span>{{ 'bookingDetail.unavailable' | translate }}</span>
   </div>
   }
 
@@ -93,7 +94,7 @@
   @if (checkingAvailability()) {
   <div class="detail__checking">
     <span class="material-symbols-outlined detail__checking-icon">sync</span>
-    <span>Comprobando disponibilidad...</span>
+    <span>{{ 'bookingDetail.checkingAvailability' | translate }}</span>
   </div>
   }
 
@@ -101,7 +102,7 @@
   <div class="detail__conditions">
     <div class="detail__conditions-left"></div>
     <div class="detail__conditions-right">
-      <button class="detail__conditions-btn" [routerLink]="'/ayuda'" >Condiciones de la reserva</button>
+      <button class="detail__conditions-btn" [routerLink]="'/ayuda'">{{ 'bookingDetail.bookingConditions' | translate }}</button>
     </div>
   </div>
 
@@ -111,18 +112,18 @@
     <div class="detail__option" [class.detail__option--selected]="isSelected(option)">
 
       <div class="detail__option-left">
-        <span class="detail__option-price">{{ option.pricePerNight }} €/noche</span>
+        <span class="detail__option-price">{{ option.pricePerNight }} {{ 'bookingDetail.perNight' | translate }}</span>
         <span class="detail__option-name">{{ option.name }}</span>
       </div>
 
       <div class="detail__option-right">
         <div class="detail__option-taxes-total">
-          <span class="detail__option-taxes">Impuestos incluidos</span>
+          <span class="detail__option-taxes">{{ 'bookingDetail.taxesIncluded' | translate }}</span>
           <span class="detail__option-total">{{ option.totalPrice | number:'1.2-2' }} €</span>
         </div>
         <button class="detail__option-btn" [class.detail__option-btn--selected]="isSelected(option)"
           (click)="selectOption(option)">
-          {{ isSelected(option) ? 'Seleccionada' : 'Seleccionar habitación' }}
+          {{ (isSelected(option) ? 'bookingDetail.selected' : 'bookingDetail.selectRoom') | translate }}
         </button>
       </div>
 
@@ -136,7 +137,7 @@
 <div class="detail__footer">
   <button class="detail__continue-btn" [disabled]="!canContinue()"
     [class.detail__continue-btn--active]="canContinue()" (click)="continue()">
-    Continuar
+    {{ 'bookingDetail.continue' | translate }}
   </button>
 </div>
 
@@ -145,14 +146,14 @@
 <!-- ── Lightbox ──────────────────────────────────────────────── -->
 @if (lightboxOpen()) {
 <div class="lightbox" (click)="closeLightbox()" (keydown)="onLightboxKey($event)" tabindex="0" role="dialog"
-  aria-modal="true" aria-label="Visor de imágenes">
+  aria-modal="true" [attr.aria-label]="'bookingDetail.titleEnlarge' | translate">
 
-  <button class="lightbox__close" (click)="closeLightbox()" aria-label="Cerrar">
+  <button class="lightbox__close" (click)="closeLightbox()" [attr.aria-label]="'bookingDetail.ariaBack' | translate">
     <span class="material-symbols-outlined">close</span>
   </button>
 
   <button class="lightbox__btn lightbox__btn--prev" (click)="$event.stopPropagation(); lightboxPrev()"
-    aria-label="Imagen anterior">
+    [attr.aria-label]="'bookingDetail.ariaPrevImage' | translate">
     <span class="material-symbols-outlined">chevron_left</span>
   </button>
 
@@ -161,7 +162,7 @@
   </div>
 
   <button class="lightbox__btn lightbox__btn--next" (click)="$event.stopPropagation(); lightboxNext()"
-    aria-label="Imagen siguiente">
+    [attr.aria-label]="'bookingDetail.ariaNextImage' | translate">
     <span class="material-symbols-outlined">chevron_right</span>
   </button>
 

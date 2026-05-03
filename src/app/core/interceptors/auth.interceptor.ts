@@ -1,14 +1,16 @@
 import { HttpInterceptorFn, HttpErrorResponse } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { finalize, catchError, throwError } from 'rxjs';
-import { AuthService }   from '../services/user/auth.service';
+import { TranslateService } from '@ngx-translate/core';
+import { AuthService } from '../services/user/auth.service';
 import { LoadingService } from '../services/loading/loading.service';
-import { ToastService }  from '../services/loading/toast.service';
+import { ToastService } from '../services/loading/toast.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const auth    = inject(AuthService);
+  const auth = inject(AuthService);
   const loading = inject(LoadingService);
-  const toast   = inject(ToastService);
+  const toast = inject(ToastService);
+  const translate = inject(TranslateService);
 
   const token = auth.token();
 
@@ -24,13 +26,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
       switch (error.status) {
         case 401:
           auth.logout();
-          toast.show('Sesión expirada. Por favor, inicia sesión de nuevo.');
+          toast.show(translate.instant('interceptor.sessionExpired'));
           break;
         case 403:
-          toast.show('No tienes permisos para realizar esta acción.');
+          toast.show(translate.instant('interceptor.forbidden'));
           break;
         case 500:
-          toast.show('Error del servidor. Inténtalo más tarde.');
+          toast.show(translate.instant('interceptor.serverError'));
           break;
         // 404, 409 y otros los gestiona el componente
       }

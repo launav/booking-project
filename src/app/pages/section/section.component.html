@@ -2,7 +2,7 @@
 
   <div class="section__header">
     <h1 class="section__title">{{ title() }}</h1>
-    <button class="section__back-btn" (click)="goBack()" aria-label="Volver">
+    <button class="section__back-btn" (click)="goBack()" [attr.aria-label]="'bookingDetail.ariaBack' | translate">
       <span class="material-symbols-outlined">chevron_left</span>
     </button>
   </div>
@@ -14,7 +14,7 @@
       {{ filtersLabel() }}
     </span>
     <button class="section__filters-clear" (click)="clearFilters()">
-      Limpiar filtros
+      {{ 'section.clearFilters' | translate }}
     </button>
   </div>
   }
@@ -28,7 +28,7 @@
       [interactive]="section() !== 'events'" (cardClick)="onCardClick($event)" />
     } @empty {
     <p class="section__empty">
-      No hay resultados para tu búsqueda
+      {{ 'section.noResults' | translate }}
     </p>
     }
   </div>

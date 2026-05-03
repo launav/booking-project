@@ -9,10 +9,12 @@ import { ToastService } from '../../core/services/loading/toast.service';
 import { PreviousRouteService } from '../../core/services/loading/previous-route.service';
 import { environment } from '../../../environments/environment';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
