@@ -7,10 +7,12 @@ import { CarouselComponent, CarouselItem } from '../../components/carousel/carou
 import { HomeService } from '../../core/services/user/home.service';
 import { CardData } from '../../components/card/model/card.model';
 
+import { TranslatePipe } from '@ngx-translate/core';
+
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, CardComponent, CarouselComponent],
+  imports: [CommonModule, CardComponent, CarouselComponent, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })

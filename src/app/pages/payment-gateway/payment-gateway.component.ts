@@ -7,6 +7,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
 import { HttpErrorResponse } from '@angular/common/http';
 import { BookingService } from '../../core/services/user/booking.service';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
 import { ToastService } from '../../core/services/loading/toast.service';
 
@@ -15,7 +16,7 @@ export type PaymentMethod = 'tarjeta' | 'paypal' | 'googlepay' | '';
 @Component({
   selector: 'app-payment-gateway',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './payment-gateway.component.html',
   styleUrl: './payment-gateway.component.scss'
 })
@@ -26,6 +27,7 @@ export class PaymentGatewayComponent implements OnInit {
   private bookingService = inject(BookingService);
   private ctx = inject(BookingContextService);
   private toast = inject(ToastService);
+  private translate = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
   form = this.fb.group({

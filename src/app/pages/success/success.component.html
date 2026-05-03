@@ -7,56 +7,56 @@
         <span class="material-symbols-outlined">check_circle</span>
       </div>
 
-      <h1 class="success__title">Tu reserva se ha registrado<br />correctamente.</h1>
+      <h1 class="success__title">{{ 'success.title' | translate }}</h1>
     </div>
 
     <div class="success__info">
-      <h2 class="success__info-title">Resumen de la reserva</h2>
+      <h2 class="success__info-title">{{ 'success.summary' | translate }}</h2>
 
       @if (reservationId(); as id) {
       <p class="success__info-line">
-        <span class="success__info-label">Nº de reserva:</span> #{{ id }}
+        <span class="success__info-label">{{ 'success.reservationNumber' | translate }}</span> #{{ id }}
       </p>
       }
 
       @if (room(); as r) {
       <p class="success__info-line">
-        <span class="success__info-label">Habitación:</span> {{ r.name }}
+        <span class="success__info-label">{{ 'success.room' | translate }}</span> {{ r.name }}
       </p>
       }
 
       @if (option(); as o) {
       <p class="success__info-line">
-        <span class="success__info-label">Régimen:</span> {{ o.name }}
+        <span class="success__info-label">{{ 'success.regime' | translate }}</span> {{ o.name }}
       </p>
       }
 
       @if (checkInLabel()) {
       <p class="success__info-line">
-        <span class="success__info-label">Entrada:</span> {{ checkInLabel() }}
+        <span class="success__info-label">{{ 'success.checkIn' | translate }}</span> {{ checkInLabel() }}
       </p>
       }
 
       @if (checkOutLabel()) {
       <p class="success__info-line">
-        <span class="success__info-label">Salida:</span> {{ checkOutLabel() }}
+        <span class="success__info-label">{{ 'success.checkOut' | translate }}</span> {{ checkOutLabel() }}
       </p>
       }
 
       @if (nights() > 0) {
       <p class="success__info-line">
-        <span class="success__info-label">Noches:</span> {{ nights() }}
+        <span class="success__info-label">{{ 'success.nights' | translate }}</span> {{ nights() }}
       </p>
       }
 
       @if (totalPrice() > 0) {
       <p class="success__info-line success__info-line--total">
-        <span class="success__info-label">Total:</span> {{ totalPrice() | currency:'EUR':'symbol':'1.2-2':'es' }}
+        <span class="success__info-label">{{ 'success.total' | translate }}</span> {{ totalPrice() | currency:'EUR':'symbol':'1.2-2':'es' }}
       </p>
       }
     </div>
 
-    <button class="success__btn" (click)="goHome()">Volver al inicio</button>
+    <button class="success__btn" (click)="goHome()">{{ 'success.backHome' | translate }}</button>
 
   </div>
 

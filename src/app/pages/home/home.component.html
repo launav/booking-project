@@ -3,9 +3,9 @@
   <section class="home__section">
     <div class="home__section-header">
       <h2 class="home__section-title">
-        Habitaciones populares{{ location() ? ' en ' + location() : '' }}
+        {{ (location() ? 'home.popularRoomsIn' : 'home.popularRooms') | translate: { location: location() } }}
       </h2>
-      <button class="home__section-more" (click)="goToSection('rooms')" aria-label="Ver más habitaciones">
+      <button class="home__section-more" (click)="goToSection('rooms')" [attr.aria-label]="'home.popularRooms' | translate">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
     </div>
@@ -14,20 +14,20 @@
       <app-card [card]="room"
         (cardClick)="onCardClick($event)" />
       } @empty {
-      <p class="home__empty">No hay habitaciones disponibles</p>
+      <p class="home__empty">{{ 'home.noRooms' | translate }}</p>
       }
     </div>
   </section>
 
   <section class="home__section">
     <div class="home__section-header">
-      <h2 class="home__section-title">Hoteles a tu disposición</h2>
+      <h2 class="home__section-title">{{ 'home.hotelsTitle' | translate }}</h2>
     </div>
     <div class="home__grid">
       @for (hotel of hotels(); track hotel.id) {
         <app-card [card]="hotel" [showFavorite]="false" (cardClick)="onHotelClick($event)" />
       } @empty {
-        <p class="home__empty">No hay hoteles disponibles</p>
+        <p class="home__empty">{{ 'home.noHotels' | translate }}</p>
       }
     </div>
   </section>

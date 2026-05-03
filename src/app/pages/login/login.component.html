@@ -3,39 +3,40 @@
 
     @if (!isRegister()) {
 
-    <h1 class="auth__title">Iniciar sesión</h1>
+    <h1 class="auth__title">{{ 'login.titleLogin' | translate }}</h1>
 
     <form class="auth__form" [formGroup]="loginForm" (ngSubmit)="onLogin()">
 
       <div class="auth__field">
-        <label class="auth__label">Email</label>
-        <input class="auth__input" type="email" formControlName="email" placeholder="tucorreo@email.com"
-          autocomplete="email" />
+        <label class="auth__label">{{ 'login.email' | translate }}</label>
+        <input class="auth__input" type="email" formControlName="email"
+          [placeholder]="'login.placeholderEmail' | translate" autocomplete="email" />
         @if (loginForm.get('email')?.touched && loginForm.get('email')?.invalid) {
-        <span class="auth__error">Introduce un email válido</span>
+        <span class="auth__error">{{ 'login.errorEmail' | translate }}</span>
         }
       </div>
 
       <div class="auth__field">
-        <label class="auth__label">Contraseña</label>
+        <label class="auth__label">{{ 'login.password' | translate }}</label>
         <div class="auth__input-wrap">
           <input class="auth__input" [type]="showLoginPwd() ? 'text' : 'password'" formControlName="password"
-            placeholder="••••••••" autocomplete="current-password" />
-          <button type="button" class="auth__eye" (click)="toggleLoginPwd()" aria-label="Ver contraseña">
+            [placeholder]="'login.placeholderPassword' | translate" autocomplete="current-password" />
+          <button type="button" class="auth__eye" (click)="toggleLoginPwd()"
+            [attr.aria-label]="'login.ariaTogglePassword' | translate">
             <span class="material-symbols-outlined">
               {{ showLoginPwd() ? 'visibility_off' : 'visibility' }}
             </span>
           </button>
         </div>
         @if (loginForm.get('password')?.touched && loginForm.get('password')?.invalid) {
-        <span class="auth__error">La contraseña es obligatoria</span>
+        <span class="auth__error">{{ 'login.errorPassword' | translate }}</span>
         }
       </div>
 
       <!-- Recordar email -->
       <label class="auth__remember">
         <input type="checkbox" [checked]="rememberEmail()" (change)="toggleRemember()" />
-        <span>Recordar email</span>
+        <span>{{ 'login.rememberEmail' | translate }}</span>
       </label>
 
       @if (error()) {
@@ -43,62 +44,63 @@
       }
 
       <button class="auth__submit" type="submit" [disabled]="loading()">
-        @if (loading()) { Entrando… } @else { Entrar }
+        {{ (loading() ? 'login.submittingLogin' : 'login.submitLogin') | translate }}
       </button>
 
     </form>
 
     <p class="auth__toggle">
-      ¿No estás registrado?
-      <button class="auth__toggle-btn" type="button" (click)="toggleMode()">Crear cuenta</button>
+      {{ 'login.noAccount' | translate }}
+      <button class="auth__toggle-btn" type="button" (click)="toggleMode()">{{ 'login.createAccount' | translate }}</button>
     </p>
 
     } @else {
 
-    <h1 class="auth__title">Crear cuenta</h1>
+    <h1 class="auth__title">{{ 'login.titleRegister' | translate }}</h1>
 
     <form class="auth__form" [formGroup]="registerForm" (ngSubmit)="onRegister()">
 
       <div class="auth__field">
-        <label class="auth__label">Nombre</label>
-        <input class="auth__input" type="text" formControlName="first_name" placeholder="Tu nombre"
-          autocomplete="given-name" />
+        <label class="auth__label">{{ 'login.firstName' | translate }}</label>
+        <input class="auth__input" type="text" formControlName="first_name"
+          [placeholder]="'login.placeholderName' | translate" autocomplete="given-name" />
         @if (registerForm.get('first_name')?.touched && registerForm.get('first_name')?.invalid) {
-        <span class="auth__error">El nombre es obligatorio</span>
+        <span class="auth__error">{{ 'login.errorFirstName' | translate }}</span>
         }
       </div>
 
       <div class="auth__field">
-        <label class="auth__label">Apellidos</label>
-        <input class="auth__input" type="text" formControlName="last_name" placeholder="Tus apellidos"
-          autocomplete="family-name" />
+        <label class="auth__label">{{ 'login.lastName' | translate }}</label>
+        <input class="auth__input" type="text" formControlName="last_name"
+          [placeholder]="'login.placeholderLastName' | translate" autocomplete="family-name" />
         @if (registerForm.get('last_name')?.touched && registerForm.get('last_name')?.invalid) {
-        <span class="auth__error">Los apellidos son obligatorios</span>
+        <span class="auth__error">{{ 'login.errorLastName' | translate }}</span>
         }
       </div>
 
       <div class="auth__field">
-        <label class="auth__label">Email</label>
-        <input class="auth__input" type="email" formControlName="email" placeholder="tucorreo@email.com"
-          autocomplete="email" />
+        <label class="auth__label">{{ 'login.email' | translate }}</label>
+        <input class="auth__input" type="email" formControlName="email"
+          [placeholder]="'login.placeholderEmail' | translate" autocomplete="email" />
         @if (registerForm.get('email')?.touched && registerForm.get('email')?.invalid) {
-        <span class="auth__error">Introduce un email válido</span>
+        <span class="auth__error">{{ 'login.errorEmail' | translate }}</span>
         }
       </div>
 
       <div class="auth__field">
-        <label class="auth__label">Contraseña</label>
+        <label class="auth__label">{{ 'login.password' | translate }}</label>
         <div class="auth__input-wrap">
           <input class="auth__input" [type]="showRegisterPwd() ? 'text' : 'password'" formControlName="password"
-            placeholder="Mínimo 6 caracteres" autocomplete="new-password" />
-          <button type="button" class="auth__eye" (click)="toggleRegisterPwd()" aria-label="Ver contraseña">
+            [placeholder]="'login.placeholderMinPassword' | translate" autocomplete="new-password" />
+          <button type="button" class="auth__eye" (click)="toggleRegisterPwd()"
+            [attr.aria-label]="'login.ariaTogglePassword' | translate">
             <span class="material-symbols-outlined">
               {{ showRegisterPwd() ? 'visibility_off' : 'visibility' }}
             </span>
           </button>
         </div>
         @if (registerForm.get('password')?.touched && registerForm.get('password')?.invalid) {
-        <span class="auth__error">Mínimo 6 caracteres</span>
+        <span class="auth__error">{{ 'login.errorMinPassword' | translate }}</span>
         }
       </div>
 
@@ -107,14 +109,14 @@
       }
 
       <button class="auth__submit" type="submit" [disabled]="loading()">
-        @if (loading()) { Creando cuenta… } @else { Registrarse }
+        {{ (loading() ? 'login.submittingRegister' : 'login.submitRegister') | translate }}
       </button>
 
     </form>
 
     <p class="auth__toggle">
-      ¿Ya tienes cuenta?
-      <button class="auth__toggle-btn" type="button" (click)="toggleMode()">Iniciar sesión</button>
+      {{ 'login.hasAccount' | translate }}
+      <button class="auth__toggle-btn" type="button" (click)="toggleMode()">{{ 'login.switchLogin' | translate }}</button>
     </p>
 
     }

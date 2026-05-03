@@ -1,6 +1,7 @@
 import { Component, computed, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export interface FooterLink {
   label: string;
@@ -16,7 +17,7 @@ export interface FooterColumn {
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, TranslatePipe],
   templateUrl: './footer.component.html',
   styleUrl: './footer.component.scss',
 })
@@ -24,20 +25,20 @@ export class FooterComponent {
 
   // ── Inputs ─────────────────────────────────────────────────
   brandName = input<string>('Roomify');
-  locale = input<string>('Español (ES)');
+  locale = input<string>('footer.locale');
 
   columns = input<FooterColumn[]>([
     {
-      title: 'Roomify',
+      title: 'footer.col1Title',
       links: [
-        { label: 'Centro de ayuda',        route: '/ayuda' },
-        { label: 'Opciones de cancelación', route: '/cancelacion' },
+        { label: 'footer.helpCenter',        route: '/ayuda' },
+        { label: 'footer.cancellationOptions', route: '/cancelacion' },
       ],
     },
     {
-      title: 'Publica tu alojamiento',
+      title: 'footer.col2Title',
       links: [
-        { label: '¿Cómo publico mi hotel?', route: '/publicar' },
+        { label: 'footer.howToPublish', route: '/publicar' },
       ],
     },
   ]);

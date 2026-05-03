@@ -1,11 +1,11 @@
 <div class="admin">
 
   <div class="admin__header">
-    <h1 class="admin__title">Panel de administración</h1>
+    <h1 class="admin__title">{{ 'admin.title' | translate }}</h1>
     @if (canAdd) {
     <button class="admin__add-btn" (click)="openAddModal()">
       <span class="material-symbols-outlined">add</span>
-      Añadir {{ activeTab() === 'habitaciones' ? 'habitación' : 'hotel' }}
+      {{ activeTab() === 'habitaciones' ? ('admin.addRoom' | translate) : ('admin.addHotel' | translate) }}
     </button>
     }
   </div>
@@ -13,17 +13,17 @@
   <!-- Tabs -->
   <nav class="admin__tabs">
     <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'hoteles'" (click)="selectTab('hoteles')">
-      <span class="material-symbols-outlined">hotel</span> Hoteles
+      <span class="material-symbols-outlined">hotel</span> {{ 'admin.tabHotels' | translate }}
     </button>
     <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'habitaciones'"
       (click)="selectTab('habitaciones')">
-      <span class="material-symbols-outlined">bed</span> Habitaciones
+      <span class="material-symbols-outlined">bed</span> {{ 'admin.tabRooms' | translate }}
     </button>
     <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'usuarios'" (click)="selectTab('usuarios')">
-      <span class="material-symbols-outlined">group</span> Usuarios
+      <span class="material-symbols-outlined">group</span> {{ 'admin.tabUsers' | translate }}
     </button>
     <button class="admin__tab" [class.admin__tab--active]="activeTab() === 'reservas'" (click)="selectTab('reservas')">
-      <span class="material-symbols-outlined">calendar_month</span> Reservas
+      <span class="material-symbols-outlined">calendar_month</span> {{ 'admin.tabBookings' | translate }}
     </button>
   </nav>
 
@@ -33,7 +33,7 @@
     @if (activeData.length === 0) {
     <div class="admin__empty">
       <span class="material-symbols-outlined">inbox</span>
-      <p>No hay datos disponibles</p>
+      <p>{{ 'admin.noData' | translate }}</p>
     </div>
     } @else {
     <div class="admin__table-wrapper">
@@ -43,7 +43,7 @@
             @for (col of activeColumns; track col) {
             <th class="admin__th">{{ columnLabel(col) }}</th>
             }
-            <th class="admin__th admin__th--actions">Acciones</th>
+            <th class="admin__th admin__th--actions">{{ 'admin.actions' | translate }}</th>
           </tr>
         </thead>
         <tbody>
@@ -65,13 +65,13 @@
             <!-- Acciones -->
             <td class="admin__td admin__td--actions">
               @if (canEdit) {
-              <button class="admin__action-btn admin__action-btn--edit" (click)="openEditModal(row)" title="Editar">
+              <button class="admin__action-btn admin__action-btn--edit" (click)="openEditModal(row)" [title]="'admin.save' | translate">
                 <span class="material-symbols-outlined">edit</span>
               </button>
               }
               @if (!(activeTab() === 'usuarios' && row['role'] === 'admin')) {
               <button class="admin__action-btn admin__action-btn--danger" (click)="askDelete(row[activeIdField])"
-                title="Eliminar">
+                [title]="'admin.confirmDeleteBtn' | translate">
                 <span class="material-symbols-outlined">delete</span>
               </button>
               }
@@ -85,7 +85,7 @@
     <!-- Paginación -->
     <div class="admin__pagination">
       <span class="admin__pagination-info">
-        Mostrando {{ pageFrom }}–{{ pageTo }} de {{ total() }} registros · Página {{ page() }} de {{ totalPages }}
+        {{ 'admin.pagination' | translate: { from: pageFrom, to: pageTo, total: total(), page: page(), totalPages: totalPages } }}
       </span>
       <div class="admin__pagination-btns">
         <button class="admin__page-btn" [disabled]="page() === 1" (click)="prevPage()">
@@ -108,8 +108,9 @@
 
     <div class="admin-modal__header">
       <h2 class="admin-modal__title">
-        {{ modalMode() === 'add' ? 'Añadir' : 'Editar' }}
-        {{ activeTab() === 'habitaciones' ? 'habitación' : 'hotel' }}
+        {{ modalMode() === 'add'
+          ? (activeTab() === 'habitaciones' ? ('admin.addRoomTitle' | translate) : ('admin.addHotelTitle' | translate))
+          : (activeTab() === 'habitaciones' ? ('admin.editRoom' | translate) : ('admin.editHotel' | translate)) }}
       </h2>
       <button class="admin-modal__close" (click)="closeModal()">
         <span class="material-symbols-outlined">close</span>
@@ -121,83 +122,83 @@
     <form class="admin-modal__form" [formGroup]="roomForm" (ngSubmit)="saveModal()">
       <div class="admin-modal__row">
         <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('id_hotel')">
-          <label>Hotel *</label>
+          <label>{{ 'admin.fieldHotel' | translate }}</label>
           <select formControlName="id_hotel">
-            <option [value]="0" disabled>Selecciona un hotel</option>
+            <option [value]="0" disabled>{{ 'admin.selectHotel' | translate }}</option>
             @for (h of hotelsList(); track h.id_hotel) {
             <option [value]="h.id_hotel">{{ h.name }} · {{ h.city }}</option>
             }
           </select>
           @if (isRoomInvalid('id_hotel')) {
-          <span class="admin-modal__error-msg">Selecciona un hotel</span>
+          <span class="admin-modal__error-msg">{{ 'admin.errorHotelRequired' | translate }}</span>
           }
         </div>
         <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('room_number')">
-          <label>Nº Habitación *</label>
-          <input type="text" formControlName="room_number" placeholder="101" />
+          <label>{{ 'admin.fieldRoomNumber' | translate }}</label>
+          <input type="text" formControlName="room_number" [placeholder]="'admin.roomNumberPlaceholder' | translate" />
           @if (isRoomInvalid('room_number')) {
-          <span class="admin-modal__error-msg">Campo obligatorio</span>
+          <span class="admin-modal__error-msg">{{ 'admin.errorRequired' | translate }}</span>
           }
         </div>
       </div>
       <div class="admin-modal__row">
         <div class="admin-modal__field">
-          <label>Tipo *</label>
+          <label>{{ 'admin.fieldType' | translate }}</label>
           <select formControlName="type">
             @for (t of roomTypes; track t) { <option [value]="t">{{ t }}</option> }
           </select>
         </div>
         <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('capacity')">
-          <label>Capacidad *</label>
+          <label>{{ 'admin.fieldCapacity' | translate }}</label>
           <input type="number" formControlName="capacity" min="1" />
           @if (isRoomInvalid('capacity')) {
-          <span class="admin-modal__error-msg">La capacidad debe ser mayor que 0</span>
+          <span class="admin-modal__error-msg">{{ 'admin.errorCapacity' | translate }}</span>
           }
         </div>
       </div>
       <div class="admin-modal__row">
         <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('price_per_night')">
-          <label>Precio / noche (€) *</label>
+          <label>{{ 'admin.fieldPrice' | translate }}</label>
           <input type="number" formControlName="price_per_night" min="0" step="0.01" />
           @if (isRoomInvalid('price_per_night')) {
-          <span class="admin-modal__error-msg">Introduce un precio válido</span>
+          <span class="admin-modal__error-msg">{{ 'admin.errorPrice' | translate }}</span>
           }
         </div>
         <div class="admin-modal__field">
-          <label>Estado</label>
+          <label>{{ 'admin.fieldStatus' | translate }}</label>
           <select formControlName="status">
             @for (s of roomStatuses; track s) { <option [value]="s">{{ s }}</option> }
           </select>
         </div>
       </div>
       <div class="admin-modal__field admin-modal__field--full">
-        <label>Descripción</label>
-        <textarea formControlName="description" rows="3" placeholder="Descripción opcional…"></textarea>
+        <label>{{ 'admin.fieldDescription' | translate }}</label>
+        <textarea formControlName="description" rows="3" [placeholder]="'admin.descriptionPlaceholder' | translate"></textarea>
       </div>
 
       <!-- URLs de imágenes -->
       <div class="admin-modal__field admin-modal__field--full">
-        <label>Imágenes (URLs)</label>
+        <label>{{ 'admin.fieldImages' | translate }}</label>
         @for (url of imageUrls(); track $index) {
         <div class="admin-modal__url-row">
           <input type="url" [value]="url" (input)="updateImageUrl($index, $any($event.target).value)"
-            placeholder="https://images.unsplash.com/…" />
+            [placeholder]="'admin.imagePlaceholder' | translate" />
           @if (imageUrls().length > 1) {
-          <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" title="Eliminar">
+          <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" [title]="'admin.cancel' | translate">
             <span class="material-symbols-outlined">close</span>
           </button>
           }
         </div>
         }
         <button type="button" class="admin-modal__url-add" (click)="addImageUrl()">
-          <span class="material-symbols-outlined">add</span> Añadir imagen
+          <span class="material-symbols-outlined">add</span> {{ 'admin.addImage' | translate }}
         </button>
       </div>
 
       <div class="admin-modal__actions">
-        <button type="button" class="admin-modal__btn admin-modal__btn--cancel" (click)="closeModal()">Cancelar</button>
+        <button type="button" class="admin-modal__btn admin-modal__btn--cancel" (click)="closeModal()">{{ 'admin.cancel' | translate }}</button>
         <button type="submit" class="admin-modal__btn admin-modal__btn--save" [disabled]="saving()">
-          @if (saving()) { Guardando… } @else { Guardar }
+          {{ (saving() ? 'admin.saving' : 'admin.save') | translate }}
         </button>
       </div>
     </form>
@@ -208,66 +209,66 @@
     <form class="admin-modal__form" [formGroup]="hotelForm" (ngSubmit)="saveModal()">
       <div class="admin-modal__row">
         <div class="admin-modal__field" [class.admin-modal__field--error]="isHotelInvalid('name')">
-          <label>Nombre *</label>
-          <input type="text" formControlName="name" placeholder="Hotel Sol" />
+          <label>{{ 'admin.fieldName' | translate }}</label>
+          <input type="text" formControlName="name" [placeholder]="'admin.hotelNamePlaceholder' | translate" />
           @if (isHotelInvalid('name')) {
-          <span class="admin-modal__error-msg">El nombre es obligatorio</span>
+          <span class="admin-modal__error-msg">{{ 'admin.errorName' | translate }}</span>
           }
         </div>
         <div class="admin-modal__field" [class.admin-modal__field--error]="isHotelInvalid('city')">
-          <label>Ciudad *</label>
-          <input type="text" formControlName="city" placeholder="Madrid" />
+          <label>{{ 'admin.fieldCity' | translate }}</label>
+          <input type="text" formControlName="city" [placeholder]="'admin.cityPlaceholder' | translate" />
           @if (isHotelInvalid('city')) {
-          <span class="admin-modal__error-msg">La ciudad es obligatoria</span>
+          <span class="admin-modal__error-msg">{{ 'admin.errorCity' | translate }}</span>
           }
         </div>
       </div>
       <div class="admin-modal__field admin-modal__field--full"
         [class.admin-modal__field--error]="isHotelInvalid('address')">
-        <label>Dirección *</label>
-        <input type="text" formControlName="address" placeholder="Gran Vía, 45" />
+        <label>{{ 'admin.fieldAddress' | translate }}</label>
+        <input type="text" formControlName="address" [placeholder]="'admin.addressPlaceholder' | translate" />
         @if (isHotelInvalid('address')) {
-        <span class="admin-modal__error-msg">La dirección es obligatoria</span>
+        <span class="admin-modal__error-msg">{{ 'admin.errorAddress' | translate }}</span>
         }
       </div>
       <div class="admin-modal__row">
         <div class="admin-modal__field">
-          <label>Teléfono</label>
-          <input type="tel" formControlName="phone" placeholder="912 345 678" />
+          <label>{{ 'admin.fieldPhone' | translate }}</label>
+          <input type="tel" formControlName="phone" [placeholder]="'admin.phonePlaceholder' | translate" />
         </div>
         <div class="admin-modal__field">
-          <label>Email</label>
-          <input type="email" formControlName="email" placeholder="info@hotel.com" />
+          <label>{{ 'admin.fieldEmail' | translate }}</label>
+          <input type="email" formControlName="email" [placeholder]="'admin.emailPlaceholder' | translate" />
         </div>
       </div>
       <div class="admin-modal__field admin-modal__field--full">
-        <label>Descripción</label>
-        <textarea formControlName="description" rows="3" placeholder="Descripción opcional…"></textarea>
+        <label>{{ 'admin.fieldDescription' | translate }}</label>
+        <textarea formControlName="description" rows="3" [placeholder]="'admin.descriptionPlaceholder' | translate"></textarea>
       </div>
 
       <!-- URLs de imágenes -->
       <div class="admin-modal__field admin-modal__field--full">
-        <label>Imágenes (URLs)</label>
+        <label>{{ 'admin.fieldImages' | translate }}</label>
         @for (url of imageUrls(); track $index) {
         <div class="admin-modal__url-row">
           <input type="url" [value]="url" (input)="updateImageUrl($index, $any($event.target).value)"
-            placeholder="https://images.unsplash.com/…" />
+            [placeholder]="'admin.imagePlaceholder' | translate" />
           @if (imageUrls().length > 1) {
-          <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" title="Eliminar">
+          <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" [title]="'admin.cancel' | translate">
             <span class="material-symbols-outlined">close</span>
           </button>
           }
         </div>
         }
         <button type="button" class="admin-modal__url-add" (click)="addImageUrl()">
-          <span class="material-symbols-outlined">add</span> Añadir imagen
+          <span class="material-symbols-outlined">add</span> {{ 'admin.addImage' | translate }}
         </button>
       </div>
 
       <div class="admin-modal__actions">
-        <button type="button" class="admin-modal__btn admin-modal__btn--cancel" (click)="closeModal()">Cancelar</button>
+        <button type="button" class="admin-modal__btn admin-modal__btn--cancel" (click)="closeModal()">{{ 'admin.cancel' | translate }}</button>
         <button type="submit" class="admin-modal__btn admin-modal__btn--save" [disabled]="saving()">
-          @if (saving()) { Guardando… } @else { Guardar }
+          {{ (saving() ? 'admin.saving' : 'admin.save') | translate }}
         </button>
       </div>
     </form>
@@ -286,17 +287,15 @@
       <span class="material-symbols-outlined">delete_forever</span>
     </div>
 
-    <h2 class="admin-modal--confirm__title">¿Eliminar registro?</h2>
-    <p class="admin-modal--confirm__text">
-      Esta acción no se puede deshacer. ¿Estás seguro de que quieres eliminar este elemento?
-    </p>
+    <h2 class="admin-modal--confirm__title">{{ 'admin.confirmDeleteTitle' | translate }}</h2>
+    <p class="admin-modal--confirm__text">{{ 'admin.confirmDeleteText' | translate }}</p>
 
     <div class="admin-modal__actions">
       <button class="admin-modal__btn admin-modal__btn--cancel" (click)="cancelDelete()">
-        Cancelar
+        {{ 'admin.cancel' | translate }}
       </button>
       <button class="admin-modal__btn admin-modal__btn--delete" (click)="confirmDelete()">
-        Sí, eliminar
+        {{ 'admin.confirmDeleteBtn' | translate }}
       </button>
     </div>
 

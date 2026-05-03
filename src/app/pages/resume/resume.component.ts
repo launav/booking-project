@@ -1,13 +1,14 @@
 import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
 import { fallbackImage } from '../../core/services/user/room.service';
 
 @Component({
   selector: 'app-resume',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './resume.component.html',
   styleUrl: './resume.component.scss'
 })

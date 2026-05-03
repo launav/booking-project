@@ -2,13 +2,13 @@
 
 <!-- Cabecera -->
 <div class="resume__header">
-  <h1 class="resume__title">Finalizar reserva</h1>
+  <h1 class="resume__title">{{ 'resume.title' | translate }}</h1>
   <nav class="resume__steps">
-    <span class="resume__step resume__step--active">1. Detalles de la reserva</span>
+    <span class="resume__step resume__step--active">{{ 'resume.step1' | translate }}</span>
     <span class="resume__step-sep">|</span>
-    <span class="resume__step">2. Forma de pago</span>
+    <span class="resume__step">{{ 'resume.step2' | translate }}</span>
     <span class="resume__step-sep">|</span>
-    <span class="resume__step">3. Confirmación</span>
+    <span class="resume__step">{{ 'resume.step3' | translate }}</span>
   </nav>
 </div>
 
@@ -31,7 +31,7 @@
           }
         </div>
       </div>
-      <button class="resume__modify-btn" (click)="goBack()">Modificar</button>
+      <button class="resume__modify-btn" (click)="goBack()">{{ 'resume.modify' | translate }}</button>
     </div>
 
     <!-- Rejilla de detalles -->
@@ -40,15 +40,15 @@
       <!-- Columna izquierda -->
       <div class="resume__details-left">
         <div class="resume__detail-item">
-          <span class="resume__detail-label">Ocupación</span>
-          <span class="resume__detail-value">{{ adults() }} adultos, {{ roomCount() }} habitaciones</span>
+          <span class="resume__detail-label">{{ 'resume.occupation' | translate }}</span>
+          <span class="resume__detail-value">{{ 'resume.occupationValue' | translate: { adults: adults(), rooms: roomCount() } }}</span>
         </div>
         <div class="resume__detail-item">
-          <span class="resume__detail-label">Check-in</span>
+          <span class="resume__detail-label">{{ 'resume.checkIn' | translate }}</span>
           <span class="resume__detail-value">{{ checkInLabel() }}</span>
         </div>
         <div class="resume__detail-item">
-          <span class="resume__detail-label">Check-out</span>
+          <span class="resume__detail-label">{{ 'resume.checkOut' | translate }}</span>
           <span class="resume__detail-value">{{ checkOutLabel() }}</span>
         </div>
       </div>
@@ -56,16 +56,16 @@
       <!-- Columna derecha -->
       <div class="resume__details-right">
         <div class="resume__detail-item">
-          <span class="resume__detail-label">Habitaciones</span>
+          <span class="resume__detail-label">{{ 'resume.rooms' | translate }}</span>
           <span class="resume__detail-value">{{ roomLabel() }}</span>
         </div>
         <div class="resume__detail-item">
-          <span class="resume__detail-label">Régimen de comidas</span>
+          <span class="resume__detail-label">{{ 'resume.mealRegime' | translate }}</span>
           <span class="resume__detail-value">{{ mealRegime() }}</span>
         </div>
         <hr class="resume__hr" />
         <div class="resume__payment-row">
-          <span class="resume__payment-label">Tipo de pago: <strong>Online</strong></span>
+          <span class="resume__payment-label">{{ 'resume.paymentType' | translate }} <strong>{{ 'resume.paymentOnline' | translate }}</strong></span>
           <span class="resume__payment-price">{{ totalPrice() | number:'1.2-2' }} €</span>
         </div>
       </div>
@@ -78,18 +78,18 @@
 @if (!hasDates()) {
 <div class="resume__no-dates">
   <span class="material-symbols-outlined">event_busy</span>
-  Debes seleccionar fechas de entrada y salida desde la búsqueda para continuar.
+  {{ 'resume.noDatesWarning' | translate }}
 </div>
 }
 
 <!-- Barra inferior fija -->
 <div class="resume__footer">
   <div class="resume__footer-total">
-    <span class="resume__footer-label">Total</span>
+    <span class="resume__footer-label">{{ 'resume.total' | translate }}</span>
     <span class="resume__footer-price">{{ totalPrice() | number:'1.2-2' }} €</span>
   </div>
   <button class="resume__footer-btn" (click)="continue()" [disabled]="!hasDates()">
-    Continuar con el pago
+    {{ 'resume.continueBtn' | translate }}
   </button>
 </div>
 

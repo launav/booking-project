@@ -2,10 +2,10 @@
 
 <!-- Breadcrumb -->
 <div class="hd__breadcrumb">
-  <button class="hd__back-btn" (click)="goBack()" aria-label="Volver">
+  <button class="hd__back-btn" (click)="goBack()" [attr.aria-label]="'bookingDetail.ariaBack' | translate">
     <span class="material-symbols-outlined">chevron_left</span>
   </button>
-  <span class="hd__breadcrumb-text">Hoteles &rsaquo; {{ h.name }}</span>
+  <span class="hd__breadcrumb-text">{{ 'hotelDetail.breadcrumb' | translate }} &rsaquo; {{ h.name }}</span>
 </div>
 
 <!-- Tarjeta principal del hotel -->
@@ -14,11 +14,13 @@
 
     <!-- Carrusel -->
     <div class="hd__carousel">
-      <button class="hd__carousel-btn hd__carousel-btn--prev" (click)="prevImage()" aria-label="Imagen anterior">
+      <button class="hd__carousel-btn hd__carousel-btn--prev" (click)="prevImage()"
+        [attr.aria-label]="'bookingDetail.ariaPrevImage' | translate">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
       <img [src]="currentImage()" [alt]="h.name" class="hd__carousel-img" (error)="onImgError($event)" />
-      <button class="hd__carousel-btn hd__carousel-btn--next" (click)="nextImage()" aria-label="Imagen siguiente">
+      <button class="hd__carousel-btn hd__carousel-btn--next" (click)="nextImage()"
+        [attr.aria-label]="'bookingDetail.ariaNextImage' | translate">
         <span class="material-symbols-outlined">chevron_right</span>
       </button>
       @if (images().length > 1) {
@@ -60,19 +62,19 @@
       <div class="hd__amenities">
         <div class="hd__amenity">
           <span class="material-symbols-outlined">wifi</span>
-          <span>Wi-Fi</span>
+          <span>{{ 'hotelDetail.amenityWifi' | translate }}</span>
         </div>
         <div class="hd__amenity">
           <span class="material-symbols-outlined">local_parking</span>
-          <span>Parking</span>
+          <span>{{ 'hotelDetail.amenityParking' | translate }}</span>
         </div>
         <div class="hd__amenity">
           <span class="material-symbols-outlined">restaurant</span>
-          <span>Restaurante</span>
+          <span>{{ 'hotelDetail.amenityRestaurant' | translate }}</span>
         </div>
         <div class="hd__amenity">
           <span class="material-symbols-outlined">fitness_center</span>
-          <span>Gimnasio</span>
+          <span>{{ 'hotelDetail.amenityGym' | translate }}</span>
         </div>
       </div>
     </div>
@@ -82,10 +84,10 @@
 
 <!-- Habitaciones disponibles -->
 <div class="hd__rooms-section">
-  <h2 class="hd__rooms-title">Habitaciones disponibles</h2>
+  <h2 class="hd__rooms-title">{{ 'hotelDetail.availableRooms' | translate }}</h2>
 
   @if (rooms().length === 0) {
-    <p class="hd__rooms-empty">No hay habitaciones disponibles en este hotel.</p>
+    <p class="hd__rooms-empty">{{ 'hotelDetail.noRoomsAvailable' | translate }}</p>
   } @else {
     <div class="hd__rooms-grid">
       @for (room of rooms(); track room.id) {
@@ -94,20 +96,20 @@
             <img [src]="room.image" [alt]="room.type" class="hd__room-img"
               (error)="onImgError($event, room.type)" />
             <span class="hd__room-badge hd__room-badge--{{ room.status }}">
-              {{ room.status === 'available' ? 'Disponible' : room.status === 'occupied' ? 'Ocupada' : 'Mantenimiento' }}
+              {{ ('hotelDetail.status.' + room.status) | translate }}
             </span>
           </div>
           <div class="hd__room-info">
             <p class="hd__room-type">{{ room.type | titlecase }}</p>
-            <p class="hd__room-number">Hab. {{ room.roomNumber }}</p>
+            <p class="hd__room-number">{{ 'hotelDetail.room' | translate }} {{ room.roomNumber }}</p>
             <div class="hd__room-footer">
               <div class="hd__room-specs">
                 <span class="material-symbols-outlined">person</span>
-                {{ room.capacity }} personas
+                {{ 'hotelDetail.capacity' | translate: { count: room.capacity } }}
               </div>
               <div class="hd__room-price">
                 <span class="hd__room-price-amount">{{ room.price }} €</span>
-                <span class="hd__room-price-label">/noche</span>
+                <span class="hd__room-price-label">{{ 'hotelDetail.perNight' | translate }}</span>
               </div>
             </div>
           </div>
@@ -122,6 +124,6 @@
 @if (loading()) {
   <div class="hd__loading">
     <span class="material-symbols-outlined hd__loading-icon">hotel</span>
-    <p>Cargando hotel…</p>
+    <p>{{ 'hotelDetail.loading' | translate }}</p>
   </div>
 }

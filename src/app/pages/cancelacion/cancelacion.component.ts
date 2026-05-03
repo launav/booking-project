@@ -1,11 +1,12 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TranslatePipe } from '@ngx-translate/core';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-cancelacion',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './cancelacion.component.html',
   styleUrl: './cancelacion.component.scss',
 })

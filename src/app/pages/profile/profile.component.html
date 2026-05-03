@@ -4,9 +4,9 @@
   <div class="profile__header">
     <button class="profile__back" (click)="goBack()">
       <span class="material-symbols-outlined">arrow_back</span>
-      Volver
+      {{ 'profile.back' | translate }}
     </button>
-    <h1 class="profile__title">Mi perfil</h1>
+    <h1 class="profile__title">{{ 'profile.title' | translate }}</h1>
   </div>
 
   @if (user(); as u) {
@@ -26,34 +26,34 @@
 
       <div class="profile__row">
         <div class="profile__field">
-          <label class="profile__label">Nombre</label>
+          <label class="profile__label">{{ 'profile.firstName' | translate }}</label>
           <input class="profile__input" type="text" formControlName="first_name" />
           @if (form.get('first_name')?.touched && form.get('first_name')?.invalid) {
-          <span class="profile__error">El nombre es obligatorio</span>
+          <span class="profile__error">{{ 'profile.errorFirstName' | translate }}</span>
           }
         </div>
         <div class="profile__field">
-          <label class="profile__label">Apellidos</label>
+          <label class="profile__label">{{ 'profile.lastName' | translate }}</label>
           <input class="profile__input" type="text" formControlName="last_name" />
           @if (form.get('last_name')?.touched && form.get('last_name')?.invalid) {
-          <span class="profile__error">Los apellidos son obligatorios</span>
+          <span class="profile__error">{{ 'profile.errorLastName' | translate }}</span>
           }
         </div>
       </div>
 
       <div class="profile__field">
-        <label class="profile__label">Teléfono</label>
-        <input class="profile__input" type="tel" formControlName="phone" placeholder="600 000 000" />
+        <label class="profile__label">{{ 'profile.phone' | translate }}</label>
+        <input class="profile__input" type="tel" formControlName="phone"
+          [placeholder]="'profile.placeholderPhone' | translate" />
       </div>
 
       <div class="profile__field">
-        <label class="profile__label">
-          Nueva contraseña
-        </label>
+        <label class="profile__label">{{ 'profile.newPassword' | translate }}</label>
         <div class="profile__input-wrap">
           <input class="profile__input" [type]="showPassword() ? 'text' : 'password'" formControlName="password"
-            placeholder="Nueva contraseña" autocomplete="new-password" />
-          <button type="button" class="profile__eye" (click)="togglePassword()" aria-label="Ver contraseña">
+            [placeholder]="'profile.placeholderPassword' | translate" autocomplete="new-password" />
+          <button type="button" class="profile__eye" (click)="togglePassword()"
+            [attr.aria-label]="'profile.ariaTogglePassword' | translate">
             <span class="material-symbols-outlined">
               {{ showPassword() ? 'visibility_off' : 'visibility' }}
             </span>
@@ -63,7 +63,7 @@
 
       <div class="profile__actions">
         <button class="profile__save" type="submit" [disabled]="saving() || form.invalid">
-          @if (saving()) { Guardando… } @else { Guardar cambios }
+          {{ (saving() ? 'profile.saving' : 'profile.save') | translate }}
         </button>
       </div>
 
