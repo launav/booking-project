@@ -4,13 +4,14 @@ import { RouterOutlet, Router, NavigationEnd, NavigationStart } from '@angular/r
 import { filter } from 'rxjs/operators';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
-import { SearchBarComponent, SearchParams } from '../../components/search-bar/search-bar.component';
+import { SearchBarComponent } from '../../components/search-bar/search-bar.component';
 import { LoadingComponent } from '../../components/loading/loading.component';
 import { ErrorModalComponent } from '../../components/error-modal/error-modal.component';
 import { LoadingService } from '../../core/services/loading/loading.service';
 import { ToastComponent } from '../../components/toast/toast.component';
 import { PreviousRouteService } from '../../core/services/loading/previous-route.service';
 import { HomeService } from '../../core/services/user/home.service';
+import { SearchParams } from '../../components/search-bar/models/search.model';
 
 const NO_SEARCHBAR_NO_FOOTER = ['/resume', '/payment'];
 const NO_SEARCHBAR_WITH_FOOTER = ['/success', '/login', '/admin', '/profile'];
