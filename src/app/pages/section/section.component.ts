@@ -9,6 +9,7 @@ import { CarouselComponent, CarouselItem } from '../../components/carousel/carou
 
 import { HomeService } from '../../core/services/user/home.service';
 import { CardData } from '../../components/card/model/card.model';
+import { ActiveFilters } from '../../core/services/user/models/activeFilters.model';
 
 export type SectionType = 'rooms' | 'events' | 'visits';
 

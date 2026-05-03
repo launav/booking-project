@@ -2,6 +2,7 @@ import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
+import { fallbackImage } from '../../core/services/user/room.service';
 
 @Component({
   selector: 'app-resume',
@@ -77,17 +78,7 @@ export class ResumeComponent {
   onImgError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.onerror = null;
-    const type = this.room()?.roomType?.toLowerCase() ?? 'default';
-    const fallbacks: Record<string, string> = {
-      individual: 'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
-      single:     'https://images.unsplash.com/photo-1522771739844-6a9f6d5f14af?w=600&q=80',
-      doble:      'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
-      double:     'https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=600&q=80',
-      suite:      'https://images.unsplash.com/photo-1616594039964-ae9021a400a0?w=600&q=80',
-      studio:     'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=600&q=80',
-      default:    'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80',
-    };
-    img.src = fallbacks[type] ?? fallbacks['default'];
+    img.src = fallbackImage(this.room()?.roomType ?? 'default');
   }
 
   // Helpers

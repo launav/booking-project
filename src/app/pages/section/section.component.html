@@ -24,7 +24,7 @@
   } @else {
   <div class="section__grid">
     @for (card of cards(); track card.id) {
-    <app-card [card]="card" [isFavorite]="card.isFavorite ?? false" [showFavorite]="section() !== 'events'"
+    <app-card [card]="card" [showFavorite]="section() !== 'events'"
       [interactive]="section() !== 'events'" (cardClick)="onCardClick($event)" />
     } @empty {
     <p class="section__empty">

@@ -1,0 +1,331 @@
+@use 'sass:color';
+
+$color-primary:   #211456;
+$color-secondary: #266BA6;
+$color-white:     #FFFFFF;
+$color-bg:        #F4F4F4;
+$color-muted:     #6B7280;
+$color-border:    #E5E7EB;
+$radius:          20px;
+
+:host {
+  display: block;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 32px 16px 48px;
+}
+
+// ── Breadcrumb ────────────────────────────────────────────────
+.hd__breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.hd__breadcrumb-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $color-primary;
+}
+
+.hd__back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: rgba($color-primary, 0.08);
+  color: $color-primary;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: background 0.2s, transform 0.2s;
+
+  span { font-size: 22px; }
+  &:hover { background: rgba($color-primary, 0.15); transform: translateX(-2px); }
+}
+
+// ── Tarjeta principal ─────────────────────────────────────────
+.hd__card {
+  background: $color-white;
+  border-radius: $radius;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  padding: 20px;
+  margin-bottom: 28px;
+  overflow: hidden;
+}
+
+.hd__top {
+  display: grid;
+  grid-template-columns: 2fr 3fr;
+  gap: 28px;
+  min-height: 260px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Carrusel ──────────────────────────────────────────────────
+.hd__carousel {
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  height: 260px;
+
+  @media (max-width: 768px) { height: 220px; }
+}
+
+.hd__carousel-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hd__carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.85);
+  color: $color-primary;
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.2s;
+
+  span { font-size: 22px; }
+  &:hover { background: $color-white; }
+  &--prev { left: 10px; }
+  &--next { right: 10px; }
+}
+
+.hd__carousel-dots {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+}
+
+.hd__carousel-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.5);
+  transition: background 0.2s, transform 0.2s;
+
+  &--active {
+    background: $color-white;
+    transform: scale(1.3);
+  }
+}
+
+// ── Info ──────────────────────────────────────────────────────
+.hd__info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.hd__name {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: $color-primary;
+  margin: 0;
+}
+
+.hd__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.hd__meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: $color-muted;
+  margin: 0;
+
+  .material-symbols-outlined { font-size: 16px; color: $color-secondary; }
+}
+
+.hd__description {
+  font-size: 0.9rem;
+  color: #374151;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.hd__amenities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-top: 4px;
+}
+
+.hd__amenity {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.75rem;
+  color: $color-primary;
+  width: 64px;
+  text-align: center;
+
+  .material-symbols-outlined { font-size: 24px; color: $color-secondary; }
+}
+
+// ── Sección habitaciones ──────────────────────────────────────
+.hd__rooms-section {
+  margin-top: 8px;
+}
+
+.hd__rooms-title {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: $color-primary;
+  margin: 0 0 16px;
+}
+
+.hd__rooms-empty {
+  color: $color-muted;
+  font-size: 0.9rem;
+}
+
+.hd__rooms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 16px;
+}
+
+// ── Tarjeta habitación ────────────────────────────────────────
+.hd__room-card {
+  background: $color-white;
+  border-radius: 14px;
+  border: 1px solid $color-border;
+  overflow: hidden;
+  cursor: pointer;
+  transition: box-shadow 0.25s, transform 0.2s;
+
+  &:hover {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+  }
+}
+
+.hd__room-img-wrap {
+  position: relative;
+  height: 150px;
+}
+
+.hd__room-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.hd__room-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+
+  &--available    { background: #D1FAE5; color: #065F46; }
+  &--occupied     { background: #FEE2E2; color: #991B1B; }
+  &--maintenance  { background: #FEF3C7; color: #92400E; }
+}
+
+.hd__room-info {
+  padding: 14px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hd__room-type {
+  font-size: 1rem;
+  font-weight: 700;
+  color: $color-primary;
+  margin: 0;
+}
+
+.hd__room-number {
+  font-size: 0.8rem;
+  color: $color-muted;
+  margin: 0;
+}
+
+.hd__room-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 8px;
+}
+
+.hd__room-specs {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.8rem;
+  color: $color-muted;
+
+  .material-symbols-outlined { font-size: 16px; }
+}
+
+.hd__room-price {
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.hd__room-price-amount {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: $color-secondary;
+}
+
+.hd__room-price-label {
+  font-size: 0.75rem;
+  color: $color-muted;
+}
+
+// ── Loading ───────────────────────────────────────────────────
+.hd__loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 80px 0;
+  color: $color-muted;
+
+  p { margin: 0; font-size: 0.9rem; }
+}
+
+.hd__loading-icon {
+  font-size: 48px;
+  color: rgba($color-secondary, 0.4);
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.4; }
+  50%       { opacity: 1; }
+}

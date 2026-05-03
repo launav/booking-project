@@ -21,7 +21,7 @@ const TYPE_FALLBACKS: Record<string, string> = {
   default:    'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80',
 };
 
-function fallbackImage(type: string): string {
+export function fallbackImage(type: string): string {
   return TYPE_FALLBACKS[type?.toLowerCase()] ?? TYPE_FALLBACKS['default'];
 }
 
@@ -67,6 +67,12 @@ export class RoomService {
 
   getById(id: number): Observable<Room> {
     return this.http.get<Room>(`${this.base}/${id}`);
+  }
+
+  checkAvailability(id: number, checkIn: string, checkOut: string): Observable<{ available: boolean }> {
+    return this.http.get<{ available: boolean }>(
+      `${this.base}/${id}/availability?checkIn=${checkIn}&checkOut=${checkOut}`
+    );
   }
 
   getImages(roomId: number): Observable<RoomImage[]> {
@@ -177,7 +183,7 @@ export class RoomService {
             hotel,
             images: images.length
               ? images.map(img => buildImageUrl(img.url))
-              : ['fallbackImage(room.type)'],
+              : [fallbackImage(room.type)],
           }))
         )
       )

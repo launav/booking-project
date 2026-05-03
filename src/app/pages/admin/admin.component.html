@@ -53,6 +53,10 @@
             <td class="admin__td">
               @if (col === 'reservation_status' || col === 'status' || col === 'role') {
               <span class="admin__badge admin__badge--{{ row[col] }}">{{ row[col] }}</span>
+              } @else if (col === 'hotel_name' && activeTab() === 'habitaciones') {
+              {{ hotelNameById(row['id_hotel']) }}
+              } @else if (col === 'check_in_date' || col === 'check_out_date') {
+              {{ formatDate(row[col]) }}
               } @else {
               {{ row[col] ?? '—' }}
               }
@@ -60,16 +64,12 @@
             }
             <!-- Acciones -->
             <td class="admin__td admin__td--actions">
-              @if (confirmDeleteId() === row[activeIdField]) {
-              <span class="admin__confirm-text">¿Seguro?</span>
-              <button class="admin__action-btn admin__action-btn--danger" (click)="confirmDelete()">Sí</button>
-              <button class="admin__action-btn" (click)="cancelDelete()">No</button>
-              } @else {
               @if (canEdit) {
               <button class="admin__action-btn admin__action-btn--edit" (click)="openEditModal(row)" title="Editar">
                 <span class="material-symbols-outlined">edit</span>
               </button>
               }
+              @if (!(activeTab() === 'usuarios' && row['role'] === 'admin')) {
               <button class="admin__action-btn admin__action-btn--danger" (click)="askDelete(row[activeIdField])"
                 title="Eliminar">
                 <span class="material-symbols-outlined">delete</span>
@@ -85,7 +85,7 @@
     <!-- Paginación -->
     <div class="admin__pagination">
       <span class="admin__pagination-info">
-        {{ total() }} registros · Página {{ page() }} de {{ totalPages }}
+        Mostrando {{ pageFrom }}–{{ pageTo }} de {{ total() }} registros · Página {{ page() }} de {{ totalPages }}
       </span>
       <div class="admin__pagination-btns">
         <button class="admin__page-btn" [disabled]="page() === 1" (click)="prevPage()">
@@ -120,13 +120,24 @@
     @if (activeTab() === 'habitaciones') {
     <form class="admin-modal__form" [formGroup]="roomForm" (ngSubmit)="saveModal()">
       <div class="admin-modal__row">
-        <div class="admin-modal__field">
-          <label>ID Hotel *</label>
-          <input type="number" formControlName="id_hotel" placeholder="1" />
+        <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('id_hotel')">
+          <label>Hotel *</label>
+          <select formControlName="id_hotel">
+            <option [value]="0" disabled>Selecciona un hotel</option>
+            @for (h of hotelsList(); track h.id_hotel) {
+            <option [value]="h.id_hotel">{{ h.name }} · {{ h.city }}</option>
+            }
+          </select>
+          @if (isRoomInvalid('id_hotel')) {
+          <span class="admin-modal__error-msg">Selecciona un hotel</span>
+          }
         </div>
-        <div class="admin-modal__field">
+        <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('room_number')">
           <label>Nº Habitación *</label>
           <input type="text" formControlName="room_number" placeholder="101" />
+          @if (isRoomInvalid('room_number')) {
+          <span class="admin-modal__error-msg">Campo obligatorio</span>
+          }
         </div>
       </div>
       <div class="admin-modal__row">
@@ -136,15 +147,21 @@
             @for (t of roomTypes; track t) { <option [value]="t">{{ t }}</option> }
           </select>
         </div>
-        <div class="admin-modal__field">
+        <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('capacity')">
           <label>Capacidad *</label>
           <input type="number" formControlName="capacity" min="1" />
+          @if (isRoomInvalid('capacity')) {
+          <span class="admin-modal__error-msg">La capacidad debe ser mayor que 0</span>
+          }
         </div>
       </div>
       <div class="admin-modal__row">
-        <div class="admin-modal__field">
+        <div class="admin-modal__field" [class.admin-modal__field--error]="isRoomInvalid('price_per_night')">
           <label>Precio / noche (€) *</label>
           <input type="number" formControlName="price_per_night" min="0" step="0.01" />
+          @if (isRoomInvalid('price_per_night')) {
+          <span class="admin-modal__error-msg">Introduce un precio válido</span>
+          }
         </div>
         <div class="admin-modal__field">
           <label>Estado</label>
@@ -163,8 +180,7 @@
         <label>Imágenes (URLs)</label>
         @for (url of imageUrls(); track $index) {
         <div class="admin-modal__url-row">
-          <input type="url" [value]="url"
-            (input)="updateImageUrl($index, $any($event.target).value)"
+          <input type="url" [value]="url" (input)="updateImageUrl($index, $any($event.target).value)"
             placeholder="https://images.unsplash.com/…" />
           @if (imageUrls().length > 1) {
           <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" title="Eliminar">
@@ -191,18 +207,28 @@
     @if (activeTab() === 'hoteles') {
     <form class="admin-modal__form" [formGroup]="hotelForm" (ngSubmit)="saveModal()">
       <div class="admin-modal__row">
-        <div class="admin-modal__field">
+        <div class="admin-modal__field" [class.admin-modal__field--error]="isHotelInvalid('name')">
           <label>Nombre *</label>
           <input type="text" formControlName="name" placeholder="Hotel Sol" />
+          @if (isHotelInvalid('name')) {
+          <span class="admin-modal__error-msg">El nombre es obligatorio</span>
+          }
         </div>
-        <div class="admin-modal__field">
+        <div class="admin-modal__field" [class.admin-modal__field--error]="isHotelInvalid('city')">
           <label>Ciudad *</label>
           <input type="text" formControlName="city" placeholder="Madrid" />
+          @if (isHotelInvalid('city')) {
+          <span class="admin-modal__error-msg">La ciudad es obligatoria</span>
+          }
         </div>
       </div>
-      <div class="admin-modal__field admin-modal__field--full">
+      <div class="admin-modal__field admin-modal__field--full"
+        [class.admin-modal__field--error]="isHotelInvalid('address')">
         <label>Dirección *</label>
         <input type="text" formControlName="address" placeholder="Gran Vía, 45" />
+        @if (isHotelInvalid('address')) {
+        <span class="admin-modal__error-msg">La dirección es obligatoria</span>
+        }
       </div>
       <div class="admin-modal__row">
         <div class="admin-modal__field">
@@ -224,8 +250,7 @@
         <label>Imágenes (URLs)</label>
         @for (url of imageUrls(); track $index) {
         <div class="admin-modal__url-row">
-          <input type="url" [value]="url"
-            (input)="updateImageUrl($index, $any($event.target).value)"
+          <input type="url" [value]="url" (input)="updateImageUrl($index, $any($event.target).value)"
             placeholder="https://images.unsplash.com/…" />
           @if (imageUrls().length > 1) {
           <button type="button" class="admin-modal__url-remove" (click)="removeImageUrl($index)" title="Eliminar">
@@ -247,6 +272,33 @@
       </div>
     </form>
     }
+
+  </div>
+</div>
+}
+
+<!-- Modal confirmación borrado -->
+@if (confirmDeleteId() !== null) {
+<div class="admin-modal-backdrop" (click)="cancelDelete()">
+  <div class="admin-modal admin-modal--confirm" (click)="$event.stopPropagation()">
+
+    <div class="admin-modal--confirm__icon">
+      <span class="material-symbols-outlined">delete_forever</span>
+    </div>
+
+    <h2 class="admin-modal--confirm__title">¿Eliminar registro?</h2>
+    <p class="admin-modal--confirm__text">
+      Esta acción no se puede deshacer. ¿Estás seguro de que quieres eliminar este elemento?
+    </p>
+
+    <div class="admin-modal__actions">
+      <button class="admin-modal__btn admin-modal__btn--cancel" (click)="cancelDelete()">
+        Cancelar
+      </button>
+      <button class="admin-modal__btn admin-modal__btn--delete" (click)="confirmDelete()">
+        Sí, eliminar
+      </button>
+    </div>
 
   </div>
 </div>

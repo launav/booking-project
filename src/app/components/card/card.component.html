@@ -3,14 +3,14 @@
   <div class="card__image-wrapper">
     <img class="card__image" [src]="card().imageUrl" [alt]="card().title" loading="lazy" (error)="onImgError($event)" />
 
-    @if (showFavorite()) {
+    <!-- @if (showFavorite()) {
       <button class="card__favorite" [class.card__favorite--active]="favorite()" (click)="toggleFavorite($event)"
         aria-label="Añadir a favoritos">
         <span class="material-symbols-outlined">
           {{ heartIcon() }}
         </span>
       </button>
-    }
+    } -->
   </div>
 
   <div class="card__info">
@@ -19,10 +19,10 @@
       <p class="card__subtitle">{{ card().subtitle }}</p>
     </div>
     @if (card().rating > 0) {
-      <div class="card__rating">
-        <span class="material-symbols-outlined card__rating-star">star</span>
-        <span class="card__rating-value">{{ ratingLabel() }}</span>
-      </div>
+    <div class="card__rating">
+      <span class="material-symbols-outlined card__rating-star">star</span>
+      <span class="card__rating-value">{{ ratingLabel() }}</span>
+    </div>
     }
   </div>
 

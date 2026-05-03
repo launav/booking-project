@@ -20,7 +20,8 @@
         aria-label="Imagen anterior">
         <span class="material-symbols-outlined">chevron_left</span>
       </button>
-      <img [src]="currentImage()" [alt]="r.name" class="detail__carousel-img" (error)="onImgError($event)" />
+      <img [src]="currentImage()" [alt]="r.name" class="detail__carousel-img detail__carousel-img--clickable"
+        (error)="onImgError($event)" (click)="openLightbox(imageIndex())" title="Ver imagen ampliada" />
       <button class="detail__carousel-btn detail__carousel-btn--next" (click)="nextImage()"
         aria-label="Imagen siguiente">
         <span class="material-symbols-outlined">chevron_right</span>
@@ -54,17 +55,59 @@
 
   </div>
 
+  <!-- Selector de fechas: si no hay fechas o la habitación no está disponible -->
+  @if (!checkIn() || !checkOut() || unavailable()) {
+  <div class="detail__date-picker" (clickOutside)="calendarOpen.set(false)">
+
+    <!-- Trigger -->
+    <button class="detail__date-trigger" type="button" (click)="toggleCalendar()">
+      <span class="material-symbols-outlined">calendar_month</span>
+      <div class="detail__date-trigger-text">
+        <span class="detail__date-trigger-label">Fechas de estancia</span>
+        <span class="detail__date-trigger-value">{{ datesLabel() }}</span>
+      </div>
+      <span class="material-symbols-outlined detail__date-trigger-chevron">
+        {{ calendarOpen() ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
+      </span>
+    </button>
+
+    <!-- Panel calendario -->
+    @if (calendarOpen()) {
+      <div class="detail__date-panel">
+        <app-date-range-picker [(checkIn)]="checkIn" [(checkOut)]="checkOut" />
+      </div>
+    }
+
+  </div>
+  }
+
+  <!-- Aviso de no disponibilidad -->
+  @if (unavailable()) {
+  <div class="detail__unavailable">
+    <span class="material-symbols-outlined">event_busy</span>
+    <span>Esta habitación no está disponible para las fechas seleccionadas. Por favor, elige otras fechas.</span>
+  </div>
+  }
+
+  <!-- Spinner comprobando disponibilidad -->
+  @if (checkingAvailability()) {
+  <div class="detail__checking">
+    <span class="material-symbols-outlined detail__checking-icon">sync</span>
+    <span>Comprobando disponibilidad...</span>
+  </div>
+  }
+
   <!-- Segundo contenedor: condiciones -->
   <div class="detail__conditions">
     <div class="detail__conditions-left"></div>
     <div class="detail__conditions-right">
-      <button class="detail__conditions-btn">Condiciones de la reserva</button>
+      <button class="detail__conditions-btn" [routerLink]="'/ayuda'" >Condiciones de la reserva</button>
     </div>
   </div>
 
   <!-- Tercer contenedor: opciones de precio -->
   <div class="detail__options">
-    @for (option of r.pricingOptions; track option.name) {
+    @for (option of dynamicOptions(); track option.name) {
     <div class="detail__option" [class.detail__option--selected]="isSelected(option)">
 
       <div class="detail__option-left">
@@ -91,10 +134,45 @@
 
 <!-- Botón continuar -->
 <div class="detail__footer">
-  <button class="detail__continue-btn" [disabled]="!selectedOption()"
-    [class.detail__continue-btn--active]="selectedOption()" (click)="continue()">
+  <button class="detail__continue-btn" [disabled]="!canContinue()"
+    [class.detail__continue-btn--active]="canContinue()" (click)="continue()">
     Continuar
   </button>
 </div>
 
+}
+
+<!-- ── Lightbox ──────────────────────────────────────────────── -->
+@if (lightboxOpen()) {
+<div class="lightbox" (click)="closeLightbox()" (keydown)="onLightboxKey($event)" tabindex="0" role="dialog"
+  aria-modal="true" aria-label="Visor de imágenes">
+
+  <button class="lightbox__close" (click)="closeLightbox()" aria-label="Cerrar">
+    <span class="material-symbols-outlined">close</span>
+  </button>
+
+  <button class="lightbox__btn lightbox__btn--prev" (click)="$event.stopPropagation(); lightboxPrev()"
+    aria-label="Imagen anterior">
+    <span class="material-symbols-outlined">chevron_left</span>
+  </button>
+
+  <div class="lightbox__img-wrap" (click)="$event.stopPropagation()">
+    <img [src]="lightboxImage()" [alt]="room()?.name ?? ''" class="lightbox__img" />
+  </div>
+
+  <button class="lightbox__btn lightbox__btn--next" (click)="$event.stopPropagation(); lightboxNext()"
+    aria-label="Imagen siguiente">
+    <span class="material-symbols-outlined">chevron_right</span>
+  </button>
+
+  @if (room() && room()!.images.length > 1) {
+  <div class="lightbox__dots" (click)="$event.stopPropagation()">
+    @for (img of room()!.images; track $index) {
+    <span class="lightbox__dot" [class.lightbox__dot--active]="lightboxIndex() === $index"
+      (click)="lightboxIndex.set($index)"></span>
+    }
+  </div>
+  }
+
+</div>
 }

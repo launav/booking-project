@@ -1,0 +1,127 @@
+@if (!loading() && hotel(); as h) {
+
+<!-- Breadcrumb -->
+<div class="hd__breadcrumb">
+  <button class="hd__back-btn" (click)="goBack()" aria-label="Volver">
+    <span class="material-symbols-outlined">chevron_left</span>
+  </button>
+  <span class="hd__breadcrumb-text">Hoteles &rsaquo; {{ h.name }}</span>
+</div>
+
+<!-- Tarjeta principal del hotel -->
+<div class="hd__card">
+  <div class="hd__top">
+
+    <!-- Carrusel -->
+    <div class="hd__carousel">
+      <button class="hd__carousel-btn hd__carousel-btn--prev" (click)="prevImage()" aria-label="Imagen anterior">
+        <span class="material-symbols-outlined">chevron_left</span>
+      </button>
+      <img [src]="currentImage()" [alt]="h.name" class="hd__carousel-img" (error)="onImgError($event)" />
+      <button class="hd__carousel-btn hd__carousel-btn--next" (click)="nextImage()" aria-label="Imagen siguiente">
+        <span class="material-symbols-outlined">chevron_right</span>
+      </button>
+      @if (images().length > 1) {
+        <div class="hd__carousel-dots">
+          @for (img of images(); track $index) {
+            <span class="hd__carousel-dot" [class.hd__carousel-dot--active]="imageIndex() === $index"></span>
+          }
+        </div>
+      }
+    </div>
+
+    <!-- Info del hotel -->
+    <div class="hd__info">
+      <h1 class="hd__name">{{ h.name }}</h1>
+
+      <div class="hd__meta">
+        <p class="hd__meta-item">
+          <span class="material-symbols-outlined">location_on</span>
+          {{ h.address }}{{ h.city ? ', ' + h.city : '' }}
+        </p>
+        @if (h.phone) {
+          <p class="hd__meta-item">
+            <span class="material-symbols-outlined">phone</span>
+            {{ h.phone }}
+          </p>
+        }
+        @if (h.email) {
+          <p class="hd__meta-item">
+            <span class="material-symbols-outlined">mail</span>
+            {{ h.email }}
+          </p>
+        }
+      </div>
+
+      @if (h.description) {
+        <p class="hd__description">{{ h.description }}</p>
+      }
+
+      <div class="hd__amenities">
+        <div class="hd__amenity">
+          <span class="material-symbols-outlined">wifi</span>
+          <span>Wi-Fi</span>
+        </div>
+        <div class="hd__amenity">
+          <span class="material-symbols-outlined">local_parking</span>
+          <span>Parking</span>
+        </div>
+        <div class="hd__amenity">
+          <span class="material-symbols-outlined">restaurant</span>
+          <span>Restaurante</span>
+        </div>
+        <div class="hd__amenity">
+          <span class="material-symbols-outlined">fitness_center</span>
+          <span>Gimnasio</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- Habitaciones disponibles -->
+<div class="hd__rooms-section">
+  <h2 class="hd__rooms-title">Habitaciones disponibles</h2>
+
+  @if (rooms().length === 0) {
+    <p class="hd__rooms-empty">No hay habitaciones disponibles en este hotel.</p>
+  } @else {
+    <div class="hd__rooms-grid">
+      @for (room of rooms(); track room.id) {
+        <div class="hd__room-card" (click)="goToRoom(room.id)">
+          <div class="hd__room-img-wrap">
+            <img [src]="room.image" [alt]="room.type" class="hd__room-img"
+              (error)="onImgError($event, room.type)" />
+            <span class="hd__room-badge hd__room-badge--{{ room.status }}">
+              {{ room.status === 'available' ? 'Disponible' : room.status === 'occupied' ? 'Ocupada' : 'Mantenimiento' }}
+            </span>
+          </div>
+          <div class="hd__room-info">
+            <p class="hd__room-type">{{ room.type | titlecase }}</p>
+            <p class="hd__room-number">Hab. {{ room.roomNumber }}</p>
+            <div class="hd__room-footer">
+              <div class="hd__room-specs">
+                <span class="material-symbols-outlined">person</span>
+                {{ room.capacity }} personas
+              </div>
+              <div class="hd__room-price">
+                <span class="hd__room-price-amount">{{ room.price }} €</span>
+                <span class="hd__room-price-label">/noche</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+</div>
+
+}
+
+@if (loading()) {
+  <div class="hd__loading">
+    <span class="material-symbols-outlined hd__loading-icon">hotel</span>
+    <p>Cargando hotel…</p>
+  </div>
+}

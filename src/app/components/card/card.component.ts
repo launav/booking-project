@@ -13,7 +13,7 @@ export class CardComponent {
 
   // Inputs
   card = input.required<CardData>();
-  isFavorite = input<boolean>(false);
+  // isFavorite = input<boolean>(false);
   showFavorite = input<boolean>(true);   // oculta el botón de favorito
   interactive = input<boolean>(true);   // false: sin cursor pointer ni click
 
@@ -29,7 +29,14 @@ export class CardComponent {
   ratingLabel = computed(() => this.card().rating.toFixed(1));
 
   ngOnInit(): void {
-    this.favorite.set(this.isFavorite());
+    // this.favorite.set(this.isFavorite());
+  }
+
+  // Fallback si la imagen no carga (URL rota en BBDD)
+  onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.onerror = null; // evita bucle infinito
+    // img.src = 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80';
   }
 
   // Fallback si la imagen no carga (URL rota en BBDD)

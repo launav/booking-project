@@ -18,54 +18,89 @@
     <!-- Fila 1: nombre, apellido, segundo apellido -->
     <div class="payment__row payment__row--3">
       <div class="payment__field">
-        <input class="payment__input" formControlName="nombre" placeholder="Nombre" type="text" />
+        <input class="payment__input"
+          [class.payment__input--error]="isInvalid('nombre')"
+          formControlName="nombre" placeholder="Nombre" type="text" />
+        @if (isInvalid('nombre')) {
+          <span class="payment__error">El nombre es obligatorio</span>
+        }
       </div>
       <div class="payment__field">
-        <input class="payment__input" formControlName="apellido" placeholder="Apellido" type="text" />
+        <input class="payment__input"
+          [class.payment__input--error]="isInvalid('apellido')"
+          formControlName="apellido" placeholder="Apellido" type="text" />
+        @if (isInvalid('apellido')) {
+          <span class="payment__error">El apellido es obligatorio</span>
+        }
       </div>
       <div class="payment__field">
-        <input class="payment__input" formControlName="segundoApellido" placeholder="Segundo apellido (Opcional)"
-          type="text" />
+        <input class="payment__input" formControlName="segundoApellido"
+          placeholder="Segundo apellido (Opcional)" type="text" />
       </div>
     </div>
 
     <!-- Fila 2: dirección -->
     <div class="payment__row payment__row--1">
       <div class="payment__field">
-        <input class="payment__input" formControlName="direccion" placeholder="Dirección" type="text" />
+        <input class="payment__input"
+          [class.payment__input--error]="isInvalid('direccion')"
+          formControlName="direccion" placeholder="Dirección" type="text" />
+        @if (isInvalid('direccion')) {
+          <span class="payment__error">La dirección es obligatoria</span>
+        }
       </div>
     </div>
 
     <!-- Fila 3: país, ciudad, código postal -->
     <div class="payment__row payment__row--3">
       <div class="payment__field">
-        <select class="payment__input payment__select" formControlName="pais" (change)="onPaisChange()">
+        <select class="payment__input payment__select"
+          [class.payment__input--error]="isInvalid('pais')"
+          formControlName="pais">
           <option value="" disabled selected>País</option>
           @for (p of paises; track p) {
           <option [value]="p">{{ p }}</option>
           }
         </select>
+        @if (isInvalid('pais')) {
+          <span class="payment__error">Selecciona un país</span>
+        }
       </div>
       <div class="payment__field">
-        <select class="payment__input payment__select" formControlName="ciudad">
-          <option value="" disabled selected>Ciudad</option>
-          @for (c of ciudadesList; track c) {
-          <option [value]="c">{{ c }}</option>
-          }
-        </select>
+        <input class="payment__input"
+          [class.payment__input--error]="isInvalid('ciudad')"
+          formControlName="ciudad" placeholder="Ciudad" type="text" />
+        @if (isInvalid('ciudad')) {
+          <span class="payment__error">La ciudad es obligatoria</span>
+        }
       </div>
       <div class="payment__field">
-        <input class="payment__input" formControlName="codigoPostal" placeholder="Código Postal" type="text" />
+        <input class="payment__input"
+          [class.payment__input--error]="isInvalid('codigoPostal')"
+          formControlName="codigoPostal" placeholder="Código Postal" type="text" />
+        @if (isInvalid('codigoPostal')) {
+          <span class="payment__error">Código postal inválido (4-10 dígitos)</span>
+        }
       </div>
     </div>
 
     <!-- Fila 4: email, teléfono -->
     <div class="payment__row payment__row--2">
       <div class="payment__field">
-        <input class="payment__input" formControlName="email" placeholder="Email" type="email" />
+        <input class="payment__input"
+          [class.payment__input--error]="isInvalid('email')"
+          formControlName="email" placeholder="Email" type="email" />
+        @if (isInvalid('email')) {
+          <span class="payment__error">Introduce un email válido</span>
+        }
       </div>
       <div class="payment__field">
-        <input class="payment__input" formControlName="telefono" placeholder="Teléfono" type="tel" />
+        <input class="payment__input"
+          [class.payment__input--error]="isInvalid('telefono')"
+          formControlName="telefono" placeholder="Teléfono" type="tel" />
+        @if (isInvalid('telefono')) {
+          <span class="payment__error">Teléfono inválido</span>
+        }
       </div>
     </div>
 

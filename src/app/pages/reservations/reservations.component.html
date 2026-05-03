@@ -21,7 +21,9 @@
         <div>
           <p class="res-card__hotel">{{ res.hotel_name ?? 'Hotel' }}</p>
           <p class="res-card__room">{{ res.type ?? 'Habitación' }} · #{{ res.room_number ?? res.id_room }}</p>
-          <p class="res-card__dates">{{ res.check_in_date }} - {{ res.check_out_date }}</p>
+          <p class="res-card__dates">
+            {{ res.check_in_date | date:'dd/MM/yyyy':'UTC' }} – {{ res.check_out_date | date:'dd/MM/yyyy':'UTC' }}
+          </p>
         </div>
       </div>
       <span class="res-card__status res-card__status--{{ res.reservation_status }}">

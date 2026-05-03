@@ -4,6 +4,7 @@ export type RoomStatus = 'available' | 'occupied' | 'maintenance';
 export interface Room {
   id_room: number;
   id_hotel: number;
+  hotel_name?: string;
   room_number: string;
   type: RoomType;
   capacity: number;

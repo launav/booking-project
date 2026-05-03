@@ -16,7 +16,7 @@ $radius:          12px;
 
 // Cabecera
 .admin__header {
-  display: flex;
+  // display: flex;
   align-items: center;
   justify-content: space-between;
   flex-wrap: wrap;
@@ -291,6 +291,20 @@ $radius:          12px;
     }
 
     textarea { resize: vertical; }
+
+    &--error {
+      input, select, textarea {
+        border-color: #EF4444;
+        background: #FFF5F5;
+        &:focus { border-color: #EF4444; box-shadow: 0 0 0 3px rgba(239,68,68,.12); }
+      }
+    }
+  }
+
+  &__error-msg {
+    font-size: 0.72rem;
+    color: #EF4444;
+    margin-top: -2px;
   }
 
   &__url-row {
@@ -357,6 +371,50 @@ $radius:          12px;
 
     &--cancel { background: #f3f4f6; color: #374151; &:hover { background: #e5e7eb; } }
     &--save   { background: $color-primary; color: #fff; &:hover:not(:disabled) { opacity: .85; } &:disabled { opacity: .5; cursor: not-allowed; } }
+    &--delete { background: #EF4444; color: #fff; &:hover { background: #DC2626; } }
+  }
+
+  // ── Modal confirmación borrado ──────────────────────────────
+  &--confirm {
+    max-width: 400px;
+    text-align: center;
+    padding: 36px 32px 28px;
+
+    .admin-modal__actions {
+      justify-content: center;
+      margin-top: 24px;
+      gap: 12px;
+    }
+  }
+
+  &--confirm__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #FEE2E2;
+    margin: 0 auto 16px;
+
+    .material-symbols-outlined {
+      font-size: 30px;
+      color: #EF4444;
+    }
+  }
+
+  &--confirm__title {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: $color-primary;
+    margin: 0 0 8px;
+  }
+
+  &--confirm__text {
+    font-size: 0.88rem;
+    color: $color-muted;
+    margin: 0;
+    line-height: 1.5;
   }
 }
 

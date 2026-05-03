@@ -4,7 +4,7 @@
   padding: 32px 16px 64px;
 
   &__header {
-    display: flex;
+    // display: flex;
     align-items: center;
     gap: 16px;
     margin-bottom: 28px;
@@ -19,8 +19,7 @@
     cursor: pointer;
     color: #6b7280;
     font-size: 14px;
-    padding: 8px 12px;
-    border-radius: 8px;
+    // padding: 8px 12px;
     transition: background .15s, color .15s;
     .material-symbols-outlined { font-size: 20px; }
     &:hover { background: #f3f4f6; color: #111827; }

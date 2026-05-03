@@ -65,11 +65,15 @@ export class HomeComponent implements OnInit {
     this.router.navigate([section]);
   }
 
-  onFavoriteToggle(id: number): void {
-    console.log('Favorito toggled:', id);
-  }
+  // onFavoriteToggle(id: number): void {
+  //   // console.log('Favorito toggled:', id);
+  // }
 
   onCardClick(id: number): void {
     this.router.navigate(['room', id]);
+  }
+
+  onHotelClick(id: number): void {
+    this.router.navigate(['hotel', id]);
   }
 }

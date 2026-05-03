@@ -5,6 +5,7 @@ import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs/operators';
+import { HttpErrorResponse } from '@angular/common/http';
 import { BookingService } from '../../core/services/user/booking.service';
 import { BookingContextService } from '../../core/services/user/booking-context.service';
 import { ToastService } from '../../core/services/loading/toast.service';
@@ -56,21 +57,9 @@ export class PaymentGatewayComponent implements OnInit {
     'Perú', 'Francia', 'Alemania', 'Italia', 'Portugal',
   ];
 
-  readonly ciudades: Record<string, string[]> = {
-    'España': ['Madrid', 'Barcelona', 'Valencia', 'Sevilla', 'Bilbao','Cádiz'],
-    'México': ['Ciudad de México', 'Guadalajara', 'Monterrey'],
-    'Argentina': ['Buenos Aires', 'Córdoba', 'Rosario'],
-    'Colombia': ['Bogotá', 'Medellín', 'Cali'],
-    'Chile': ['Santiago', 'Valparaíso', 'Concepción'],
-    'Perú': ['Lima', 'Arequipa', 'Trujillo'],
-    'Francia': ['París', 'Marsella', 'Lyon'],
-    'Alemania': ['Berlín', 'Múnich', 'Hamburgo'],
-    'Italia': ['Roma', 'Milán', 'Nápoles'],
-    'Portugal': ['Lisboa', 'Oporto', 'Braga'],
-  };
-
-  get ciudadesList(): string[] {
-    return this.ciudades[this.form.get('pais')?.value ?? ''] ?? [];
+  isInvalid(field: string): boolean {
+    const ctrl = this.form.get(field);
+    return !!(ctrl && ctrl.invalid && ctrl.touched);
   }
 
   // Lifecycle
@@ -82,12 +71,15 @@ export class PaymentGatewayComponent implements OnInit {
 
   // Acciones
 
-  onPaisChange(): void { this.form.get('ciudad')?.setValue(''); }
-
   selectPayment(method: PaymentMethod): void { this.paymentMethod.set(method); }
 
   continue(): void {
-    if (!this.canContinue() || this.submitting()) return;
+    if (this.submitting()) return;
+    if (!this.formValid()) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    if (!this.canContinue()) return;
 
     const room = this.ctx.selectedRoom();
     const checkIn = this.ctx.checkIn()?.toISOString().split('T')[0] ?? null;
@@ -112,9 +104,13 @@ export class PaymentGatewayComponent implements OnInit {
           this.submitting.set(false);
           this.router.navigate(['/success']);
         },
-        error: () => {
+        error: (err: HttpErrorResponse) => {
           this.submitting.set(false);
-          // El interceptor muestra el modal de error para 4xx/5xx
+          if (err.status === 409) {
+            this.toast.show('La habitación ya está reservada para esas fechas. Por favor, selecciona otras fechas.');
+            this.ctx.setContext({ checkIn: null, checkOut: null });
+            this.router.navigate(['/room', room.id]);
+          }
         },
       });
   }

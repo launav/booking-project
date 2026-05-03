@@ -15,8 +15,8 @@ export class BookingService {
   private http = inject(HttpClient);
   private base = `${environment.apiUrl}/reservations`;
 
-  getUserBookings(userId: number): Observable<Booking[]> {
-    return this.http.get<Booking[]>(`${this.base}/my/${userId}`);
+  getUserBookings(): Observable<Booking[]> {
+    return this.http.get<Booking[]>(`${this.base}/my`);
   }
 
   createBooking(data: CreateBookingRequest): Observable<CreateBookingResponse> {

@@ -125,6 +125,21 @@ $input-radius: 8px;
   }
 }
 
+.payment__input--error {
+  border-color: #EF4444 !important;
+  background: #FFF5F5;
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+  }
+}
+
+.payment__error {
+  font-size: 0.75rem;
+  color: #EF4444;
+  margin-top: 4px;
+}
+
 .payment__select {
   appearance: none;
   -webkit-appearance: none;

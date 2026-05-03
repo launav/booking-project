@@ -19,6 +19,11 @@ export class HotelService {
     );
   }
 
+  /** Todos los hoteles sin paginar, para selects/dropdowns */
+  getAllForSelect(): Observable<PaginatedResponse<Hotel>> {
+    return this.http.get<PaginatedResponse<Hotel>>(`${this.base}?page=1&limit=1000`);
+  }
+
   create(data: CreateHotelDto): Observable<Hotel> {
     return this.http.post<Hotel>(this.base, data);
   }

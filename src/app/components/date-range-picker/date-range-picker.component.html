@@ -1,0 +1,65 @@
+<div class="calendar">
+
+  <!-- Navegación meses -->
+  <div class="calendar__nav">
+    <button class="calendar__nav-btn" (click)="prevMonth()" type="button">
+      <span class="material-symbols-outlined">chevron_left</span>
+    </button>
+    <button class="calendar__nav-btn" (click)="nextMonthNav()" type="button">
+      <span class="material-symbols-outlined">chevron_right</span>
+    </button>
+  </div>
+
+  <!-- Dos meses -->
+  <div class="calendar__months">
+    @for (month of [currentMonth(), nextMonth()]; track month) {
+      <div class="calendar__month">
+        <div class="calendar__month-title">{{ getMonthLabel(month) }}</div>
+        <div class="calendar__grid">
+          @for (day of weekDays; track day) {
+            <div class="calendar__weekday">{{ day }}</div>
+          }
+          @for (date of getDays(month); track $index) {
+            @if (date === null) {
+              <div></div>
+            } @else {
+              <button
+                class="calendar__day"
+                type="button"
+                [class.calendar__day--check-in]="isCheckIn(date)"
+                [class.calendar__day--check-out]="isCheckOut(date)"
+                [class.calendar__day--range-start]="isRangeStart(date)"
+                [class.calendar__day--range-end]="isRangeEnd(date)"
+                [class.calendar__day--in-range]="isInRange(date)"
+                [class.calendar__day--past]="isPast(date)"
+                [disabled]="isPast(date)"
+                (click)="selectDate(date)"
+                (mouseenter)="hoveredDate.set(date)"
+                (mouseleave)="hoveredDate.set(null)">
+                {{ date.getDate() }}
+              </button>
+            }
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- Footer: muestra las fechas seleccionadas -->
+  <div class="calendar__footer">
+    <div class="calendar__footer-field">
+      <span class="calendar__footer-label">Entrada</span>
+      <span class="calendar__footer-value">
+        {{ checkIn() ? (checkIn() | date:'dd/MM/yyyy') : 'dd/mm/aaaa' }}
+      </span>
+    </div>
+    <div class="calendar__footer-divider"></div>
+    <div class="calendar__footer-field">
+      <span class="calendar__footer-label">Salida</span>
+      <span class="calendar__footer-value">
+        {{ checkOut() ? (checkOut() | date:'dd/MM/yyyy') : 'dd/mm/aaaa' }}
+      </span>
+    </div>
+  </div>
+
+</div>
