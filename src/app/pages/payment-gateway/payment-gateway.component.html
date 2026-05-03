@@ -59,7 +59,7 @@
           formControlName="pais">
           <option value="" disabled selected>País</option>
           @for (p of paises; track p) {
-            <option [value]="p">{{ p }}</option>
+          <option [value]="p">{{ p }}</option>
           }
         </select>
         @if (isInvalid('pais')) {

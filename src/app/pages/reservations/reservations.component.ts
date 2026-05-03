@@ -21,6 +21,9 @@ export class ReservationsComponent implements OnInit {
 
   reservations = signal<Booking[]>([]);
 
+  // Obtener el ID del usuario actual para cargar sus reservas
+  userId = this.authService.currentUser()?.id_user as any;
+
   ngOnInit(): void {
     if (!this.authService.isLoggedIn()) return;
     this.loadReservations();

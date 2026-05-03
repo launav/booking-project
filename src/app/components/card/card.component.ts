@@ -39,6 +39,13 @@ export class CardComponent {
     // img.src = 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80';
   }
 
+  // Fallback si la imagen no carga (URL rota en BBDD)
+  onImgError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.onerror = null; // evita bucle infinito
+    // img.src = 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=600&q=80';
+  }
+
   // Actions
   toggleFavorite(event: MouseEvent): void {
     event.stopPropagation();
