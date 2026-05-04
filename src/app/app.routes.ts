@@ -22,10 +22,12 @@ export const routes: Routes = [
       },
       {
         path: 'resume',
+        canActivate: [AuthGuard],
         loadComponent: () => import('./pages/resume/resume.component').then(m => m.ResumeComponent),
       },
       {
         path: 'payment',
+        canActivate: [AuthGuard],
         loadComponent: () => import('./pages/payment-gateway/payment-gateway.component').then(m => m.PaymentGatewayComponent),
       },
       {

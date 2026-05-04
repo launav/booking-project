@@ -1,6 +1,6 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { RouterOutlet, Router, NavigationEnd, NavigationStart } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd, NavigationStart, NavigationCancel, NavigationError } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { HeaderComponent } from '../../components/header/header.component';
 import { FooterComponent } from '../../components/footer/footer.component';
@@ -52,14 +52,16 @@ export class MainLayoutComponent {
 
     this.router.events
       .pipe(
-        filter(e => e instanceof NavigationEnd),
+        filter(e => e instanceof NavigationEnd || e instanceof NavigationCancel || e instanceof NavigationError),
         takeUntilDestroyed(this.destroyRef)
       )
-      .subscribe((e: NavigationEnd) => {
+      .subscribe((e) => {
         this.loadingService.hide();
-        this.hideSearchBar.set(this.checkHideSearch(e.urlAfterRedirects));
-        this.hideFooter.set(this.checkHideFooter(e.urlAfterRedirects));
-        this.prevRoute.track(e.urlAfterRedirects);
+        if (e instanceof NavigationEnd) {
+          this.hideSearchBar.set(this.checkHideSearch(e.urlAfterRedirects));
+          this.hideFooter.set(this.checkHideFooter(e.urlAfterRedirects));
+          this.prevRoute.track(e.urlAfterRedirects);
+        }
       });
   }
 

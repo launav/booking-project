@@ -241,9 +241,7 @@ export class AdminComponent implements OnInit {
           const urls = this.imageUrls().map(u => u.trim()).filter(Boolean);
           if (!urls.length) return of(null);
 
-          const entityId = isEdit
-            ? (tab === 'habitaciones' ? (row as Room).id_room : (row as Hotel).id_hotel)
-            : (tab === 'habitaciones' ? res.id_room : res.id_hotel);
+          const entityId = tab === 'habitaciones' ? res.id_room : res.id_hotel;
 
           const saves$ = urls.map(url =>
             tab === 'habitaciones'

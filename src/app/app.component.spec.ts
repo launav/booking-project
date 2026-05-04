@@ -1,10 +1,19 @@
 import { TestBed } from '@angular/core/testing';
 import { AppComponent } from './app.component';
+import { TranslateService } from '@ngx-translate/core';
 
 describe('AppComponent', () => {
+
+  const translateServiceMock = {
+    use: jasmine.createSpy('use')
+  };
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AppComponent],
+      providers: [
+        { provide: TranslateService, useValue: translateServiceMock }
+      ]
     }).compileComponents();
   });
 
@@ -20,10 +29,10 @@ describe('AppComponent', () => {
     expect(app.title).toEqual('booking-project');
   });
 
-  it('should render title', () => {
+  it('should call translate.use on init', () => {
     const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, booking-project');
+    fixture.detectChanges(); // dispara ngOnInit
+    expect(translateServiceMock.use).toHaveBeenCalledWith('es-ES');
   });
+
 });

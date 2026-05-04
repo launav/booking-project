@@ -485,7 +485,7 @@ $radius: 20px;
 }
 
 .detail__continue-btn {
-  background: linear-gradient(135deg, $color-secondary, color.adjust($color-secondary, $lightness: -10%));
+  background: $color-secondary;
   color: $color-white;
   border: none;
   border-radius: 24px;
