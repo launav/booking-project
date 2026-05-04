@@ -2,7 +2,7 @@ import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../core/services/user/auth.service';
 
 const REMEMBER_KEY = 'rememberedEmail';
@@ -21,6 +21,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private authService = inject(AuthService);
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
   private destroyRef = inject(DestroyRef);
 
   isRegister = signal(false);
@@ -76,7 +77,8 @@ export class LoginComponent {
       .subscribe({
         next: () => {
           this.loading.set(false);
-          this.router.navigate([this.authService.isAdmin() ? '/admin' : '/home']);
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+          this.router.navigate([returnUrl || (this.authService.isAdmin() ? '/admin' : '/home')]);
         },
         error: (err) => {
           this.loading.set(false);
@@ -108,7 +110,8 @@ export class LoginComponent {
             .subscribe({
               next: () => {
                 this.loading.set(false);
-                this.router.navigate([this.authService.isAdmin() ? '/admin' : '/home']);
+                const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+                this.router.navigate([returnUrl || (this.authService.isAdmin() ? '/admin' : '/home')]);
               },
               error: () => {
                 this.loading.set(false);

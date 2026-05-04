@@ -18,4 +18,12 @@ describe('TranslateLoaderService', () => {
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
+
+  it('getProviders should return a non-empty array', () => {
+    const providers = TranslateLoaderService.getProviders();
+    expect(Array.isArray(providers)).toBeTrue();
+    expect(providers.length).toBeGreaterThan(0);
+  });
+
+
 });

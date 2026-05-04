@@ -66,10 +66,11 @@ export class SectionComponent implements OnInit {
   });
 
   title = computed(() => {
-    const base = this.translate.instant(SECTION_TITLE_KEYS[this.section()]);
     const raw = this.filters().destination || this.location();
     const dest = raw ? raw.charAt(0).toUpperCase() + raw.slice(1) : '';
-    return `${base} ${dest}`;
+    const base = this.translate.instant(SECTION_TITLE_KEYS[this.section()]);
+    if (!dest) return base.replace(/ en$/, '').trim();
+    return this.section() === 'rooms' ? `${base} en ${dest}` : `${base} ${dest}`;
   });
 
   filtersLabel = computed(() => {
